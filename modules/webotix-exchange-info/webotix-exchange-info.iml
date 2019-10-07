@@ -102,7 +102,7 @@
     <orderEntry type="library" name="Maven: org.codehaus.mojo:animal-sniffer-annotations:1.14" level="project" />
     <orderEntry type="library" name="Maven: com.google.inject.extensions:guice-assistedinject:4.2.2" level="project" />
     <orderEntry type="library" name="Maven: com.google.inject.extensions:guice-servlet:4.2.2" level="project" />
-    <orderEntry type="library" name="Maven: com.gruelbox:xchange-core:4.3.19.2" level="project" />
+    <orderEntry type="library" name="Maven: org.knowm.xchange:xchange-core:4.4.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.mmazi:rescu:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: javax.ws.rs:javax.ws.rs-api:2.1" level="project" />
     <orderEntry type="library" name="Maven: oauth.signpost:signpost-core:1.2.1.2" level="project" />

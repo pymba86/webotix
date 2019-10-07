@@ -11,6 +11,7 @@
         <module>modules/webotix-market-data</module>
         <module>modules/webotix-exchange-info</module>
         <module>modules/webotix-exchange</module>
+        <module>modules/webotix-utils</module>
     </modules>
 
     <properties>
@@ -21,8 +22,9 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <asm.version>7.1</asm.version>
-        <xchange.version>4.3.19.2</xchange.version>
+        <xchange.version>4.4.0</xchange.version>
         <reactivex.version>2.2.12</reactivex.version>
+        <xchange.stream.version>4.4.0</xchange.stream.version>
     </properties>
 
     <dependencyManagement>
@@ -38,6 +40,18 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>webotix-exchange</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-utils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>info.bitrich.xchange-stream</groupId>
+            <artifactId>xchange-stream-core</artifactId>
+            <version>${xchange.stream.version}</version>
         </dependency>
 
         <dependency>
@@ -85,7 +99,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.gruelbox</groupId>
+            <groupId>org.knowm.xchange</groupId>
             <artifactId>xchange-core</artifactId>
             <version>${xchange.version}</version>
         </dependency>

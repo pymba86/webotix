@@ -50,7 +50,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.gruelbox</groupId>
+            <groupId>org.knowm.xchange</groupId>
             <artifactId>xchange-core</artifactId>
         </dependency>
 
