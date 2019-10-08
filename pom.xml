@@ -38,6 +38,12 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-notification</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>webotix-exchange</artifactId>
             <version>${project.version}</version>
         </dependency>

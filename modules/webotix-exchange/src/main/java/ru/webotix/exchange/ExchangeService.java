@@ -20,4 +20,20 @@ public interface ExchangeService {
      * @return биржа
      */
     Exchange get(String name);
+
+    /**
+     * Проверка на аутенфикацию на бирже
+     *
+     * @param name название биржы
+     * @return проверка на аутенфикацию на бирже
+     */
+    boolean isAuthenticated(String name);
+
+    /**
+     * Получить ограничитель скорости операций по бирже
+     *
+     * @param name название биржы
+     * @return ограничитель скорости
+     */
+    RateController rateController(String name);
 }
