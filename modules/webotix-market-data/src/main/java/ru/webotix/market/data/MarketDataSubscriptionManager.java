@@ -512,7 +512,7 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
 
         /**
          * Подписать слушателей к бирже
-         * <p>
+         *
          * Поитогу получаем новый массив слушателей которые должны
          * быть подключены при следующей попытке
          *

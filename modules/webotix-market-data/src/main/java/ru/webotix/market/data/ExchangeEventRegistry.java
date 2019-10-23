@@ -37,7 +37,7 @@ public interface ExchangeEventRegistry {
 
         /**
          * Получить поток событий баланса слушающей биржы
-         * @return
+         * @return Подписка на события относящиеся к балансу
          */
         Flowable<BalanceEvent> getBalances();
 

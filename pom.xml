@@ -12,6 +12,10 @@
         <module>modules/webotix-exchange-info</module>
         <module>modules/webotix-exchange</module>
         <module>modules/webotix-utils</module>
+        <module>modules/webotix-auth</module>
+        <module>modules/webotix-datasource</module>
+        <module>modules/webotix-common</module>
+        <module>modules/webotix-websocket</module>
     </modules>
 
     <properties>
@@ -25,6 +29,7 @@
         <xchange.version>4.4.0</xchange.version>
         <reactivex.version>2.2.12</reactivex.version>
         <xchange.stream.version>4.4.0</xchange.stream.version>
+        <dropwizard.websockets.version>1.3.14</dropwizard.websockets.version>
     </properties>
 
     <dependencyManagement>
@@ -114,6 +119,12 @@
             <groupId>io.reactivex.rxjava2</groupId>
             <artifactId>rxjava</artifactId>
             <version>${reactivex.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.liveperson</groupId>
+            <artifactId>dropwizard-websockets</artifactId>
+            <version>${dropwizard.websockets.version}</version>
         </dependency>
 
     </dependencies>
