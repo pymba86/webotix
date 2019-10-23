@@ -2,7 +2,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>webotix-datasource</artifactId>
+    <artifactId>webotix-job</artifactId>
     <packaging>jar</packaging>
 
     <parent>
@@ -77,41 +77,6 @@
         <dependency>
             <groupId>info.bitrich.xchange-stream</groupId>
             <artifactId>xchange-stream-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.badgerwithagun.morf</groupId>
-            <artifactId>morf-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.badgerwithagun.morf</groupId>
-            <artifactId>morf-h2</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.badgerwithagun.morf</groupId>
-            <artifactId>morf-mysql</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gruelbox</groupId>
-            <artifactId>dropwizard-guice-box</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gruelbox</groupId>
-            <artifactId>dropwizard-guice-box-hibernate</artifactId>
         </dependency>
 
     </dependencies>

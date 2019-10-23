@@ -2,7 +2,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>webotix-core</artifactId>
+    <artifactId>webotix-common</artifactId>
     <packaging>jar</packaging>
 
     <parent>
@@ -15,8 +15,18 @@
     <dependencies>
 
         <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-client</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>webotix-exchange-info</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-datasource</artifactId>
         </dependency>
 
         <dependency>
