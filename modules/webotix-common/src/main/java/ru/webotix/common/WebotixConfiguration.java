@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 import io.dropwizard.client.JerseyClientConfiguration;
 import ru.webotix.datasource.database.DatabaseConfiguration;
+import ru.webotix.exchange.ExchangeConfiguration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Map;
 
 /**
  * Базовая конфигурация приложения
@@ -27,6 +29,11 @@ public class WebotixConfiguration extends Configuration {
     @NotNull
     @JsonProperty("jerseyClient")
     private JerseyClientConfiguration jerseyClient = new JerseyClientConfiguration();
+
+    /**
+     * Конфигурации бирж данных с которыми будет работать система
+     */
+    private Map<String, ExchangeConfiguration> exchanges;
 
     /**
      * Получить конфигурацию базы данных
@@ -62,5 +69,23 @@ public class WebotixConfiguration extends Configuration {
      */
     public void setJerseyClient(JerseyClientConfiguration jerseyClient) {
         this.jerseyClient = jerseyClient;
+    }
+
+    /**
+     * Получить конфигурации бирж
+     *
+     * @return конфигруации бирж по коду
+     */
+    public Map<String, ExchangeConfiguration> getExchanges() {
+        return exchanges;
+    }
+
+    /**
+     * Установить конфигурации бирж
+     *
+     * @param exchanges конфигурации бирж по коду
+     */
+    public void setExchanges(Map<String, ExchangeConfiguration> exchanges) {
+        this.exchanges = exchanges;
     }
 }

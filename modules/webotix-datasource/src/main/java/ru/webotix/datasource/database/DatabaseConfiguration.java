@@ -141,7 +141,8 @@ public class DatabaseConfiguration {
 
     /**
      * Получить DataSource к базе данных
-     * @return
+     *
+     * @return DataSource базы данных
      */
     public DataSourceFactory toDataSourceFactory() {
         DataSourceFactory dsf = new DataSourceFactory();
