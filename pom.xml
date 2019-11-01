@@ -49,6 +49,12 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-market-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>webotix-exchange-info</artifactId>
             <version>${project.version}</version>
         </dependency>

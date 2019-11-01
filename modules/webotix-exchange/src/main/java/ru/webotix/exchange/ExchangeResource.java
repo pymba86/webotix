@@ -32,6 +32,11 @@ public class ExchangeResource {
         this.configuration = configuration;
     }
 
+    /**
+     * Получить список доступных бирж
+     *
+     * @return Список бирж
+     */
     @GET
     @Timed
     public Collection<ExchangeMeta> list() {
