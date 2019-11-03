@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableMap;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.util.Duration;
 import org.alfasoftware.morf.jdbc.ConnectionResources;
-import org.alfasoftware.morf.jdbc.DatabaseType;
 import org.hibernate.cfg.AvailableSettings;
 
 import javax.validation.constraints.Min;

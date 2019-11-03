@@ -75,17 +75,17 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.badgerwithagun.morf</groupId>
+            <groupId>org.alfasoftware</groupId>
             <artifactId>morf-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.github.badgerwithagun.morf</groupId>
+            <groupId>org.alfasoftware</groupId>
             <artifactId>morf-h2</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.github.badgerwithagun.morf</groupId>
+            <groupId>org.alfasoftware</groupId>
             <artifactId>morf-mysql</artifactId>
         </dependency>
 

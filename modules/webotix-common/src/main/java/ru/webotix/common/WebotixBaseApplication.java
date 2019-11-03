@@ -23,6 +23,7 @@ public abstract class WebotixBaseApplication extends Application<WebotixConfigur
 
         bootstrap.addBundle(
                 new GuiceBundle<WebotixConfiguration>(this,
+                        new WebotixApplicationModule(),
                         new GuiceHibernateModule(hibernateBundleFactory),
                         createApplicationModule()
                         )
