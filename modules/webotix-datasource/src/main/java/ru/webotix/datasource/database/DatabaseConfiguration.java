@@ -99,7 +99,7 @@ public class DatabaseConfiguration {
      * @return параметры доступа
      */
     public ConnectionResources toConnectionResources() {
-        return DatabaseType.Registry.urlToConnectionResources(
+        return DatabaseTypeRegistry.urlToConnectionResources(
                 "jdbc:" + connectionString
         );
     }
@@ -110,7 +110,7 @@ public class DatabaseConfiguration {
      * @return класс драйвера к базе
      */
     public String getDriverClassName() {
-        return DatabaseType.Registry
+        return DatabaseTypeRegistry
                 .findByIdentifier(toConnectionResources()
                         .getDatabaseType()).driverClassName();
     }

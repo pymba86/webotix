@@ -2,7 +2,8 @@ package ru.webotix.app;
 
 import com.google.inject.AbstractModule;
 import com.gruelbox.tools.dropwizard.guice.Configured;
-import ru.webotix.common.WebotixConfiguration;
+import ru.webotix.common.api.WebotixConfiguration;
+import ru.webotix.exchange.ExchangeResourceModule;
 import ru.webotix.websocket.WebSocketModule;
 
 public class WebotixModule extends AbstractModule implements Configured<WebotixConfiguration> {
@@ -17,5 +18,6 @@ public class WebotixModule extends AbstractModule implements Configured<WebotixC
     @Override
     protected void configure() {
         install(new WebSocketModule());
+        install(new ExchangeResourceModule());
     }
 }

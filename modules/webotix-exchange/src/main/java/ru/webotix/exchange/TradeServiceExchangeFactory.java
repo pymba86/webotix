@@ -2,7 +2,7 @@ package ru.webotix.exchange;
 
 import com.google.inject.Inject;
 import org.knowm.xchange.service.trade.TradeService;
-import ru.webotix.common.WebotixConfiguration;
+import ru.webotix.common.api.WebotixConfiguration;
 
 public class TradeServiceExchangeFactory extends AbstractExchangeServiceFactory<TradeService>
         implements TradeServiceFactory {

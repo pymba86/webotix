@@ -1,7 +1,8 @@
 package ru.webotix.exchange;
 
-import ru.webotix.common.WebotixConfiguration;
 import org.apache.commons.lang3.StringUtils;
+import ru.webotix.common.api.WebotixConfiguration;
+import ru.webotix.exchange.api.ExchangeConfiguration;
 
 import java.util.Map;
 

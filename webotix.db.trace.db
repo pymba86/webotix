@@ -1,0 +1,208 @@
+2019-11-04 19:31:19 jdbc[8]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 19:31:19 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 19:31:19 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+drop table zzzUpgradeStatus [42102-197]
+2019-11-04 19:31:19 jdbc[15]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 19:38:04 jdbc[8]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 19:38:04 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 19:38:04 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+drop table zzzUpgradeStatus [42102-197]
+2019-11-04 19:38:04 jdbc[15]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 19:43:39 jdbc[8]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 19:43:40 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 19:43:40 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+drop table zzzUpgradeStatus [42102-197]
+2019-11-04 19:43:40 jdbc[15]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 19:52:15 jdbc[8]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 19:52:15 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 19:52:15 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+drop table zzzUpgradeStatus [42102-197]
+2019-11-04 19:52:15 jdbc[15]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:00:00 jdbc[8]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:00:00 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:00:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+drop table zzzUpgradeStatus [42102-197]
+2019-11-04 20:00:00 jdbc[15]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:01:24 jdbc[8]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:01:24 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:01:24 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+drop table zzzUpgradeStatus [42102-197]
+2019-11-04 20:01:24 jdbc[15]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:04:17 jdbc[8]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:04:17 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:04:17 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+drop table zzzUpgradeStatus [42102-197]
+2019-11-04 20:04:17 jdbc[15]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:05:56 jdbc[8]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:05:56 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:05:56 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+drop table zzzUpgradeStatus [42102-197]
+2019-11-04 20:05:56 jdbc[15]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:06:30 jdbc[8]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:06:30 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:06:31 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+drop table zzzUpgradeStatus [42102-197]
+2019-11-04 20:06:31 jdbc[15]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:08:08 jdbc[8]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:08:08 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:08:08 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+drop table zzzUpgradeStatus [42102-197]
+2019-11-04 20:08:08 jdbc[15]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:09:03 jdbc[8]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:09:04 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:09:04 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+drop table zzzUpgradeStatus [42102-197]
+2019-11-04 20:09:04 jdbc[15]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:09:48 jdbc[8]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:09:48 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:09:48 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+drop table zzzUpgradeStatus [42102-197]
+2019-11-04 20:09:48 jdbc[15]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:13:49 jdbc[8]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:13:49 jdbc[12]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]
+2019-11-04 20:13:49 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+drop table zzzUpgradeStatus [42102-197]
+2019-11-04 20:13:49 jdbc[15]: exception
+org.h2.jdbc.JdbcSQLException: Таблица "ZZZUPGRADESTATUS" не найдена
+Table "ZZZUPGRADESTATUS" not found; SQL statement:
+SELECT status FROM zzzUpgradeStatus [42102-197]

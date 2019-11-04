@@ -6,6 +6,7 @@ import com.google.inject.Provides;
 import com.google.inject.servlet.ServletModule;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.client.JerseyClientBuilder;
+import ru.webotix.common.api.WebotixConfiguration;
 import ru.webotix.datasource.database.DatabaseConfiguration;
 
 import javax.ws.rs.client.Client;

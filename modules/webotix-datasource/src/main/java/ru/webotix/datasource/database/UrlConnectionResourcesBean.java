@@ -7,12 +7,8 @@ import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
-import javax.xml.crypto.Data;
 
-import org.alfasoftware.morf.jdbc.ConnectionResources;
-import org.alfasoftware.morf.jdbc.DataSourceAdapter;
-import org.alfasoftware.morf.jdbc.SchemaResourceImpl;
-import org.alfasoftware.morf.jdbc.SqlDialect;
+import org.alfasoftware.morf.jdbc.*;
 import org.alfasoftware.morf.metadata.SchemaResource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,7 +20,7 @@ import com.google.common.base.Preconditions;
  * where possible.
  *
  * <p>Create using
- * {@link DatabaseType.Registry#urlToConnectionResources(String)}.</p>
+ * {@link DatabaseTypeRegistry#urlToConnectionResources(String)}.</p>
  */
 public class UrlConnectionResourcesBean implements ConnectionResources {
 
@@ -41,7 +37,7 @@ public class UrlConnectionResourcesBean implements ConnectionResources {
     private int statementPoolingMaxStatements;
 
     /**
-     * Constructor intended for use by implementations of {@link DatabaseType}.
+     * Constructor intended for use by implementations of {@link DatabaseTypeRegistry}.
      *
      * @param url The JDBC URL.
      * @param databaseType The database type identifier.
@@ -63,7 +59,7 @@ public class UrlConnectionResourcesBean implements ConnectionResources {
 
 
     private DatabaseType findDatabaseType() {
-        return DatabaseType.Registry.findByIdentifier(getDatabaseType());
+        return DatabaseTypeRegistry.findByIdentifier(getDatabaseType());
     }
 
 

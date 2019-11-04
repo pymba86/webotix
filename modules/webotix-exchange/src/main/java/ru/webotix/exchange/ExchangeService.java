@@ -1,9 +1,11 @@
 package ru.webotix.exchange;
 
+import com.google.inject.ImplementedBy;
 import org.knowm.xchange.Exchange;
 
 import java.util.Collection;
 
+@ImplementedBy(ExchangeServiceImpl.class)
 public interface ExchangeService {
 
     /**

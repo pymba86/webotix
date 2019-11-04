@@ -3,10 +3,12 @@ package ru.webotix.exchange;
 import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.gruelbox.tools.dropwizard.guice.resources.WebResource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.webotix.common.WebotixConfiguration;
+import ru.webotix.common.api.WebotixConfiguration;
+import ru.webotix.exchange.api.ExchangeConfiguration;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 @Path("/exchanges")
 @Produces(MediaType.APPLICATION_JSON)
 @Singleton
-public class ExchangeResource {
+public class ExchangeResource implements WebResource {
 
     private static final Logger log = LoggerFactory.getLogger(ExchangeResource.class);
 
@@ -40,7 +42,7 @@ public class ExchangeResource {
     @GET
     @Timed
     public Collection<ExchangeMeta> list() {
-        return exchanges.getExchanges().stream()
+        return this.exchanges.getExchanges().stream()
                 .map(code -> {
                     ExchangeConfiguration exchangeConfig = configuration.getExchanges().get(code);
                     return new ExchangeMeta(

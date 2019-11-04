@@ -8,6 +8,7 @@ import org.knowm.xchange.Exchange;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -29,14 +30,13 @@ public final class Exchanges {
     public static final String SIMULATED = "simulated";
 
     public static final Supplier<List<Class<? extends Exchange>>> EXCHANGE_TYPES = Suppliers.memoize(
-            () -> new Reflections("org.knowm.exchange")
+            () -> new Reflections("org.knowm.xchange")
                     .getSubTypesOf(Exchange.class)
                     .stream()
                     .filter(c -> !c.equals(BaseExchange.class))
-                    .collect(Collectors.toList())
-    );
+                    .collect(Collectors.toList()));
 
-    static final Supplier<List<Class<? extends StreamingExchange>>> STREAMING_EXHANGE_TYPES = Suppliers.memoize(
+    static final Supplier<List<Class<? extends StreamingExchange>>> STREAMING_EXCHANGE_TYPES = Suppliers.memoize(
             () -> new ArrayList<>(new Reflections("info.bitrich.xchangestream")
                     .getSubTypesOf(StreamingExchange.class)
             )
@@ -63,4 +63,27 @@ public final class Exchanges {
     }
 
 
+    public static Class<? extends Exchange> friendlyNameToClass(String friendlyName) {
+
+
+        Optional<Class<? extends StreamingExchange>> streamingResult = STREAMING_EXCHANGE_TYPES.get()
+                .stream()
+                .filter(c -> c.getSimpleName().replace("StreamingExchange", "").equalsIgnoreCase(friendlyName))
+                .findFirst();
+        if (streamingResult.isPresent())
+            return streamingResult.get();
+
+        Optional<Class<? extends Exchange>> result = EXCHANGE_TYPES.get()
+                .stream()
+                .filter(c -> c.getSimpleName().replace("Exchange", "").equalsIgnoreCase(friendlyName))
+                .findFirst();
+        if (!result.isPresent())
+            throw new IllegalArgumentException("Unknown exchange [" + friendlyName + "]");
+        return result.get();
+    }
+
+    public static String classToFriendlyName(Class<? extends Exchange> clazz) {
+        String name = clazz.getSimpleName().replace("Exchange", "").toLowerCase();
+        return name.equals("coinbasepro") ? "gdax" : name;
+    }
 }

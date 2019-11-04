@@ -2,7 +2,7 @@ package ru.webotix.exchange;
 
 import com.google.inject.Inject;
 import org.knowm.xchange.service.account.AccountService;
-import ru.webotix.common.WebotixConfiguration;
+import ru.webotix.common.api.WebotixConfiguration;
 import ru.webotix.exchange.PaperAccountService.Factory;
 
 public class AccountServiceExchangeFactory extends AbstractExchangeServiceFactory<AccountService> implements

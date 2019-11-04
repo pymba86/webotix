@@ -8,6 +8,7 @@ import com.gruelbox.tools.dropwizard.guice.hibernate.HibernateBundleFactory;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import ru.webotix.common.api.WebotixConfiguration;
 import ru.webotix.datasource.database.DatabaseSetup;
 
 public abstract class WebotixBaseApplication extends Application<WebotixConfiguration> {

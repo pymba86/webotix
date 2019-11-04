@@ -7,7 +7,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.websockets.WebsocketBundle;
 import ru.webotix.common.WebotixBaseApplication;
-import ru.webotix.common.WebotixConfiguration;
+import ru.webotix.common.api.WebotixConfiguration;
 import ru.webotix.websocket.WebSocketBundleInit;
 
 public abstract class WebHostApplication extends WebotixBaseApplication {

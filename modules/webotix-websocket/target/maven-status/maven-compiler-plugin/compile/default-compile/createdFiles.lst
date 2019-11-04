@@ -1,0 +1,10 @@
+ru/webotix/websocket/WebSocketCommandMessage.class
+ru/webotix/websocket/WebSocketServer.class
+ru/webotix/websocket/AutoValue_WebSocketOutMessage.class
+ru/webotix/websocket/WebSocketServer$1.class
+ru/webotix/websocket/WebSocketInMessage.class
+ru/webotix/websocket/WebSocketOutMessage.class
+ru/webotix/websocket/AutoValue_WebSocketInMessage.class
+ru/webotix/websocket/WebSocketBundleInit.class
+ru/webotix/websocket/WebSocketModule.class
+ru/webotix/websocket/WebSocketNatureMessage.class

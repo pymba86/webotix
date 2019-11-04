@@ -18,6 +18,8 @@
         <module>modules/webotix-websocket</module>
         <module>modules/webotix-job</module>
         <module>modules/webotix-app</module>
+        <module>modules/webotix-exchange-api</module>
+        <module>modules/webotix-common-api</module>
     </modules>
 
     <properties>
@@ -56,6 +58,12 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-common-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>webotix-websocket</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -87,6 +95,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>webotix-utils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-exchange-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -143,6 +157,18 @@
         <dependency>
             <groupId>org.knowm.xchange</groupId>
             <artifactId>xchange-core</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-binance</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-simulated</artifactId>
             <version>${xchange.version}</version>
         </dependency>
 

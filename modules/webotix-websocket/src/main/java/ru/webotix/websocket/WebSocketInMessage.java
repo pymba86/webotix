@@ -15,7 +15,7 @@ public abstract class WebSocketInMessage {
     @JsonCreator
     static WebSocketInMessage create(@JsonProperty("command") WebSocketCommandMessage command,
                                      @JsonProperty("tickers") Collection<TickerSpec> tickers) {
-        return new AutoValue__WebSocketInMessage(command, tickers);
+        return new AutoValue_WebSocketInMessage(command, tickers);
     }
 
     @JsonProperty
