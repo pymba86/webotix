@@ -20,6 +20,7 @@
         <module>modules/webotix-app</module>
         <module>modules/webotix-exchange-api</module>
         <module>modules/webotix-common-api</module>
+        <module>modules/webotix-ui</module>
     </modules>
 
     <properties>
