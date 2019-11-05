@@ -1,0 +1,30 @@
+{
+  "name": "webotix",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "@types/react": "^16.9.11",
+    "@types/react-dom": "^16.9.3",
+    "@types/react-grid-layout": "^0.16.7",
+    "@types/react-redux": "^7.1.5",
+    "@types/styled-components": "^4.1.21",
+    "polished": "^3.4.2",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
+    "react-grid-layout": "^0.17.1",
+    "react-redux": "^7.1.1",
+    "redux": "^4.0.4",
+    "styled-components": "^4.4.1"
+
+  },
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject"
+  },
+  "devDependencies": {
+    "react-scripts-ts": "^3.1.0",
+    "typescript": "^3.7.2"
+  }
+}
