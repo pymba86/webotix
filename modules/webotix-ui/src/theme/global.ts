@@ -1,4 +1,4 @@
-import {createGlobalStyle, css} from "../lib/styled"
+import {createGlobalStyle, css} from "../common/styled"
 
 export const GlobalStyle = createGlobalStyle`
   ${({ theme }) => css`

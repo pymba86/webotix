@@ -1,5 +1,5 @@
 import Theme from "../typings/theme";
-import {lighten} from "polished";
+import {darken, lighten} from "polished";
 
 
 const theme: Theme = {
@@ -9,10 +9,14 @@ const theme: Theme = {
         mono: "Menlo, monospace",
         heading: "system-ui, sans-serif"
     },
+    radii: [0,1,4],
     colors: {
         fore: "#aaa",
+        link: "#3BB3E4",
         black: "#000",
         white: "#fff",
+        disabled: darken(0.3, "#aaa"),
+        disabledBg: lighten(0.03, "#2F3241"),
         backgrounds: [
             "#131722",
             "#282b38",
