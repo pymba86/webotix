@@ -1,23 +1,110 @@
 import styled from "styled-components";
+import {WidthProvider, Responsive} from "react-grid-layout"
 import * as React from "react";
+import theme from "../../theme";
+import Section from "../../elements/Section";
+
+const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 const LayoutBox = styled.div`
   height: 100%;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
 `;
 
-export interface Props {
+interface Props {
     isMobile: boolean;
 }
 
 
 export default class Framework extends React.Component<Props> {
 
+    basePanels: any = {
+        coins: {
+            key: "coins",
+            visible: true,
+            detached: false,
+            stackPosition: 0
+        },
+        jobs: {
+            key: "jobs",
+            visible: true,
+            detached: false,
+            stackPosition: 0
+        },
+        chart: {
+            key: "chart",
+            visible: true,
+            detached: false,
+            stackPosition: 0
+        },
+        openOrders: {
+            key: "openOrders",
+            visible: true,
+            detached: false,
+            stackPosition: 0
+        },
+        balance: {
+            key: "balance",
+            visible: true,
+            detached: false,
+            stackPosition: 0
+        },
+        tradeSelector: {
+            key: "tradeSelector",
+            visible: true,
+            detached: false,
+            stackPosition: 0
+        },
+        marketData: {
+            key: "marketData",
+            visible: true,
+            detached: false,
+            stackPosition: 0
+        },
+        notifications: {
+            key: "notifications",
+            visible: true,
+            detached: false,
+            stackPosition: 0
+        }
+    };
+
+    baseLayouts: any = {
+        lg: [
+          { i: "coins", x: 0, y: 0, w: 8, h: 22 },
+            { i: "notifications", x: 0, y: 100, w: 8, h: 11 }
+        ],
+        md: [
+            { i: "coins", x: 20, y: 100, w: 12, h: 11 },
+            { i: "notifications",x: 20, y: 400, w: 12, h: 7 }
+        ],
+        sm: [
+            { i: "coins", x: 0, y: 100, w: 4, h: 12},
+            { i: "notifications", x: 0, y: 800, w: 4, h: 6 }
+        ]
+    };
+
     render() {
         return (
-            <>
-
-            </>
+            <ResponsiveReactGridLayout
+                breakpoints={theme.panelBreakpoints}
+                cols={{lg: 40, md: 32, sm: 4}}
+                margin={[theme.space[1], theme.space[1]]}
+                layouts={this.baseLayouts}
+                rowHeight={24}
+                containerPadding={[theme.space[1], theme.space[1]]}
+            >
+                <LayoutBox key="coins">
+                  <Section>
+                      Box 1
+                  </Section>
+                </LayoutBox>
+                <LayoutBox key="notifications">
+                    <Section>
+                        Box 2
+                    </Section>
+                </LayoutBox>
+            </ResponsiveReactGridLayout>
         )
     }
 }

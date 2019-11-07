@@ -1,11 +1,12 @@
 export default interface Theme {
-    fontSizes: number[];
+    fontSizes: number[],
     fonts: {
         sans: string;
         mono: string;
         heading: string;
     },
-    radii: number[];
+    radii: number[],
+    space: number[],
     colors: {
         fore: string;
         link: string;
@@ -14,5 +15,10 @@ export default interface Theme {
         disabled: string;
         disabledBg: string;
         backgrounds: string[];
+    },
+    panelBreakpoints: {
+        lg: number,
+        md: number,
+        sm: number
     }
 }

@@ -2,7 +2,7 @@ import * as React from "react";
 import Framework from "./Framework";
 
 
-class FrameworkContainer extends React.Component {
+export default class FrameworkContainer extends React.Component {
 
     render() {
         return (

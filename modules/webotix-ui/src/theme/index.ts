@@ -24,7 +24,13 @@ const theme: Theme = {
             "#343747",
             lighten(0.1, "#343747")
         ]
-    }
+    },
+    panelBreakpoints: {
+        lg: 1630,
+        md: 992,
+        sm: 0
+    },
+    space: [0, 4, 8, 16, 32, 64, 128],
 };
 
 export default theme;

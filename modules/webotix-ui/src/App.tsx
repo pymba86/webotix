@@ -2,7 +2,7 @@ import * as React from 'react';
 import {ThemeProvider} from "./common/styled";
 import theme from "./theme";
 import {GlobalStyle} from "./theme/global"
-import Button from "./elements/Button";
+import FrameworkContainer from "./containers/Framework/FrameworkContainer";
 
 export default class App extends React.Component {
 
@@ -11,7 +11,7 @@ export default class App extends React.Component {
             <ThemeProvider theme={theme}>
                 <React.Fragment>
                     <GlobalStyle/>
-                    <Button>Webotix</Button>
+                    <FrameworkContainer />
                 </React.Fragment>
             </ThemeProvider>
         );
