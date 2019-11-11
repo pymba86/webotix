@@ -1,15 +1,9 @@
-import styled from "styled-components";
+
 import {WidthProvider, Responsive} from "react-grid-layout"
 import * as React from "react";
-import theme from "../../theme";
-import Section from "../../elements/Section";
+import {Button} from "../../elements/Button";
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
-
-const LayoutBox = styled.div`
-  height: 100%;
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
-`;
 
 interface Props {
     isMobile: boolean;
@@ -87,23 +81,14 @@ export default class Framework extends React.Component<Props> {
     render() {
         return (
             <ResponsiveReactGridLayout
-                breakpoints={theme.panelBreakpoints}
-                cols={{lg: 40, md: 32, sm: 4}}
-                margin={[theme.space[1], theme.space[1]]}
                 layouts={this.baseLayouts}
-                rowHeight={24}
-                containerPadding={[theme.space[1], theme.space[1]]}
             >
-                <LayoutBox key="coins">
-                  <Section>
-                      Box 1
-                  </Section>
-                </LayoutBox>
-                <LayoutBox key="notifications">
-                    <Section>
+                  <div  key="coins">
+                      <Button appearance={"success"} variant={"solid"}/>
+                  </div>
+                    <div key="notifications">
                         Box 2
-                    </Section>
-                </LayoutBox>
+                    </div>
             </ResponsiveReactGridLayout>
         )
     }
