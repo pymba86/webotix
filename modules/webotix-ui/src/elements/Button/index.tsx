@@ -1,129 +1,124 @@
 import * as React from "react"
-import {PaletteAppearance} from "../../theme/colors";
-import {styled, Theme, ThemeProps} from "../../theme";
-import color from "color";
-import {css} from "styled-components";
+import {classNames, variationName} from "../../utilities/css";
+import styles from './Button.scss';
 
-export type ButtonSize = "xs" | "sm" | "md" | "lg";
+export type Size = 'slim' | 'medium' | 'large';
 
-export type ButtonVariant = "solid" | "outline";
+export type TextAlign = 'left' | 'right' | 'center';
 
-export type ButtonAppearance = PaletteAppearance;
-
-export type ButtonType = "button" | "reset" | "submit";
-
-export interface ButtonStyleProps {
-    leftIcon?: React.ReactNode;
-    rightIcon?: React.ReactNode;
+export interface ButtonProps {
+    /** The content to display inside the button */
+    children?: string | string[];
+    /** A destination to link to, rendered in the href attribute of a link */
+    url?: string;
+    /** A unique identifier for the button */
+    id?: string;
+    /** Provides extra visual weight and identifies the primary action in a set of buttons */
+    primary?: boolean;
+    /** Indicates a dangerous or potentially negative action */
+    destructive?: boolean;
+    /** Disables the button, disallowing merchant interaction */
     disabled?: boolean;
+    /** Replaces button text with a spinner while a background action is being performed */
     loading?: boolean;
-    active?: boolean;
-    full?: boolean;
-    size?: ButtonSize;
-    variant?: ButtonVariant;
-    appearance: ButtonAppearance;
-    type?: ButtonType;
+    /** Changes the size of the button, giving it more or less padding*/
+    size?: Size;
+    /** Changes the inner text alignment of the button */
+    textAlign?: TextAlign;
+    /** Gives the button a subtle alternative to the default button styling, appropriate for certain backdrops */
+    outline?: boolean;
+    /** Gives the button the appearance of being pressed */
+    pressed?: boolean;
+    /** Allows the button to grow to the width of its container */
+    fullWidth?: boolean;
+    /** Displays the button with a disclosure icon. Defaults to `down` when set to true */
+    disclosure?: 'down' | 'up' | boolean;
+    /** Allows the button to submit a form */
+    submit?: boolean;
+    /** Renders a button that looks like a link */
+    plain?: boolean;
+    /** Makes `plain` and `outline` Button colors (text, borders, icons) the same as the current text color. Also adds an underline to `plain` Buttons */
+    monochrome?: boolean;
+    /** Forces url to open in a new tab */
+    external?: boolean;
+    /** Tells the browser to download the url instead of opening it. Provides a hint for the downloaded filename if it is a string value */
+    download?: string | boolean;
+    /** Icon to display to the left of the button content */
+    icon?: React.ReactElement;
+    /** Callback when clicked */
+    onClick?(): void;
+    /** Callback when button becomes focused */
+    onFocus?(): void;
+    /** Callback when focus leaves button */
+    onBlur?(): void;
+    /** Callback when a keypress event is registered on the button */
+    onKeyPress?(event: React.KeyboardEvent<HTMLButtonElement>): void;
+    /** Callback when a keyup event is registered on the button */
+    onKeyUp?(event: React.KeyboardEvent<HTMLButtonElement>): void;
+    /** Callback when a keydown event is registered on the button */
+    onKeyDown?(event: React.KeyboardEvent<HTMLButtonElement>): void;
+    /** Callback when mouse enter */
+    onMouseEnter?(): void;
+    /** Callback when element is touched */
+    onTouchStart?(): void;
 }
-
-export interface ButtonProps extends ButtonStyleProps {
-    children?: React.ReactNode;
-    ref?: React.Ref<HTMLButtonElement>;
-    component?: React.ElementType;
-}
-
-export type ButtonRef = HTMLButtonElement;
 
 ////////////////////////////////////////////////////////////
 
-const getTextColor = (background: string, theme: Theme) => {
-    return color(background).isDark() ? "white" : theme.modes.light.text.default;
+export const Button: React.FunctionComponent<ButtonProps>
+    = ({
+           id,
+           url,
+           disabled,
+           loading,
+           children,
+           onClick,
+           onFocus,
+           onBlur,
+           onKeyDown,
+           onKeyPress,
+           onKeyUp,
+           onMouseEnter,
+           onTouchStart,
+           external,
+           download,
+           icon,
+           primary,
+           outline,
+           destructive,
+           disclosure,
+           plain,
+           monochrome,
+           submit,
+           size = 'medium',
+           textAlign,
+           fullWidth,
+           pressed,
+       }: ButtonProps) => {
+
+    const isDisabled = disabled || loading;
+
+    const className = classNames(
+        styles.Button,
+        primary && styles.primary,
+        outline && styles.outline,
+        destructive && styles.destructive,
+        isDisabled && styles.disabled,
+        loading && styles.loading,
+        plain && styles.plain,
+        pressed && !disabled && !url && styles.pressed,
+        monochrome && styles.monochrome,
+        size && size !== 'medium' && styles[variationName('size', size)],
+        textAlign && styles[variationName('textAlign', textAlign)],
+        fullWidth && styles.fullWidth,
+        icon && children == null && styles.iconOnly,
+    );
+
+    return (
+        <button className={className}>
+            {children}
+        </button>
+    )
 };
-
-const variantStyle = ({theme, ...props}: ButtonStyleProps & ThemeProps) => {
-
-    const {appearance} = props;
-
-    switch (appearance) {
-        case "none":
-            return css`
-                      background-color: white;
-                      color: ${getTextColor(theme.colors.intent.none.lightest, theme)};
-                    `;
-        case "primary":
-            return css`
-                      background-color: ${theme.colors.intent.primary.base};
-                      color: ${getTextColor(theme.colors.intent.primary.base, theme)};
-                    `;
-        case "success":
-            return css`
-                      background-color: ${theme.colors.intent.success.base};
-                      color: ${getTextColor(theme.colors.intent.success.base, theme)};
-                    `;
-        case "warning":
-            return css`
-                      background-color: ${theme.colors.intent.warning.base};
-                      color: ${getTextColor(theme.colors.intent.warning.base, theme)};
-                    `;
-        case "danger":
-            return css`background-color: ${theme.colors.intent.danger.base};
-                      color: ${getTextColor(theme.colors.intent.danger.base, theme)};
-                    `;
-    }
-};
-
-
-const baseStyle = (props: ButtonStyleProps) => css`
-  appearance: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 250ms;
-  user-select: none;
-  position: relative;
-  white-space: nowrap;
-  vertical-align: middle;
-  line-height: 1.2;
-  outline: none;
-  border:none;
-`;
-
-const disabledStyle = (props: ButtonStyleProps) => props.disabled && css`
-  cursor: not-allowed;
-  opacity: 40%;
-`;
-
-
-export const ButtonStyle = styled.button<ButtonStyleProps>`
-  ${baseStyle}
-  ${disabledStyle}
-  ${variantStyle}
-  
-`;
-
-////////////////////////////////////////////////////////////
-
-export const Button: React.RefForwardingComponent<ButtonRef, ButtonProps>
-    = React.forwardRef(({
-                            children,
-                            component = "button",
-                            size = "md",
-                            appearance = "primary",
-                            type = "button",
-                            variant = "solid",
-                            active,
-                            full,
-                            loading,
-                            leftIcon,
-                            rightIcon,
-                            ...props
-                        }: ButtonProps, ref) => {
-
-        return (
-            <ButtonStyle ref={ref} as={component} appearance={appearance}  {...props}>
-                ${children}
-            </ButtonStyle>
-        )
-    }
-);
 
 export default Button;

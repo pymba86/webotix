@@ -1,15 +1,11 @@
 {
   "compilerOptions": {
-    "outDir": "build",
-    "module": "esnext",
-    "target": "es5",
-    "lib": ["es6", "es7", "dom", "webworker", "es2017"],
-    "sourceMap": true,
+    "target": "es6",
     "allowJs": false,
     "jsx": "react",
     "moduleResolution": "node",
     "rootDir": ".",
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "noImplicitReturns": true,
@@ -19,8 +15,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "allowSyntheticDefaultImports": true,
-    "removeComments": true,
-    "skipLibCheck": true
+    "removeComments": true
   },
   "exclude": ["node_modules", "build"]
 }
