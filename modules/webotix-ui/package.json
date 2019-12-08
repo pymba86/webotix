@@ -1,17 +1,7 @@
 {
   "name": "webotix",
   "version": "1.0.0",
-  "main": "index.js",
   "dependencies": {
-    "@types/color": "^3.0.0",
-    "@types/node-sass": "^4.11.0",
-    "@types/react": "^16.9.11",
-    "@types/react-dom": "^16.9.4",
-    "@types/react-grid-layout": "^0.16.7",
-    "@types/react-redux": "^7.1.5",
-    "color": "^3.1.2",
-    "dotenv": "^8.2.0",
-    "open-color": "^1.7.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-grid-layout": "^0.17.1",
@@ -19,32 +9,55 @@
     "redux": "^4.0.4"
   },
   "scripts": {
-    "fuse": "ts-node --project fuse.tsconfig.json fuse.ts",
-    "start": "NODE_ENV=development npm run fuse",
-    "build": "NODE_ENV=production npm run fuse build",
-    "tslint": "tslint --fix -c tslint.json -p tsconfig.json"
+    "start": "cross-env NODE_ENV=development TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack-dev-server --watch --progress --colors --config tools/webpack/dev.config.ts",
+    "build": "cross-env NODE_ENV=production TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack  --progress --colors --config tools/webpack/prod.config.ts"
   },
   "devDependencies": {
-    "typescript": "^3.7.2",
-    "react-scripts": "^3.2.0",
-    "ts-node": "^8.5.4",
-    "tslint": "^5.20.1",
-    "uglify-js": "^3.7.1",
-    "fuse-box": "^3.7.1",
+    "@types/autoprefixer": "^9.6.1",
+    "@types/clean-webpack-plugin": "^0.1.3",
+    "@types/html-webpack-plugin": "^3.2.1",
+    "@types/mini-css-extract-plugin": "^0.8.0",
+    "@types/node": "^12.12.14",
+    "@types/react": "^16.9.11",
+    "@types/react-dom": "^16.9.4",
+    "@types/react-grid-layout": "^0.16.7",
+    "@types/react-redux": "^7.1.5",
+    "@types/stylelint": "^9.10.1",
+    "@types/webpack": "^4.41.0",
+    "@types/webpack-dev-server": "^3.9.0",
+    "autoprefixer": "^9.7.3",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "circular-dependency-plugin": "^5.2.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "cross-env": "^6.0.3",
+    "css-loader": "^3.2.1",
+    "doiuse": "^4.2.0",
+    "favicons-webpack-plugin": "^1.0.2",
+    "file-loader": "^5.0.2",
+    "fork-ts-checker-webpack-plugin": "^3.1.1",
+    "friendly-errors-webpack-plugin": "^1.7.0",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.13.0",
-    "postcss-modules": "^1.4.1",
-    "fuse-box-typechecker": "^3.0.0-next.29"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "postcss-loader": "^3.0.0",
+    "postcss-reporter": "^6.0.1",
+    "postcss-scss": "^2.0.0",
+    "react-hot-loader": "^4.12.18",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.0.1",
+    "stylelint": "^12.0.0",
+    "stylelint-config-standard": "^19.0.0",
+    "stylelint-order": "^3.1.1",
+    "stylelint-scss": "^3.13.0",
+    "thread-loader": "^2.1.3",
+    "ts-loader": "^6.2.1",
+    "ts-node": "^8.5.4",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.7.2",
+    "url-loader": "^3.0.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
   }
 }

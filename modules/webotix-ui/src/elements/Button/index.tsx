@@ -1,10 +1,15 @@
 import * as React from "react"
-import {classNames, variationName} from "../../utilities/css";
 import styles from './Button.scss';
 
 export type Size = 'slim' | 'medium' | 'large';
 
 export type TextAlign = 'left' | 'right' | 'center';
+
+type Falsy = boolean | undefined | null | 0;
+
+export function classNames(...classes: (string | Falsy)[]) {
+    return classes.filter(Boolean).join(' ');
+}
 
 export interface ButtonProps {
     /** The content to display inside the button */
@@ -108,8 +113,6 @@ export const Button: React.FunctionComponent<ButtonProps>
         plain && styles.plain,
         pressed && !disabled && !url && styles.pressed,
         monochrome && styles.monochrome,
-        size && size !== 'medium' && styles[variationName('size', size)],
-        textAlign && styles[variationName('textAlign', textAlign)],
         fullWidth && styles.fullWidth,
         icon && children == null && styles.iconOnly,
     );
