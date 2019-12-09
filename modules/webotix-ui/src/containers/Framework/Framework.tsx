@@ -84,10 +84,10 @@ export default class Framework extends React.Component<Props> {
                 layouts={this.baseLayouts}
             >
                   <div  key="coins">
-                      <Button primary={true}>Add product</Button>
+                      <Button primary={true}>Добавить заказ</Button>
                   </div>
                     <div key="notifications">
-                        <Button>Add product</Button>
+                        <Button>Загрузить</Button>
                     </div>
             </ResponsiveReactGridLayout>
         )

@@ -1,11 +1,51 @@
-body {
-  background-color: black;
+@import "../../styles/foundation";
+@import "../../styles/elements";
+
+.button {
+  @include button-base;
+  @include button-height($button-height);
 }
 
-.Button {
- background-color: blue;
+.default {
+  @include button();
 }
 
-.primary {
-  padding: 2em;
+@each $intent, $colors in $button-intents {
+  .#{$intent} {
+    @include button-intent($colors...);
+  }
 }
+
+.disabled {
+  cursor: not-allowed;
+}
+
+.fill {
+  display: flex;
+  width: 100%;
+}
+
+.textAlignRight {
+  text-align: right;
+}
+
+.textAlignLeft {
+  text-align: left;
+}
+
+.large {
+  @include button-height-large();
+}
+
+.small {
+  @include button-height-small();
+}
+
+.minimal {
+  @include button-minimal();
+}
+
+.buttonText {
+  flex: 0 1 auto;
+}
+

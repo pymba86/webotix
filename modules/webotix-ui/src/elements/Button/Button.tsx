@@ -104,8 +104,9 @@ export const Button: React.FunctionComponent<ButtonProps>
     const isDisabled = disabled || loading;
 
     const className = classNames(
-        styles.Button,
-        primary && styles.primary,
+        styles.button,
+        styles.danger,
+        styles.fill,
         outline && styles.outline,
         destructive && styles.destructive,
         isDisabled && styles.disabled,

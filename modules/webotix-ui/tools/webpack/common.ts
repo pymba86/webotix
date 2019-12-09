@@ -9,7 +9,6 @@ import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
 import postcssReporter from 'postcss-reporter';
 import postcssSCSS from 'postcss-scss';
 import autoprefixer from 'autoprefixer';
-import doiuse from 'doiuse';
 
 import threadLoaderLib from 'thread-loader';
 import {getEnvParams} from "../params";
@@ -131,14 +130,6 @@ const commonScssLoaders: webpack.Loader[] = [
         options: {
             syntax: postcssSCSS,
             plugins: () => [
-                doiuse({
-                    // https://github.com/browserslist/browserslist
-                    // to view resulting browsers list, use the command in terminal
-                    // `npx browserslist "defaults, not ie > 0"`
-                    browsers: ['defaults', 'not op_mini all', 'not ie > 0', 'not ie_mob > 0'],
-                    ignore: [],
-                    ignoreFiles: ['**/normalize.css'],
-                }),
                 postcssReporter({
                     clearReportedMessages: true,
                     throwError: true,
@@ -146,6 +137,7 @@ const commonScssLoaders: webpack.Loader[] = [
             ],
         },
     },
+    "@teamsupercell/typings-for-css-modules-loader"
 ];
 
 export function getStyleRules(type: BuildType) {
