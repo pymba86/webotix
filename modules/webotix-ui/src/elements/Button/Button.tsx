@@ -1,15 +1,10 @@
 import * as React from "react"
 import styles from './Button.scss';
+import {classNames} from "../../utilities";
 
 export type Size = 'slim' | 'medium' | 'large';
 
 export type TextAlign = 'left' | 'right' | 'center';
-
-type Falsy = boolean | undefined | null | 0;
-
-export function classNames(...classes: (string | Falsy)[]) {
-    return classes.filter(Boolean).join(' ');
-}
 
 export interface ButtonProps {
     /** The content to display inside the button */

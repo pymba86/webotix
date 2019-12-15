@@ -268,7 +268,7 @@ $button-intents: (
   }
 
   @each $intent, $colors in $button-intents {
-    &.intent-#{$intent} {
+    &.#{$intent} {
       @include button-minimal-intent(
                       map-get($intent-colors, $intent),
                       map-get($intent-text-colors, $intent)
