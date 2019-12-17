@@ -1,7 +1,7 @@
 
 import {WidthProvider, Responsive} from "react-grid-layout"
 import * as React from "react";
-import {Button} from "../../elements/Button";
+import {Button} from "../../elements/button";
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 

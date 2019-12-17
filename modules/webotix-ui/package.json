@@ -2,6 +2,8 @@
   "name": "webotix",
   "version": "1.0.0",
   "dependencies": {
+    "@types/classnames": "^2.2.6",
+    "classnames": "^2.2.6",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-grid-layout": "^0.17.1",
