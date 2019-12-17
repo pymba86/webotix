@@ -1,7 +1,6 @@
-
 import {WidthProvider, Responsive} from "react-grid-layout"
 import * as React from "react";
-import {Button} from "../../elements/button";
+import {Button} from "../../elements";
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -65,16 +64,16 @@ export default class Framework extends React.Component<Props> {
 
     baseLayouts: any = {
         lg: [
-          { i: "coins", x: 0, y: 0, w: 8, h: 22 },
-            { i: "notifications", x: 0, y: 100, w: 8, h: 11 }
+            {i: "coins", x: 0, y: 0, w: 8, h: 22},
+            {i: "notifications", x: 0, y: 100, w: 8, h: 11}
         ],
         md: [
-            { i: "coins", x: 20, y: 100, w: 12, h: 11 },
-            { i: "notifications",x: 20, y: 400, w: 12, h: 7 }
+            {i: "coins", x: 20, y: 100, w: 12, h: 11},
+            {i: "notifications", x: 20, y: 400, w: 12, h: 7}
         ],
         sm: [
-            { i: "coins", x: 0, y: 100, w: 4, h: 12},
-            { i: "notifications", x: 0, y: 800, w: 4, h: 6 }
+            {i: "coins", x: 0, y: 100, w: 4, h: 12},
+            {i: "notifications", x: 0, y: 800, w: 4, h: 6}
         ]
     };
 
@@ -83,12 +82,12 @@ export default class Framework extends React.Component<Props> {
             <ResponsiveReactGridLayout
                 layouts={this.baseLayouts}
             >
-                  <div  key="coins">
-                      <Button primary={true}>Добавить заказ</Button>
-                  </div>
-                    <div key="notifications">
-                        <Button>Загрузить</Button>
-                    </div>
+                <div key="coins">
+                    <Button fill={true} intent={"danger"}>Добавить заказ</Button>
+                </div>
+                <div key="notifications">
+                    <Button>Загрузить</Button>
+                </div>
             </ResponsiveReactGridLayout>
         )
     }

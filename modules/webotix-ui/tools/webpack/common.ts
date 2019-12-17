@@ -6,6 +6,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CircularDependencyPlugin from 'circular-dependency-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import FriendlyErrorsWebpackPlugin from 'friendly-errors-webpack-plugin';
+import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import postcssReporter from 'postcss-reporter';
 import postcssSCSS from 'postcss-scss';
 import autoprefixer from 'autoprefixer';
@@ -45,7 +46,7 @@ function sortChunks(a: webpack.compilation.Chunk, b: webpack.compilation.Chunk) 
 
 export const getCommonPlugins: (type: BuildType) => webpack.Plugin[] = type => [
     new CleanWebpackPlugin({
-        cleanOnceBeforeBuildPatterns: ['build', 'static']
+        cleanAfterEveryBuildPatterns: ['build', 'static']
     }),
     new MiniCssExtractPlugin({
         filename: `css/[name].[${chunkHash}].css`,
@@ -60,12 +61,13 @@ export const getCommonPlugins: (type: BuildType) => webpack.Plugin[] = type => [
         exclude: /node_modules/,
         failOnError: true,
         cwd: process.cwd(),
-    })
+    }),
+    new OptimizeCSSAssetsPlugin()
 ]
     .concat(type !== 'prod' ? (
         new ForkTsCheckerWebpackPlugin({
             checkSyntacticErrors: true,
-            async: false,
+            async: true,
             tsconfig: path.resolve('./tsconfig.json'),
         })) : [])
     .concat(type !== 'prod' ? (
@@ -136,18 +138,14 @@ const commonScssLoaders: webpack.Loader[] = [
                 }),
             ],
         },
-    },
-    "@teamsupercell/typings-for-css-modules-loader"
+    }
 ];
 
 export function getStyleRules(type: BuildType) {
-    const getCssLoader = (extend: boolean = false, onlyLocals: boolean = false) => ({
+    const getCssLoader = (extend: boolean = false) => ({
         loader: 'css-loader',
         options: {
-            onlyLocals, importLoaders: 1,
-            modules: {
-                localIdentName: extend ? '[name]__[local]' : '[hash:base64:5]'
-            },
+            importLoaders: 1,
             sourceMap: extend,
         },
     });

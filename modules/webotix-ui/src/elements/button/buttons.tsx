@@ -1,8 +1,8 @@
 import * as React from "react"
-import {AbstractButton, ButtonProps} from "./abstractButton";
+import {AbstractButton, ButtonProps as Props} from "./abstractButton";
 import {removeNonHTMLProps} from "../../utilities";
 
-export {ButtonProps};
+export type ButtonProps = Props;
 
 export class Button extends AbstractButton<React.ButtonHTMLAttributes<HTMLButtonElement>> {
 

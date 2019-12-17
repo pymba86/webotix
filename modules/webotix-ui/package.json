@@ -2,7 +2,6 @@
   "name": "webotix",
   "version": "1.0.0",
   "dependencies": {
-    "@types/classnames": "^2.2.6",
     "classnames": "^2.2.6",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
@@ -15,7 +14,7 @@
     "build": "cross-env NODE_ENV=production TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack  --progress --colors --config tools/webpack/prod.config.ts"
   },
   "devDependencies": {
-    "@teamsupercell/typings-for-css-modules-loader": "^2.1.0",
+    "@types/classnames": "^2.2.6",
     "@types/autoprefixer": "^9.6.1",
     "@types/clean-webpack-plugin": "^0.1.3",
     "@types/html-webpack-plugin": "^3.2.1",
@@ -43,6 +42,7 @@
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.13.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
     "postcss-loader": "^3.0.0",
     "postcss-reporter": "^6.0.1",
     "postcss-scss": "^2.0.0",
