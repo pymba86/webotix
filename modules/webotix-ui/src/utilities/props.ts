@@ -2,6 +2,8 @@ import * as React from "react";
 
 import {Intent} from "./intent";
 
+export type HTMLDivProps = React.HTMLAttributes<HTMLDivElement>;
+
 /**
  * Базовый класс свойств для всех компонентов
  */
@@ -80,6 +82,6 @@ export function removeNonHTMLProps(
             }
             return prev;
         },
-        { ...props },
+        {...props},
     );
 }

@@ -1,6 +1,6 @@
 import {WidthProvider, Responsive} from "react-grid-layout"
 import * as React from "react";
-import {Button} from "../../elements";
+import {AnchorButton, Button} from "../../elements";
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
@@ -84,6 +84,7 @@ export default class Framework extends React.Component<Props> {
             >
                 <div key="coins">
                     <Button fill={true} intent={"danger"}>Добавить заказ</Button>
+                    <AnchorButton intent={"warning"} href={"google.com"}>Сайт</AnchorButton>
                 </div>
                 <div key="notifications">
                     <Button>Загрузить</Button>
