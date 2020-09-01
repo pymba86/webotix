@@ -26,7 +26,6 @@ import ru.webotix.exchange.api.ExchangeConfiguration;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,18 +35,20 @@ import static info.bitrich.xchangestream.util.Events.BEFORE_API_CALL_HANDLER;
 import static java.util.stream.Stream.concat;
 
 @Singleton
-public class ExchangeServiceImpl implements ExchangeService {
+public class CacheExchangeService implements ExchangeService {
 
     private static final ExchangeConfiguration VANILLA_CONFIG = new ExchangeConfiguration();
     private static final RateLimit DEFAULT_RATE = new RateLimit(1, 3, TimeUnit.SECONDS);
     private static final RateLimit[] NO_LIMITS = new RateLimit[0];
     private static final Duration THROTTLE_DURATION = Duration.ofMinutes(2);
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExchangeServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CacheExchangeService.class);
 
     private final WebotixConfiguration configuration;
 
-    private final LoadingCache<String, Exchange> exchanges = CacheBuilder.newBuilder().build(new CacheLoader<String, Exchange>() {
+    private final LoadingCache<String, Exchange> exchanges = CacheBuilder.newBuilder()
+            .build(new CacheLoader<String, Exchange>() {
+
         @Override
         public Exchange load(String name) throws Exception {
             final ExchangeConfiguration exchangeConfiguration = configuration.getExchanges() == null
@@ -148,7 +149,7 @@ public class ExchangeServiceImpl implements ExchangeService {
     });
 
     @Inject
-    public ExchangeServiceImpl(WebotixConfiguration configuration) {
+    public CacheExchangeService(WebotixConfiguration configuration) {
         this.configuration = configuration;
     }
 
@@ -156,7 +157,8 @@ public class ExchangeServiceImpl implements ExchangeService {
     public Collection<String> getExchanges() {
         return ImmutableSet.<String>builder()
                 .addAll(Exchanges.EXCHANGE_TYPES.get().stream()
-                        .map(Exchanges::classToFriendlyName).collect(Collectors.toList())
+                        .map(Exchanges::classToFriendlyName)
+                        .collect(Collectors.toList())
                 )
                 .build();
     }

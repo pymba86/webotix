@@ -22,7 +22,8 @@ public class AccountServiceExchangeFactory extends AbstractExchangeServiceFactor
 
     @Override
     protected ExchangeServiceFactory<AccountService> getRealFactory() {
-        return exchange -> exchangeService.get(exchange).getAccountService();
+        return exchange -> exchangeService.get(exchange)
+                .getAccountService();
     }
 
     @Override

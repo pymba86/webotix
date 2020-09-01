@@ -36,5 +36,4 @@ public abstract class Balance {
     @JsonProperty
     public abstract BigDecimal available();
 
-
 }

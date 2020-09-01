@@ -101,7 +101,7 @@ public class ExchangeEventBus implements ExchangeEventRegistry {
          * @param subscription слушатель
          * @return слушатель удален из общего списка
          */
-        private boolean unsuscribe(MarketDataSubscription subscription) {
+        private boolean unsubscribe(MarketDataSubscription subscription) {
             log.debug("... unsubscribing {}", subscription);
             AtomicInteger refCount = allSubscriptions.get(subscription);
 
@@ -132,7 +132,7 @@ public class ExchangeEventBus implements ExchangeEventRegistry {
         private boolean unsubscribeAll() {
             boolean updated = false;
             for (MarketDataSubscription subscription : subscriptions) {
-                if (unsuscribe(subscription)) {
+                if (unsubscribe(subscription)) {
                     updated = true;
                 }
             }

@@ -92,7 +92,9 @@ public final class WebSocketServer {
     }
 
     private WebSocketInMessage decodeRequest(String message) {
-        WebSocketInMessage request = null;
+
+        WebSocketInMessage request;
+
         try {
             request = objectMapper.readValue(message, WebSocketInMessage.class);
         } catch (Exception e) {

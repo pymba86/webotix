@@ -11,8 +11,9 @@ import java.util.Optional;
 public class ConnectionResourceFactory {
 
     public Optional<UrlConnectionResourcesBean> build(DatabaseType databaseType, String url) {
-        // FIXME Разбирает строку только с h2
+
         Iterator<String> split = Splitter.on(':').split(url).iterator();
+
         if (!"jdbc".equals(split.next())) {
             return Optional.empty();
         }

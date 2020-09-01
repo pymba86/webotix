@@ -42,13 +42,15 @@ public class ExchangeResource implements WebResource {
     @GET
     @Timed
     public Collection<ExchangeMeta> list() {
-        return this.exchanges.getExchanges().stream()
+        return this.exchanges.getExchanges()
+                .stream()
                 .map(code -> {
                     ExchangeConfiguration exchangeConfig = configuration.getExchanges().get(code);
                     return new ExchangeMeta(
                             code,
                             Exchanges.name(code),
-                            exchangeConfig != null && StringUtils.isNotBlank(exchangeConfig.getApiKey())
+                            exchangeConfig != null
+                                    && StringUtils.isNotBlank(exchangeConfig.getApiKey())
                     );
                 })
                 .collect(Collectors.toList());

@@ -5,7 +5,7 @@ import org.knowm.xchange.Exchange;
 
 import java.util.Collection;
 
-@ImplementedBy(ExchangeServiceImpl.class)
+@ImplementedBy(CacheExchangeService.class)
 public interface ExchangeService {
 
     /**

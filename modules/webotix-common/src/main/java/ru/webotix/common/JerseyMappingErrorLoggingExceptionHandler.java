@@ -13,7 +13,12 @@ public class JerseyMappingErrorLoggingExceptionHandler implements ExceptionMappe
 
     @Override
     public Response toResponse(JsonMappingException exception) {
+
         LOGGER.error("JSON mapping error at " + exception.getPath(), exception);
-        return Response.status(Response.Status.BAD_REQUEST).entity(exception.getMessage()).type("text/plain").build();
+
+        return Response.status(Response.Status.BAD_REQUEST)
+                .entity(exception.getMessage())
+                .type("text/plain")
+                .build();
     }
 }

@@ -116,6 +116,7 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
 
     @Override
     protected void run() throws Exception {
+
         Thread.currentThread()
                 .setName(MarketDataSubscriptionManager.class.getSimpleName());
 
@@ -207,8 +208,11 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
 
         @Override
         public void run() {
+
             Thread.currentThread().setName(exchangeName);
+
             log.info("{} starting", exchangeName);
+
             try {
                 initialize();
 
@@ -239,16 +243,25 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
          * Это может привести к сбою, когда обмен недоступен, поэтому продолжайте попытки.
          */
         private void initialize() throws InterruptedException {
+
             while (isRunning()) {
                 try {
+
                     Exchange exchange = exchangeService.get(exchangeName);
 
                     this.streamingExchange
-                            = exchange instanceof StreamingExchange ? (StreamingExchange) exchange : null;
+                            = exchange instanceof StreamingExchange
+                            ? (StreamingExchange) exchange : null;
 
-                    this.accountService = accountServiceFactory.getForExchange(exchangeName);
-                    this.marketDataService = exchange.getMarketDataService();
-                    this.tradeService = tradeServiceFactory.getForExchange(exchangeName);
+                    this.accountService = accountServiceFactory
+                            .getForExchange(exchangeName);
+
+                    this.marketDataService = exchange
+                            .getMarketDataService();
+
+                    this.tradeService = tradeServiceFactory
+                            .getForExchange(exchangeName);
+
                     break;
                 } catch (Exception e) {
                     log.error(exchangeName + " - failing initialising. Will retry in one minute.", e);
@@ -303,10 +316,11 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
         }
 
         private void suspend() throws InterruptedException {
+
             log.debug("{} - poll going to sleep", exchangeName);
+
             try {
                 if (subscriptionsFailed) {
-                    // FIXME awaitAdvanceInterruptibly - 1000
                     phaser.awaitAdvanceInterruptibly(phase, 1000, TimeUnit.MILLISECONDS);
                 } else {
                     log.debug("{} - sleeping until phase {}", exchangeName, phase);
@@ -324,7 +338,9 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
         }
 
         private Wallet wallet() throws IOException {
+
             exchangeService.rateController(exchangeName).acquire();
+
             Wallet wallet;
             wallet = accountService.getAccountInfo().getWallet();
             if (wallet == null) {
@@ -335,7 +351,9 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
 
         private Iterable<Balance> featchBalances(Collection<String> currencyCodes)
                 throws IOException {
+
             Map<String, Balance> result = new HashMap<>();
+
             currencyCodes.stream().map(Balance::zero)
                     .forEach(balance -> result.put(balance.currency(), balance));
             wallet().getBalances().values().stream()

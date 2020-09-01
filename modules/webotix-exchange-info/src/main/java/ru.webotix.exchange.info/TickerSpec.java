@@ -23,8 +23,14 @@ public abstract class TickerSpec {
     }
 
     public static TickerSpec fromKey(String key) {
+
         String[] split = key.split("/");
-        return builder().exchange(split[0]).counter(split[1]).base(split[2]).build();
+
+        return builder()
+                .exchange(split[0])
+                .counter(split[1])
+                .base(split[2])
+                .build();
     }
 
     @AutoValue.Builder

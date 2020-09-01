@@ -65,25 +65,35 @@ public final class Exchanges {
 
     public static Class<? extends Exchange> friendlyNameToClass(String friendlyName) {
 
-
         Optional<Class<? extends StreamingExchange>> streamingResult = STREAMING_EXCHANGE_TYPES.get()
                 .stream()
-                .filter(c -> c.getSimpleName().replace("StreamingExchange", "").equalsIgnoreCase(friendlyName))
+                .filter(c -> c.getSimpleName()
+                        .replace("StreamingExchange", "")
+                        .equalsIgnoreCase(friendlyName))
                 .findFirst();
+
         if (streamingResult.isPresent())
             return streamingResult.get();
 
         Optional<Class<? extends Exchange>> result = EXCHANGE_TYPES.get()
                 .stream()
-                .filter(c -> c.getSimpleName().replace("Exchange", "").equalsIgnoreCase(friendlyName))
+                .filter(c -> c.getSimpleName()
+                        .replace("Exchange", "")
+                        .equalsIgnoreCase(friendlyName))
                 .findFirst();
+
         if (!result.isPresent())
             throw new IllegalArgumentException("Unknown exchange [" + friendlyName + "]");
+
         return result.get();
     }
 
     public static String classToFriendlyName(Class<? extends Exchange> clazz) {
-        String name = clazz.getSimpleName().replace("Exchange", "").toLowerCase();
+
+        String name = clazz.getSimpleName()
+                .replace("Exchange", "")
+                .toLowerCase();
+
         return name.equals("coinbasepro") ? "gdax" : name;
     }
 }

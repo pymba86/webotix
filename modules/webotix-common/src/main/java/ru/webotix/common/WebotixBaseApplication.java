@@ -23,11 +23,11 @@ public abstract class WebotixBaseApplication extends Application<WebotixConfigur
                         .getDatabase().toDataSourceFactory());
 
         bootstrap.addBundle(
-                new GuiceBundle<WebotixConfiguration>(this,
+                new GuiceBundle<>(this,
                         new WebotixApplicationModule(),
                         new GuiceHibernateModule(hibernateBundleFactory),
                         createApplicationModule()
-                        )
+                )
         );
 
         bootstrap.addBundle(hibernateBundleFactory.bundle());

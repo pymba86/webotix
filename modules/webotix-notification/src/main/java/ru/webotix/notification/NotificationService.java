@@ -13,6 +13,14 @@ public interface NotificationService {
     void send(Notification notification);
 
     /**
+     * Оправить исключение в асинхронном режиме
+     *
+     * @param message Текст исключения
+     * @param cause   Исключение
+     */
+    void error(String message, Throwable cause);
+
+    /**
      * Оправить уведомление в асинхронном режиме
      *
      * @param message Текст уведомления
@@ -38,12 +46,4 @@ public interface NotificationService {
     default void error(String message) {
         send(Notification.create(message, NotificationLevel.Error));
     }
-
-    /**
-     * Оправить исключение в асинхронном режиме
-     *
-     * @param message Текст исключения
-     * @param cause   Исключение
-     */
-    void error(String message, Throwable cause);
 }
