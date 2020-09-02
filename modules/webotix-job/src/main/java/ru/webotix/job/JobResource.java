@@ -13,4 +13,6 @@ import javax.ws.rs.core.MediaType;
 @Consumes(MediaType.APPLICATION_JSON)
 @Singleton
 public class JobResource implements WebResource {
+
+
 }
