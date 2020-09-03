@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 import com.gruelbox.tools.dropwizard.guice.hibernate.EntityContribution;
 import com.gruelbox.tools.dropwizard.guice.resources.WebResource;
+import io.dropwizard.lifecycle.Managed;
 import org.alfasoftware.morf.upgrade.TableContribution;
 
 /**
@@ -32,6 +33,10 @@ public class JobModule extends AbstractModule {
         // Привязка веб API
         Multibinder.newSetBinder(binder(), WebResource.class)
                 .addBinding().to(JobResource.class);
+
+        // Управление блокировками заданий
+        Multibinder.newSetBinder(binder(), Managed.class)
+                .addBinding().to(RecordJobLocker.class);
 
     }
 }
