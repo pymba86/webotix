@@ -1,5 +1,7 @@
 package ru.webotix.job.spi;
 
+import com.google.inject.Injector;
+
 public interface JobProcessor<T extends Job> {
 
     public Status start();
@@ -19,5 +21,13 @@ public interface JobProcessor<T extends Job> {
          * @return Экземпляр процесса
          */
         public JobProcessor<T> create(T job, JobControl jobControl);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static JobProcessor<Job> createProcessor(
+            Job job, JobControl jobControl, Injector injector
+    ) {
+        return ((JobProcessor.Factory<Job>) injector.getInstance(job.processorFactory()))
+                .create(job, jobControl);
     }
 }

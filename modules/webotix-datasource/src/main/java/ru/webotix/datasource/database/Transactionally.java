@@ -163,4 +163,8 @@ public class Transactionally {
         }
     }
 
+    public Transactionally allowingNested() {
+        return new Transactionally(sessionFactory, true);
+    }
+
 }
