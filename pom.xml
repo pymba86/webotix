@@ -15,6 +15,7 @@
         <module>modules/webotix-auth</module>
         <module>modules/webotix-datasource</module>
         <module>modules/webotix-common</module>
+        <module>modules/webotix-base</module>
         <module>modules/webotix-websocket</module>
         <module>modules/webotix-job</module>
         <module>modules/webotix-app</module>
@@ -48,6 +49,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>webotix-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-base</artifactId>
             <version>${project.version}</version>
         </dependency>
 
