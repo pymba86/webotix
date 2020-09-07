@@ -21,4 +21,19 @@ public interface JobSubmitter {
      * @param jobControl Управление заданием
      */
     void validate(Job job, JobControl jobControl);
+
+    /**
+     * Отправить задание, но переформулирует все проверенные исключение
+     * в исключения времени выполнения
+     *
+     * @param job Задание
+     * @return Задание, которое включает любой сгенерированный индетификатор.
+     */
+    default Job submitNewUnchecked(Job job) {
+        try {
+            return submitNew(job);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
