@@ -61,7 +61,7 @@ public class ExchangeEventBus implements ExchangeEventRegistry {
         @Override
         public Flowable<BalanceEvent> getBalances() {
 
-            Set<String> exchangeCurrenciesSuscribed =
+            Set<String> exchangeCurrenciesSubscribed =
                     subscriptionsFor(MarketDataType.Balance)
                             .stream()
                             .flatMap(spec ->
@@ -73,7 +73,7 @@ public class ExchangeEventBus implements ExchangeEventRegistry {
                             .collect(Collectors.toSet());
 
             return marketDataSubscriptionManager.getBalances()
-                    .filter(e -> exchangeCurrenciesSuscribed.contains(
+                    .filter(e -> exchangeCurrenciesSubscribed.contains(
                             e.exchange() + "/" + e.currency()
                     ))
                     .onBackpressureLatest();
