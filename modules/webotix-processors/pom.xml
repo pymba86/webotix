@@ -2,26 +2,51 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>webotix-notification</artifactId>
+    <artifactId>webotix-processors</artifactId>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>ru.webotix</groupId>
         <artifactId>webotix-parent</artifactId>
         <version>0.1.0</version>
-        <relativePath>../..</relativePath>
+        <relativePath>../</relativePath>
     </parent>
 
     <dependencies>
 
         <dependency>
-            <groupId>com.google.auto.value</groupId>
-            <artifactId>auto-value</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-exchange-info</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-base</artifactId>
         </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>webotix-job</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-exchange</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-utils</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-notification</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.auto.value</groupId>
+            <artifactId>auto-value</artifactId>
         </dependency>
 
         <dependency>
@@ -47,6 +72,21 @@
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-servlet</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjava</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>info.bitrich.xchange-stream</groupId>
+            <artifactId>xchange-stream-core</artifactId>
         </dependency>
 
     </dependencies>

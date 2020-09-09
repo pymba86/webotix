@@ -6,7 +6,7 @@ package ru.webotix.job.spi;
 public interface StatusUpdateService {
 
     /**
-     * Отправить обновление статуса
+     * Отправить обновление статуса задания
      *
      * @param statusUpdate Обновление статуса
      */

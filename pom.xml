@@ -18,6 +18,7 @@
         <module>modules/webotix-base</module>
         <module>modules/webotix-websocket</module>
         <module>modules/webotix-job</module>
+        <module>modules/webotix-processors</module>
         <module>modules/webotix-app</module>
         <module>modules/webotix-exchange-api</module>
         <module>modules/webotix-common-api</module>
@@ -96,6 +97,12 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-processors</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>webotix-exchange</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -103,6 +110,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>webotix-utils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-job</artifactId>
             <version>${project.version}</version>
         </dependency>
 
