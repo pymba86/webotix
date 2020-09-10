@@ -8,12 +8,12 @@ import com.google.inject.Singleton;
  * Сервис уведомлений, который отправляет все входящие уведомления в EventBus
  */
 @Singleton
-public class EventNotificationService implements TransientNotificationService {
+public class SynchronousNotificationService implements TransientNotificationService {
 
     private final EventBus eventBus;
 
     @Inject
-    public EventNotificationService(EventBus eventBus) {
+    public SynchronousNotificationService(EventBus eventBus) {
         this.eventBus = eventBus;
     }
 

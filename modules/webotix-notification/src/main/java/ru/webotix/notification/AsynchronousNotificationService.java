@@ -8,6 +8,8 @@ import ru.webotix.datasource.database.Transactionally;
 import ru.webotix.job.JobSubmitter;
 import ru.webotix.job.spi.StatusUpdate;
 import ru.webotix.job.spi.StatusUpdateService;
+import ru.webotix.processors.Alert;
+import ru.webotix.processors.StatusUpdateJob;
 
 @Singleton
 public class AsynchronousNotificationService implements NotificationService, StatusUpdateService {
@@ -26,20 +28,27 @@ public class AsynchronousNotificationService implements NotificationService, Sta
 
     @Override
     public void send(StatusUpdate statusUpdate) {
-        /*transactionally
+        transactionally
                 .allowingNested()
                 .run(() -> jobSubmitter.submitNewUnchecked(
-
-                ));*/
+                        StatusUpdateJob.builder().statusUpdate(statusUpdate).build()
+                ));
     }
 
     @Override
     public void send(Notification notification) {
-
+        transactionally
+                .allowingNested()
+                .run(
+                        () -> jobSubmitter.submitNewUnchecked(
+                                Alert.builder().notification(notification).build()
+                        )
+                );
     }
 
     @Override
     public void error(String message, Throwable cause) {
-
+        log.error("Error notification: " + message, cause);
+        error(message);
     }
 }
