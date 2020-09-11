@@ -77,7 +77,7 @@ public class RecordJobLocker implements JobLocker, Managed {
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         SafelyDispose.of(interval);
     }
 

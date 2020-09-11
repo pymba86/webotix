@@ -2,8 +2,9 @@ package ru.webotix.exchange;
 
 import com.google.inject.Inject;
 import org.knowm.xchange.service.account.AccountService;
-import ru.webotix.common.api.WebotixConfiguration;
 import ru.webotix.exchange.PaperAccountService.Factory;
+
+import java.util.Map;
 
 public class AccountServiceExchangeFactory extends AbstractExchangeServiceFactory<AccountService> implements
         AccountServiceFactory {
@@ -12,7 +13,7 @@ public class AccountServiceExchangeFactory extends AbstractExchangeServiceFactor
     private final Factory paperAccountServiceFactory;
 
     @Inject
-    public AccountServiceExchangeFactory(WebotixConfiguration configuration,
+    public AccountServiceExchangeFactory(Map<String, ExchangeConfiguration> configuration,
                                          ExchangeService exchangeService,
                                          Factory paperAccountServiceFactory) {
         super(configuration);

@@ -2,7 +2,8 @@ package ru.webotix.exchange;
 
 import com.google.inject.Inject;
 import org.knowm.xchange.service.trade.TradeService;
-import ru.webotix.common.api.WebotixConfiguration;
+
+import java.util.Map;
 
 public class TradeServiceExchangeFactory extends AbstractExchangeServiceFactory<TradeService>
         implements TradeServiceFactory {
@@ -10,7 +11,8 @@ public class TradeServiceExchangeFactory extends AbstractExchangeServiceFactory<
     private final ExchangeService exchangeService;
 
     @Inject
-    public TradeServiceExchangeFactory(WebotixConfiguration configuration, ExchangeService exchangeService) {
+    public TradeServiceExchangeFactory(Map<String, ExchangeConfiguration> configuration,
+                                       ExchangeService exchangeService) {
         super(configuration);
         this.exchangeService = exchangeService;
     }

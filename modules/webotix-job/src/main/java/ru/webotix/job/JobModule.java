@@ -1,5 +1,6 @@
 package ru.webotix.job;
 
+import com.google.common.util.concurrent.Service;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 import com.gruelbox.tools.dropwizard.guice.hibernate.EntityContribution;
@@ -14,6 +15,9 @@ public class JobModule extends AbstractModule {
 
     @Override
     protected void configure() {
+
+        bind(JobSubmitter.class)
+                .to(ProcessJobSubmitter.class);
 
         // Привязка классов миграций базы данных
         Multibinder<TableContribution> tableContributions =
@@ -30,13 +34,16 @@ public class JobModule extends AbstractModule {
 
         entityContributions.addBinding().to(JobRecordContribution.class);
 
-        // Привязка веб API
-        Multibinder.newSetBinder(binder(), WebResource.class)
-                .addBinding().to(JobResource.class);
-
         // Управление блокировками заданий
         Multibinder.newSetBinder(binder(), Managed.class)
                 .addBinding().to(RecordJobLocker.class);
 
+        // Сервис запуска заданий
+        Multibinder.newSetBinder(binder(), Service.class)
+                .addBinding().to(GuardianLoop.class);
+
+        // Привязка веб API
+        Multibinder.newSetBinder(binder(), WebResource.class)
+                .addBinding().to(JobResource.class);
     }
 }

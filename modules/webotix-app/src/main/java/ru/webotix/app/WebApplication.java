@@ -1,16 +1,19 @@
 package ru.webotix.app;
 
+import com.google.inject.Binder;
 import com.google.inject.Inject;
 import com.google.inject.Module;
+import com.google.inject.servlet.ServletModule;
+import io.dropwizard.Configuration;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.websockets.WebsocketBundle;
-import ru.webotix.common.WebotixBaseApplication;
-import ru.webotix.common.api.WebotixConfiguration;
+import ru.webotix.common.JerseyBaseApplication;
 import ru.webotix.websocket.WebSocketBundleInit;
 
-public abstract class WebHostApplication extends WebotixBaseApplication {
+public abstract class WebApplication<T extends Configuration>
+        extends JerseyBaseApplication<T> implements Module {
 
     @Inject
     private WebSocketBundleInit webSocketBundleInit;
@@ -18,10 +21,15 @@ public abstract class WebHostApplication extends WebotixBaseApplication {
     private WebsocketBundle websocketBundle;
 
     @Override
-    public void initialize(Bootstrap<WebotixConfiguration> bootstrap) {
-        bootstrap.addBundle(new AssetsBundle("/assets/", "/", "index.html"));
+    public void initialize(final Bootstrap<T> bootstrap) {
+
+        bootstrap.addBundle(
+                new AssetsBundle("/assets/", "/", "index.html"));
+
         super.initialize(bootstrap);
-        websocketBundle = new WebsocketBundle(new Class[] {});
+
+        websocketBundle = new WebsocketBundle(new Class[]{});
+
         bootstrap.addBundle(websocketBundle);
     }
 
@@ -29,8 +37,14 @@ public abstract class WebHostApplication extends WebotixBaseApplication {
     protected abstract Module createApplicationModule();
 
     @Override
-    public void run(WebotixConfiguration webotixConfiguration, Environment environment) throws Exception {
+    public void run(T webotixConfiguration, Environment environment) {
         super.run(webotixConfiguration, environment);
         webSocketBundleInit.init(websocketBundle);
+    }
+
+    @Override
+    public void configure(Binder binder) {
+        super.configure(binder);
+        binder.install(new ServletModule());
     }
 }

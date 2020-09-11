@@ -25,8 +25,13 @@
         </dependency>
 
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-exchange</artifactId>
+            <groupId>com.gruelbox</groupId>
+            <artifactId>dropwizard-guice-box</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gruelbox</groupId>
+            <artifactId>dropwizard-guice-box-hibernate</artifactId>
         </dependency>
 
         <dependency>
@@ -36,7 +41,7 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-notification</artifactId>
+            <artifactId>webotix-datasource</artifactId>
         </dependency>
 
         <dependency>

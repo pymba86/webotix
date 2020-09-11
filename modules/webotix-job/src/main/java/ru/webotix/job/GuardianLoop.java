@@ -57,7 +57,7 @@ public class GuardianLoop extends AbstractExecutionThreadService {
     }
 
     @Override
-    protected void run() throws Exception {
+    protected void run() {
         Thread.currentThread().setName("Guardian loop");
         log.info("{} started", this);
         while (isRunning() && !kill) {

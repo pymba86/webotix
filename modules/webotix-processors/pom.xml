@@ -31,11 +31,6 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-exchange</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>webotix-utils</artifactId>
         </dependency>
 

@@ -20,13 +20,8 @@
         </dependency>
 
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-exchange-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-common-api</artifactId>
+            <groupId>com.gruelbox</groupId>
+            <artifactId>dropwizard-guice-box</artifactId>
         </dependency>
 
         <dependency>

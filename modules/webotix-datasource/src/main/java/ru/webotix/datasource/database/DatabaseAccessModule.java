@@ -1,6 +1,7 @@
 package ru.webotix.datasource.database;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.multibindings.Multibinder;
@@ -24,9 +25,12 @@ import java.util.stream.Collectors;
 public class DatabaseAccessModule extends AbstractModule {
 
     protected void configure() {
+
         Multibinder.newSetBinder(binder(), UpgradeStep.class);
         Multibinder.newSetBinder(binder(), TableContribution.class);
         Multibinder.newSetBinder(binder(), View.class);
+
+        requestInjection(new DatabaseInit());
     }
 
     @Provides
@@ -56,5 +60,13 @@ public class DatabaseAccessModule extends AbstractModule {
     @Provides
     DataSource dataSource(ConnectionResources connectionResources) {
         return connectionResources.getDataSource();
+    }
+
+    private static final class DatabaseInit {
+
+        @Inject
+        void start(DatabaseSetup databaseSetup) {
+            databaseSetup.setup();
+        }
     }
 }

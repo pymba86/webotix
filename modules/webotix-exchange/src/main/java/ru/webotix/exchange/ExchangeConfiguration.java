@@ -1,4 +1,4 @@
-package ru.webotix.exchange.api;
+package ru.webotix.exchange;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;

@@ -20,12 +20,10 @@ import org.knowm.xchange.dto.meta.ExchangeMetaData;
 import org.knowm.xchange.dto.meta.RateLimit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.webotix.common.api.WebotixConfiguration;
-import ru.webotix.exchange.api.ExchangeConfiguration;
-
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -44,16 +42,16 @@ public class CacheExchangeService implements ExchangeService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CacheExchangeService.class);
 
-    private final WebotixConfiguration configuration;
+    private final Map<String, ExchangeConfiguration> configuration;
 
     private final LoadingCache<String, Exchange> exchanges = CacheBuilder.newBuilder()
             .build(new CacheLoader<String, Exchange>() {
 
         @Override
-        public Exchange load(String name) throws Exception {
-            final ExchangeConfiguration exchangeConfiguration = configuration.getExchanges() == null
+        public Exchange load(String name)  {
+            final ExchangeConfiguration exchangeConfiguration = configuration == null
                     ? VANILLA_CONFIG
-                    : MoreObjects.firstNonNull(configuration.getExchanges().get(name), VANILLA_CONFIG);
+                    : MoreObjects.firstNonNull(configuration.get(name), VANILLA_CONFIG);
             if (exchangeConfiguration.isAuthenticated()) {
                 return privateApi(name, exchangeConfiguration);
             } else {
@@ -149,7 +147,7 @@ public class CacheExchangeService implements ExchangeService {
     });
 
     @Inject
-    public CacheExchangeService(WebotixConfiguration configuration) {
+    public CacheExchangeService(Map<String, ExchangeConfiguration> configuration) {
         this.configuration = configuration;
     }
 
@@ -175,9 +173,9 @@ public class CacheExchangeService implements ExchangeService {
 
     @Override
     public boolean isAuthenticated(String name) {
-        if (configuration.getExchanges() == null)
+        if (configuration == null)
             return false;
-        ExchangeConfiguration exchangeConfiguration = configuration.getExchanges().get(name);
+        ExchangeConfiguration exchangeConfiguration = configuration.get(name);
         return exchangeConfiguration != null &&
                 StringUtils.isNotEmpty(exchangeConfiguration.getApiKey());
     }
