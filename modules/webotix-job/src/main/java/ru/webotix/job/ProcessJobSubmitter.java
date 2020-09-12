@@ -4,10 +4,10 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.webotix.job.spi.Job;
-import ru.webotix.job.spi.JobControl;
-import ru.webotix.job.spi.JobProcessor;
-import ru.webotix.job.spi.Validatable;
+import ru.webotix.job.api.Job;
+import ru.webotix.job.api.JobControl;
+import ru.webotix.job.api.JobProcessor;
+import ru.webotix.job.api.Validatable;
 
 import java.util.UUID;
 

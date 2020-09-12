@@ -6,11 +6,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
-import ru.webotix.job.spi.Job;
-import ru.webotix.job.spi.JobBuilder;
-import ru.webotix.job.spi.JobControl;
-import ru.webotix.job.spi.JobProcessor;
-import ru.webotix.notification.Notification;
+import ru.webotix.job.api.Job;
+import ru.webotix.job.api.JobBuilder;
+import ru.webotix.job.api.JobControl;
+import ru.webotix.job.api.JobProcessor;
+import ru.webotix.notification.api.Notification;
 
 import javax.annotation.Nullable;
 

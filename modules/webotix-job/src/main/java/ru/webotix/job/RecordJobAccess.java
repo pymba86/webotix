@@ -8,7 +8,7 @@ import org.hibernate.LockMode;
 import org.hibernate.NonUniqueObjectException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import ru.webotix.job.spi.Job;
+import ru.webotix.job.api.Job;
 
 import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;

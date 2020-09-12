@@ -4,20 +4,20 @@ import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
-import ru.webotix.job.spi.JobControl;
-import ru.webotix.job.spi.Status;
-import ru.webotix.notification.TransientNotificationService;
+import ru.webotix.job.api.JobControl;
+import ru.webotix.job.status.api.Status;
+import ru.webotix.notification.api.NotificationService;
 
 public class AlertProcessor implements Alert.Processor {
 
-    private final TransientNotificationService notificationService;
+    private final NotificationService notificationService;
     private final Alert job;
 
     @AssistedInject
     public AlertProcessor(
             @Assisted Alert job,
             @Assisted JobControl jobControl,
-            TransientNotificationService notificationService) {
+            NotificationService notificationService) {
         this.job = job;
         this.notificationService = notificationService;
     }

@@ -9,7 +9,7 @@ import io.dropwizard.client.JerseyClientConfiguration;
 import ru.webotix.datasource.database.DatabaseConfiguration;
 import ru.webotix.datasource.wiring.BackgroundProcessingConfiguration;
 import ru.webotix.exchange.ExchangeConfiguration;
-import ru.webotix.job.spi.JobRunConfiguration;
+import ru.webotix.job.JobRunConfiguration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;

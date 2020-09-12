@@ -26,7 +26,27 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-job-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-base</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-notification-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>webotix-processors</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-datasource</artifactId>
         </dependency>
 
         <dependency>

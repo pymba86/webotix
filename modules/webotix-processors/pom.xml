@@ -9,7 +9,7 @@
         <groupId>ru.webotix</groupId>
         <artifactId>webotix-parent</artifactId>
         <version>0.1.0</version>
-        <relativePath>../</relativePath>
+        <relativePath>../..</relativePath>
     </parent>
 
     <dependencies>
@@ -21,22 +21,27 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-notification-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>webotix-base</artifactId>
         </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-job</artifactId>
+            <artifactId>webotix-job-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-job-status-api</artifactId>
         </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>webotix-utils</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-notification</artifactId>
         </dependency>
 
         <dependency>

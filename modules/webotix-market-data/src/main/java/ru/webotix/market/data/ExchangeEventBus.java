@@ -7,7 +7,7 @@ import com.google.inject.Singleton;
 import io.reactivex.Flowable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.webotix.exchange.info.TickerSpec;
+import ru.webotix.exchange.api.TickerSpec;
 
 import java.util.Set;
 import java.util.UUID;

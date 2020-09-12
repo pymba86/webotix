@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
-import ru.webotix.exchange.info.TickerSpec;
+import ru.webotix.exchange.api.TickerSpec;
 
 import java.util.Collection;
 

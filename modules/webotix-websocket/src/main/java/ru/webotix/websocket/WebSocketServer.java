@@ -12,7 +12,7 @@ import com.google.inject.Injector;
 import io.reactivex.disposables.Disposable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.webotix.exchange.info.TickerSpec;
+import ru.webotix.exchange.api.TickerSpec;
 import ru.webotix.market.data.ExchangeEventRegistry;
 import ru.webotix.market.data.ExchangeEventRegistry.ExchangeEventSubscription;
 import ru.webotix.market.data.MarketDataSubscription;

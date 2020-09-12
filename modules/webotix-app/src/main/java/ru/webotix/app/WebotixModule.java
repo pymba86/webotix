@@ -3,13 +3,15 @@ package ru.webotix.app;
 import com.google.inject.AbstractModule;
 import com.gruelbox.tools.dropwizard.guice.Configured;
 import com.gruelbox.tools.dropwizard.guice.hibernate.GuiceHibernateModule;
+import ru.webotix.base.SubmissionType;
 import ru.webotix.datasource.database.DatabaseModule;
 import ru.webotix.datasource.wiring.WiringModule;
 import ru.webotix.exchange.ExchangeModule;
 import ru.webotix.job.JobModule;
+import ru.webotix.job.status.JobStatusModule;
 import ru.webotix.notification.NotificationModule;
-import ru.webotix.notification.NotificationModule.SubmissionType;
 import ru.webotix.processors.ProcessorModule;
+import ru.webotix.telegram.TelegramModule;
 import ru.webotix.websocket.WebSocketModule;
 
 public class WebotixModule extends AbstractModule
@@ -19,8 +21,7 @@ public class WebotixModule extends AbstractModule
 
     private WebotixConfiguration configuration;
 
-
-    public WebotixModule(GuiceHibernateModule guiceHibernateModule) {
+    WebotixModule(GuiceHibernateModule guiceHibernateModule) {
         super();
         this.guiceHibernateModule = guiceHibernateModule;
     }
@@ -42,17 +43,26 @@ public class WebotixModule extends AbstractModule
         // Открываем веб сокеты
         install(new WebSocketModule());
 
+        // Настройка базы данных
         install(new DatabaseModule());
 
+        // Настройка схем подключения
         install(new WiringModule());
 
+        // Управление заданиями
         install(new JobModule());
 
         // Регистрируем процессы заданий
         install(new ProcessorModule());
 
-        // Асинхронно пересылает уведомления в Telegram
+        // Управление уведомлениями
         install(new NotificationModule(SubmissionType.ASYNC));
+
+        // Управление статусами заданий
+        install(new JobStatusModule(SubmissionType.ASYNC));
+
+        // Регистрируем отправку уведомлений в telegram
+        install(new TelegramModule());
 
         // Регистрируем доступ к заданиям
         install(new ExchangeModule());

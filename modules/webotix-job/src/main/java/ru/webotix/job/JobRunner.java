@@ -10,19 +10,21 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.webotix.datasource.database.Transactionally;
-import ru.webotix.job.spi.*;
+import ru.webotix.job.api.*;
+import ru.webotix.job.status.api.JobStatusService;
+import ru.webotix.job.status.api.Status;
 
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
-public class JobRunner {
+class JobRunner {
 
     private static final Logger log = LoggerFactory.getLogger(JobRunner.class);
 
     private final JobLocker jobLocker;
     private final JobAccess jobAccess;
     private final Injector injector;
-    private final StatusUpdateService statusUpdateService;
+    private final JobStatusService jobStatusService;
     private final Transactionally transactionally;
     private final EventBus eventBus;
     private final UUID uuid;
@@ -35,7 +37,7 @@ public class JobRunner {
             JobAccess jobAccess,
             Injector injector,
             EventBus eventBus,
-            StatusUpdateService statusUpdateService,
+            JobStatusService jobStatusService,
             Transactionally transactionally,
             ExecutorService executorService,
             Provider<SessionFactory> sessionFactory
@@ -43,7 +45,7 @@ public class JobRunner {
         this.jobLocker = jobLocker;
         this.jobAccess = jobAccess;
         this.injector = injector;
-        this.statusUpdateService = statusUpdateService;
+        this.jobStatusService = jobStatusService;
         this.transactionally = transactionally;
         this.sessionFactory = sessionFactory;
         this.executorService = executorService;
@@ -188,7 +190,7 @@ public class JobRunner {
             // Попытка запустить задачу
             Status result = safeStart();
             // Отправить ссообшение об изменении статуса задачи
-            statusUpdateService.status(job.id(), result);
+            jobStatusService.status(job.id(), result);
 
             switch (result) {
                 case FAILURE_PERMANENT:
@@ -254,7 +256,7 @@ public class JobRunner {
             );
 
             log.info("{} finishing ({})...", job, status);
-            statusUpdateService.status(job.id(), status);
+            jobStatusService.status(job.id(), status);
             if (!stopAndUnregister()) {
                 log.warn("Finish of job which is already shutting down. Status={}, job={}",
                         this.status, job);
