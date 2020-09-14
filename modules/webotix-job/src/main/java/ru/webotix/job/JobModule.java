@@ -19,6 +19,12 @@ public class JobModule extends AbstractModule {
         bind(JobSubmitter.class)
                 .to(ProcessJobSubmitter.class);
 
+        bind(JobAccess.class)
+                .to(RecordJobAccess.class);
+
+        bind(JobLocker.class)
+                .to(RecordJobLocker.class);
+
         // Привязка классов миграций базы данных
         Multibinder<TableContribution> tableContributions =
                 Multibinder.newSetBinder(

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.Singleton;
 import org.hibernate.LockMode;
 import org.hibernate.NonUniqueObjectException;
 import org.hibernate.Session;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static ru.webotix.job.JobRecord.TABLE_NAME;
 
+@Singleton
 public class RecordJobAccess implements JobAccess {
 
     private final ObjectMapper objectMapper;

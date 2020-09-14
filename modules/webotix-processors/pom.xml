@@ -16,11 +16,6 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-exchange-info</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>webotix-notification-api</artifactId>
         </dependency>
 

@@ -1,5 +1,13 @@
 package ru.webotix.job.api;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.CUSTOM,
+        property = "jobType"
+)
+@JsonTypeIdResolver(JobTypeResolver.class)
 public interface Job {
 
     /**

@@ -2,15 +2,15 @@
 
     <modelVersion>4.0.0</modelVersion>
 
+    <artifactId>webotix-exchange-api</artifactId>
+    <packaging>jar</packaging>
+
     <parent>
         <groupId>ru.webotix</groupId>
         <artifactId>webotix-parent</artifactId>
         <version>0.1.0</version>
         <relativePath>../..</relativePath>
     </parent>
-
-    <artifactId>webotix-exchange-api</artifactId>
-    <packaging>jar</packaging>
 
     <dependencies>
 

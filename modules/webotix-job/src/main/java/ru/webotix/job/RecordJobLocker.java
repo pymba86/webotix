@@ -2,6 +2,7 @@ package ru.webotix.job;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.dropwizard.lifecycle.Managed;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+@Singleton
 public class RecordJobLocker implements JobLocker, Managed {
 
     private static final Logger log = LoggerFactory.getLogger(RecordJobLocker.class);

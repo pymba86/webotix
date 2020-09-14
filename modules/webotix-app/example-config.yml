@@ -1,3 +1,5 @@
+database:
+  connectionString: h2:file:./webotix;DB_CLOSE_DELAY=-1;DEFAULT_LOCK_TIMEOUT=60000
 exchanges:
   simulated:
     apiKey: DEMO

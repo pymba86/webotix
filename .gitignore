@@ -4,5 +4,5 @@
 .idea
 *.iml
 *.db
-**/webotix.mv.db
-**/webotix.trace.db
+webotix.mv.db
+webotix.trace.db

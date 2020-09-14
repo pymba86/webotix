@@ -3,6 +3,7 @@ package ru.webotix.processors;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.google.auto.value.AutoValue;
 import ru.webotix.job.api.Job;
@@ -14,9 +15,10 @@ import ru.webotix.job.status.api.JobStatus;
 import javax.annotation.Nullable;
 
 @AutoValue
+@JsonDeserialize(builder = UpdateStatusJob.Builder.class)
 public abstract class UpdateStatusJob implements Job {
 
-    public static final Builder builder() {
+    public static Builder builder() {
         return new AutoValue_UpdateStatusJob.Builder();
     }
 
