@@ -15,8 +15,7 @@ public class AsyncJobStatusService implements JobStatusService {
     private final Transactionally transactionally;
 
     @Inject
-    AsyncJobStatusService(JobSubmitter jobSubmitter, Transactionally transactionally)
-    {
+    AsyncJobStatusService(JobSubmitter jobSubmitter, Transactionally transactionally) {
         this.jobSubmitter = jobSubmitter;
         this.transactionally = transactionally;
     }
@@ -25,8 +24,9 @@ public class AsyncJobStatusService implements JobStatusService {
     public void send(JobStatus statusUpdate) {
         transactionally
                 .allowingNested()
-                .run(() -> jobSubmitter.submitNewUnchecked(
-                        UpdateStatusJob.builder().statusUpdate(statusUpdate).build()
-                ));
+                .run(
+                        () -> jobSubmitter.submitNewUnchecked(
+                                UpdateStatusJob.builder().statusUpdate(statusUpdate).build()
+                        ));
     }
 }

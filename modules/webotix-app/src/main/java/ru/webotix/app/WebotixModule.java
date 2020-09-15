@@ -56,10 +56,10 @@ public class WebotixModule extends AbstractModule
         install(new ProcessorModule());
 
         // Управление уведомлениями
-        install(new NotificationModule(SubmissionType.ASYNC));
+        install(new NotificationModule(SubmissionType.SYNC));
 
         // Управление статусами заданий
-        install(new JobStatusModule(SubmissionType.ASYNC));
+        install(new JobStatusModule(SubmissionType.SYNC));
 
         // Регистрируем отправку уведомлений в telegram
         install(new TelegramModule());

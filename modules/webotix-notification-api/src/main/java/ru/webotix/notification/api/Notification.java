@@ -1,5 +1,6 @@
 package ru.webotix.notification.api;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
@@ -11,6 +12,7 @@ import com.google.auto.value.AutoValue;
 @JsonDeserialize
 public abstract class Notification {
 
+    @JsonCreator
     public static Notification create(@JsonProperty("message") String message,
                                       @JsonProperty("level") NotificationLevel level) {
         return new AutoValue_Notification(message, level);

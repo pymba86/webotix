@@ -22,7 +22,7 @@ public class DatabaseConfiguration {
     @NotNull
     @JsonProperty
     private String connectionString =
-            "h2:file:./webotix.db;DB_CLOSE_DELAY=-1;MVCC=TRUE;DEFAULT_LOCK_TIMEOUT=60000";
+            "h2:file:./webotix.db;DB_CLOSE_DELAY=-1;DEFAULT_LOCK_TIMEOUT=60000";
 
     /**
      * Как долго должны сохраняться блокировки базы данных в секундах.

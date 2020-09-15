@@ -5,6 +5,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
+import com.google.inject.Singleton;
 import org.hibernate.BaseSessionEventListener;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import ru.webotix.job.status.api.Status;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
+@Singleton
 class JobRunner {
 
     private static final Logger log = LoggerFactory.getLogger(JobRunner.class);

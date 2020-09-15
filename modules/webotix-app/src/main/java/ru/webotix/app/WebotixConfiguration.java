@@ -10,6 +10,7 @@ import ru.webotix.datasource.database.DatabaseConfiguration;
 import ru.webotix.datasource.wiring.BackgroundProcessingConfiguration;
 import ru.webotix.exchange.ExchangeConfiguration;
 import ru.webotix.job.JobRunConfiguration;
+import ru.webotix.telegram.TelegramConfiguration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -26,6 +27,10 @@ public class WebotixConfiguration extends Configuration
     @Valid
     @JsonProperty
     private DatabaseConfiguration database = new DatabaseConfiguration();
+
+    @Valid
+    @JsonProperty
+    private TelegramConfiguration telegram;
 
     @Valid
     @JsonProperty("jerseyClient")
@@ -68,6 +73,14 @@ public class WebotixConfiguration extends Configuration
         this.exchanges = exchanges;
     }
 
+    public TelegramConfiguration getTelegram() {
+        return telegram;
+    }
+
+    public void setTelegram(TelegramConfiguration telegram) {
+        this.telegram = telegram;
+    }
+
     public void bind(Binder binder) {
 
         binder.bind(BackgroundProcessingConfiguration.class)
@@ -80,6 +93,10 @@ public class WebotixConfiguration extends Configuration
         // Конфигурация веб клиента
         binder.bind(JerseyClientConfiguration.class)
                 .toProvider(Providers.of(jerseyClient));
+
+        // Конфигурация телеграм
+        binder.bind(TelegramConfiguration.class)
+                .toProvider(Providers.of(telegram));
 
         // Конфигурация бирж
         binder.bind(new TypeLiteral<Map<String, ExchangeConfiguration>>() {})
