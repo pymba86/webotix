@@ -12,20 +12,20 @@ import ru.webotix.notification.api.Notification;
 import javax.annotation.Nullable;
 
 @AutoValue
-@JsonDeserialize(builder = Alert.Builder.class)
-public abstract class Alert implements Job {
+@JsonDeserialize(builder = AlertJob.Builder.class)
+public abstract class AlertJob implements Job {
 
     public static Builder builder() {
-        return new AutoValue_Alert.Builder();
+        return new AutoValue_AlertJob.Builder();
     }
 
     @AutoValue.Builder
     @JsonPOJOBuilder(withPrefix = "")
-    public abstract static class Builder implements JobBuilder<Alert> {
+    public abstract static class Builder implements JobBuilder<AlertJob> {
 
         @JsonCreator
         private static Builder create() {
-            return Alert.builder();
+            return AlertJob.builder();
         }
 
         @Override
@@ -34,7 +34,7 @@ public abstract class Alert implements Job {
         public abstract Builder notification(Notification notification);
 
         @Override
-        public abstract Alert build();
+        public abstract AlertJob build();
     }
 
     @Override
@@ -61,11 +61,11 @@ public abstract class Alert implements Job {
         return Processor.ProcessorFactory.class;
     }
 
-    public interface Processor extends JobProcessor<Alert> {
-        interface ProcessorFactory extends JobProcessor.Factory<Alert> {
+    public interface Processor extends JobProcessor<AlertJob> {
+        interface ProcessorFactory extends JobProcessor.Factory<AlertJob> {
 
             @Override
-            Processor create(Alert job, JobControl jobControl);
+            Processor create(AlertJob job, JobControl jobControl);
         }
     }
 }

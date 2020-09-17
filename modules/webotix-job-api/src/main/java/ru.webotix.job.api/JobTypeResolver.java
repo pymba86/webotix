@@ -96,7 +96,7 @@ final class JobTypeResolver extends TypeIdResolverBase {
 
     private static ArrayList<Class<? extends Job>> getSubclasses() {
         return new ArrayList<>(
-                new Reflections("ru.webotix.processors")
+                new Reflections("ru.webotix")
                         .getSubTypesOf(Job.class));
     }
 }

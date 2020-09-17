@@ -8,7 +8,7 @@ import ru.webotix.datasource.database.Transactionally;
 import ru.webotix.job.JobSubmitter;
 import ru.webotix.notification.api.Notification;
 import ru.webotix.notification.api.NotificationService;
-import ru.webotix.processors.Alert;
+import ru.webotix.processors.AlertJob;
 
 @Singleton
 public class AsyncNotificationService implements NotificationService {
@@ -31,7 +31,7 @@ public class AsyncNotificationService implements NotificationService {
                 .allowingNested()
                 .run(
                         () -> jobSubmitter.submitNewUnchecked(
-                                Alert.builder().notification(notification).build()
+                                AlertJob.builder().notification(notification).build()
                         )
                 );
     }

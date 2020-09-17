@@ -6,7 +6,7 @@ public class ProcessorModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        install(new AlertProcessor.Module());
+        install(new AlertJobProcessor.Module());
         install(new UpdateStatusJobProcessor.Module());
     }
 }

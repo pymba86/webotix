@@ -8,14 +8,14 @@ import ru.webotix.job.api.JobControl;
 import ru.webotix.job.status.api.Status;
 import ru.webotix.notification.api.NotificationService;
 
-public class AlertProcessor implements Alert.Processor {
+public class AlertJobProcessor implements AlertJob.Processor {
 
     private final NotificationService notificationService;
-    private final Alert job;
+    private final AlertJob job;
 
     @AssistedInject
-    public AlertProcessor(
-            @Assisted Alert job,
+    public AlertJobProcessor(
+            @Assisted AlertJob job,
             @Assisted JobControl jobControl,
             NotificationService notificationService) {
         this.job = job;
@@ -36,7 +36,7 @@ public class AlertProcessor implements Alert.Processor {
     }
 
     @Override
-    public void setReplacedJob(Alert job) {
+    public void setReplacedJob(AlertJob job) {
         // Удаление данного задания не возможно
     }
 
@@ -46,8 +46,8 @@ public class AlertProcessor implements Alert.Processor {
         protected void configure() {
             install(
                     new FactoryModuleBuilder()
-                            .implement(Alert.Processor.class, AlertProcessor.class)
-                            .build(Alert.Processor.ProcessorFactory.class)
+                            .implement(AlertJob.Processor.class, AlertJobProcessor.class)
+                            .build(AlertJob.Processor.ProcessorFactory.class)
             );
         }
     }
