@@ -1,11 +1,9 @@
-package ru.webotix.exchange;
+package ru.webotix.exchange.api;
 
-import com.google.inject.ImplementedBy;
 import org.knowm.xchange.Exchange;
 
 import java.util.Collection;
 
-@ImplementedBy(CacheExchangeService.class)
 public interface ExchangeService {
 
     /**

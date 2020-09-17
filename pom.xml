@@ -12,6 +12,7 @@
         <module>modules/webotix-telegram</module>
         <module>modules/webotix-notification</module>
         <module>modules/webotix-notification-api</module>
+        <module>modules/webotix-market-data-api</module>
         <module>modules/webotix-market-data</module>
         <module>modules/webotix-exchange-api</module>
         <module>modules/webotix-exchange</module>
@@ -59,6 +60,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>webotix-base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-market-data-api</artifactId>
             <version>${project.version}</version>
         </dependency>
 

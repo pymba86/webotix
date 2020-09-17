@@ -1,4 +1,4 @@
-package ru.webotix.market.data;
+package ru.webotix.market.data.api;
 
 /**
  * Типы данных с помошью которых происходит взаимодействие

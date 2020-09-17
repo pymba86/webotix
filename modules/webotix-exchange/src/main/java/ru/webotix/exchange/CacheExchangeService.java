@@ -20,6 +20,9 @@ import org.knowm.xchange.dto.meta.ExchangeMetaData;
 import org.knowm.xchange.dto.meta.RateLimit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.webotix.exchange.api.ExchangeService;
+import ru.webotix.exchange.api.RateController;
+
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;

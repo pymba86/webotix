@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
 import org.knowm.xchange.dto.trade.UserTrade;
-import ru.webotix.exchange.api.TickerSpec;
+import ru.webotix.market.data.api.TickerSpec;
 
 @AutoValue
 @JsonDeserialize

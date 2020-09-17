@@ -5,13 +5,18 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.gruelbox.tools.dropwizard.guice.resources.WebResource;
 import org.apache.commons.lang3.StringUtils;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.marketdata.Ticker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.webotix.exchange.api.ExchangeService;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -53,5 +58,46 @@ public class ExchangeResource implements WebResource {
                     );
                 })
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Получить текущий тике для указанной биржи и пары
+     *
+     * @param exchange Биржда
+     * @param counter  Контр валюта
+     * @param base     Базовая валюта
+     * @return Тикер
+     * @throws IOException Если выбрасывается при обмене
+     */
+    @GET
+    @Path("{exchange}/markets/{base}-{counter}/ticker")
+    @Timed
+    public Ticker ticker(@PathParam("exchange") String exchange,
+                         @PathParam("counter") String counter,
+                         @PathParam("base") String base) throws IOException {
+
+        return exchanges.get(exchange)
+                .getMarketDataService()
+                .getTicker(new CurrencyPair(base, counter));
+    }
+
+    /**
+     * Список валютных пар на указанной бирже
+     *
+     * @param exchange Биржа
+     * @return Поддерживаемые валютные пары
+     */
+    @GET
+    @Timed
+    @Path("{exchange}/pairs")
+    public Collection<ExchangePair> pairs(@PathParam("exchange") String exchange) {
+
+        return exchanges.get(exchange)
+                .getExchangeMetaData()
+                .getCurrencyPairs()
+                .keySet()
+                .stream()
+                .map(ExchangePair::new)
+                .collect(Collectors.toSet());
     }
 }

@@ -27,7 +27,7 @@ public class ExecutorServiceManager implements Managed {
                         Integer.MAX_VALUE,
                         30L,
                         TimeUnit.SECONDS,
-                        new SynchronousQueue<Runnable>(),
+                        new SynchronousQueue<>(),
                         threadFactory);
     }
 

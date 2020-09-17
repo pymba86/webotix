@@ -12,11 +12,10 @@ import com.google.inject.Injector;
 import io.reactivex.disposables.Disposable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.webotix.exchange.api.TickerSpec;
-import ru.webotix.market.data.ExchangeEventRegistry;
-import ru.webotix.market.data.ExchangeEventRegistry.ExchangeEventSubscription;
-import ru.webotix.market.data.MarketDataSubscription;
-import ru.webotix.market.data.MarketDataType;
+import ru.webotix.exchange.api.ExchangeEventRegistry;
+import ru.webotix.market.data.api.MarketDataSubscription;
+import ru.webotix.market.data.api.MarketDataType;
+import ru.webotix.market.data.api.TickerSpec;
 import ru.webotix.utils.SafelyClose;
 import ru.webotix.utils.SafelyDispose;
 
@@ -47,7 +46,7 @@ public final class WebSocketServer {
     private final AtomicReference<ImmutableSet<MarketDataSubscription>> marketDataSubscriptions
             = new AtomicReference<>(ImmutableSet.of());
 
-    private ExchangeEventSubscription subscription;
+    private ExchangeEventRegistry.ExchangeEventSubscription subscription;
 
     @Inject
     void inject(ExchangeEventRegistry exchangeEventRegistry, ObjectMapper objectMapper, EventBus eventBus) {

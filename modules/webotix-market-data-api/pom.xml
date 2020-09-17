@@ -2,7 +2,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>webotix-exchange-api</artifactId>
+    <artifactId>webotix-market-data-api</artifactId>
     <packaging>jar</packaging>
 
     <parent>
@@ -13,11 +13,6 @@
     </parent>
 
     <dependencies>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-market-data-api</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>com.google.auto.value</groupId>

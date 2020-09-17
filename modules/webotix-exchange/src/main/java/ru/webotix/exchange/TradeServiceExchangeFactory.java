@@ -2,6 +2,7 @@ package ru.webotix.exchange;
 
 import com.google.inject.Inject;
 import org.knowm.xchange.service.trade.TradeService;
+import ru.webotix.exchange.api.ExchangeService;
 
 import java.util.Map;
 
@@ -19,7 +20,8 @@ public class TradeServiceExchangeFactory extends AbstractExchangeServiceFactory<
 
     @Override
     protected ExchangeServiceFactory<TradeService> getRealFactory() {
-        return exchange -> exchangeService.get(exchange).getTradeService();
+        return exchange -> exchangeService.get(exchange)
+                .getTradeService();
     }
 
     @Override

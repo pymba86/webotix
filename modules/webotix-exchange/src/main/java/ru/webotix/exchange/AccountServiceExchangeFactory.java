@@ -3,11 +3,12 @@ package ru.webotix.exchange;
 import com.google.inject.Inject;
 import org.knowm.xchange.service.account.AccountService;
 import ru.webotix.exchange.PaperAccountService.Factory;
+import ru.webotix.exchange.api.ExchangeService;
 
 import java.util.Map;
 
-public class AccountServiceExchangeFactory extends AbstractExchangeServiceFactory<AccountService> implements
-        AccountServiceFactory {
+public class AccountServiceExchangeFactory extends AbstractExchangeServiceFactory<AccountService>
+        implements AccountServiceFactory {
 
     private final ExchangeService exchangeService;
     private final Factory paperAccountServiceFactory;

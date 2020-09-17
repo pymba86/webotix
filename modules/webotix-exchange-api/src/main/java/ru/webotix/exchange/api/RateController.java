@@ -1,4 +1,4 @@
-package ru.webotix.exchange;
+package ru.webotix.exchange.api;
 
 import com.google.common.util.concurrent.RateLimiter;
 import org.slf4j.Logger;
@@ -30,7 +30,7 @@ public class RateController {
      * @param rateLimiter  Основной ограничитель скорости.
      * @param throttleBy   Продолжительность регулирования должна продолжаться.
      */
-    RateController(String exchangeName, RateLimiter rateLimiter, Duration throttleBy) {
+    public RateController(String exchangeName, RateLimiter rateLimiter, Duration throttleBy) {
         this.exchangeName = exchangeName;
         this.rateLimiter = rateLimiter;
         this.throttleBy = throttleBy.toMillis();

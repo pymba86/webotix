@@ -1,28 +1,27 @@
 package ru.webotix.market.data;
 
 import com.google.common.collect.*;
-import com.google.common.collect.ImmutableSet.Builder;
-import com.google.common.util.concurrent.AbstractExecutionThreadService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import info.bitrich.xchangestream.core.ProductSubscription;
 import info.bitrich.xchangestream.core.StreamingExchange;
-import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.Currency;
+import org.knowm.xchange.dto.account.Balance;
 import org.knowm.xchange.dto.account.Wallet;
 import org.knowm.xchange.exceptions.*;
 import org.knowm.xchange.service.account.AccountService;
 import org.knowm.xchange.service.marketdata.MarketDataService;
 import org.knowm.xchange.service.trade.TradeService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.webotix.exchange.AccountServiceFactory;
-import ru.webotix.exchange.ExchangeService;
-import ru.webotix.exchange.RateController;
-import ru.webotix.exchange.TradeServiceFactory;
-import ru.webotix.exchange.api.TickerSpec;
+import ru.webotix.datasource.wiring.BackgroundProcessingConfiguration;
+import ru.webotix.exchange.*;
+import ru.webotix.exchange.api.ExchangeService;
+import ru.webotix.exchange.api.RateController;
+import ru.webotix.market.data.api.BalanceEvent;
+import ru.webotix.market.data.api.MarketDataSubscription;
+import ru.webotix.market.data.api.MarketDataType;
+import ru.webotix.market.data.api.TickerSpec;
 import ru.webotix.notification.api.NotificationService;
 import ru.webotix.utils.CheckedExceptions;
 import ru.webotix.utils.SafelyDispose;
@@ -42,81 +41,59 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static info.bitrich.xchangestream.core.ProductSubscription.ProductSubscriptionBuilder;
 import static java.time.LocalDateTime.now;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import static jersey.repackaged.com.google.common.base.MoreObjects.firstNonNull;
 
 @Singleton
-public class MarketDataSubscriptionManager extends AbstractExecutionThreadService {
+public class MarketDataSubscriptionController extends AbstractPollingController {
 
-    private static final Logger log = LoggerFactory.getLogger(ExchangeEventBus.class);
-
+    private static final int MAX_TRADES = 20;
+    private static final int ORDERBOOK_DEPTH = 20;
     private static final int MINUTES_BETWEEN_EXCEPTION_NOTIFICATIONS = 15;
 
     private final ExchangeService exchangeService;
-    private final AccountServiceFactory accountServiceFactory;
     private final TradeServiceFactory tradeServiceFactory;
+    private final AccountServiceFactory accountServiceFactory;
     private final NotificationService notificationService;
+    private final Map<String, ExchangeConfiguration> exchangeConfiguration;
 
     private final Map<String, AtomicReference<Set<MarketDataSubscription>>> nextSubscriptions;
-    private final ConcurrentMap<String, Set<MarketDataSubscription>> subscriptionsPerExchange = Maps.newConcurrentMap();
-    private final ConcurrentMap<String, Set<MarketDataSubscription>> pollsPerExchange = Maps.newConcurrentMap();
+    private final ConcurrentMap<String, Set<MarketDataSubscription>> subscriptionsPerExchange =
+            Maps.newConcurrentMap();
+    private final ConcurrentMap<String, Set<MarketDataSubscription>> pollsPerExchange =
+            Maps.newConcurrentMap();
     private final Multimap<String, Disposable> disposablesPerExchange = HashMultimap.create();
     private final Set<MarketDataSubscription> unavailableSubscriptions = Sets.newConcurrentHashSet();
 
-    private final CachingPersistentPublisher<BalanceEvent, String> balanceOut;
-
     private final ConcurrentMap<TickerSpec, Instant> mostRecentTrades = Maps.newConcurrentMap();
 
-    private final Phaser phaser = new Phaser(1);
-
-    private LifecycleListener lifecycleListener = new LifecycleListener() {
-    };
-
     @Inject
-    public MarketDataSubscriptionManager(ExchangeService exchangeService,
-                                         AccountServiceFactory accountServiceFactory,
-                                         TradeServiceFactory tradeServiceFactory,
-                                         NotificationService notificationService) {
+    public MarketDataSubscriptionController(BackgroundProcessingConfiguration configuration,
+                                            SubscriptionPublisher publisher,
+                                            ExchangeService exchangeService,
+                                            TradeServiceFactory tradeServiceFactory,
+                                            AccountServiceFactory accountServiceFactory,
+                                            NotificationService notificationService,
+                                            Map<String, ExchangeConfiguration> exchangeConfiguration) {
+        super(configuration, publisher);
         this.exchangeService = exchangeService;
-        this.accountServiceFactory = accountServiceFactory;
         this.tradeServiceFactory = tradeServiceFactory;
+        this.accountServiceFactory = accountServiceFactory;
         this.notificationService = notificationService;
-
+        this.exchangeConfiguration = exchangeConfiguration;
         this.nextSubscriptions = exchangeService.getExchanges()
-                .stream()
-                .collect(Collectors.toMap(
-                        Function.identity(), e -> new AtomicReference<>()
-                ));
+                .stream().collect(Collectors.toMap(Function.identity(), e -> new AtomicReference<>()));
 
-        exchangeService.getExchanges().forEach(e -> {
-            subscriptionsPerExchange.put(e, ImmutableSet.of());
-            pollsPerExchange.put(e, ImmutableSet.of());
-        });
-
-        this.balanceOut = new CachingPersistentPublisher<>(
-                (BalanceEvent e) -> e.exchange() + "/" + e.currency()
-        );
-    }
-
-
-    void setLifecycleListener(LifecycleListener listener) {
-        this.lifecycleListener = listener;
-    }
-
-
-    public Flowable<BalanceEvent> getBalances() {
-        return balanceOut.getAll();
+        exchangeService.getExchanges()
+                .forEach(e -> {
+                    subscriptionsPerExchange.put(e, ImmutableSet.of());
+                    pollsPerExchange.put(e, ImmutableSet.of());
+                });
     }
 
     @Override
-    protected void run() throws Exception {
-
-        Thread.currentThread()
-                .setName(MarketDataSubscriptionManager.class.getSimpleName());
-
-        log.info("{} started", this);
+    protected void doRun() throws InterruptedException {
 
         ExecutorService threadPool = Executors.newFixedThreadPool(
                 exchangeService.getExchanges().size());
@@ -126,31 +103,28 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
                 submitExchangesAndWaitForCompletion(threadPool);
                 log.info("{} stopping; all exchanges have shut down", this);
             } catch (InterruptedException e) {
-                log.info("{} stopping due to interrupt", this);
-                Thread.currentThread().interrupt();
+                throw e;
             } catch (Exception e) {
                 log.error(this + " stopping due to uncaught exception", e);
             }
         } finally {
             threadPool.shutdownNow();
-            updateSubscriptions(Collections.emptySet());
-            log.info("{} stopped", this);
-            lifecycleListener.onStopMain();
         }
-
     }
 
     /**
      * Запускает потоки для работы с биржами. Ожидаем результат выполнения потоков
      *
      * @param threadPool Пул потоков
-     * @throws InterruptedException
      */
     private void submitExchangesAndWaitForCompletion(ExecutorService threadPool) throws InterruptedException {
+
         Map<String, Future<?>> futures = new HashMap<>();
 
         for (String exchange : exchangeService.getExchanges()) {
-            futures.put(exchange, threadPool.submit(new Poller(exchange)));
+            if (exchangeConfiguration.getOrDefault(exchange, new ExchangeConfiguration()).isEnabled()) {
+                futures.put(exchange, threadPool.submit(new Poller(exchange)));
+            }
         }
 
         for (Map.Entry<String, Future<?>> entry : futures.entrySet()) {
@@ -162,12 +136,9 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
         }
     }
 
-    /**
-     * Обновить подписчиков на тикер
-     *
-     * @param subscriptions Подписки на тип данных - определенный тикер
-     */
+    @Override
     public void updateSubscriptions(Set<MarketDataSubscription> subscriptions) {
+
         ImmutableListMultimap<String, MarketDataSubscription> byExchange
                 = Multimaps.index(subscriptions, s -> s.spec().exchange());
 
@@ -178,8 +149,7 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
                     );
         }
 
-        int phase = phaser.arrive();
-        log.debug("Progressing to phase {}", phase);
+        wake();
     }
 
     /**
@@ -210,14 +180,15 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
             log.info("{} starting", exchangeName);
 
             try {
+
                 initialize();
 
-                while (!phaser.isTerminated()) {
+                while (!isTerminated()) {
 
                     // Прежде чем проверять наличие опросов, определить, на каком этапе
                     // мы будем ждать, если нет работы, то есть
                     // следующее пробуждение.
-                    phase = phaser.getPhase();
+                    phase = getPhase();
                     if (phase == -1)
                         break;
 
@@ -226,12 +197,12 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
 
                 log.info("{} shutting down due to termination", exchangeName);
             } catch (InterruptedException e) {
-                log.info("{} shutting down due to inerrupt", exchangeName);
+                log.info("{} shutting down due to interrupt", exchangeName);
                 Thread.currentThread().interrupt();
             } catch (Exception e) {
                 log.error(exchangeName + " shutting down due to uncaught exception", e);
             } finally {
-                lifecycleListener.onStop(exchangeName);
+                subtaskStopped(exchangeName);
             }
         }
 
@@ -259,6 +230,7 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
                             .getForExchange(exchangeName);
 
                     break;
+
                 } catch (Exception e) {
                     log.error(exchangeName + " - failing initialising. Will retry in one minute.", e);
                     Thread.sleep(60000);
@@ -276,14 +248,14 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
             // через несколько секунд, чтобы повторить попытку
             Set<MarketDataSubscription> polls = activePolls();
             if (polls.isEmpty()) {
-                suspend();
+                suspend(exchangeName, phase, subscriptionsFailed);
                 return;
             }
 
             log.debug("{} - start poll", exchangeName);
             Set<String> balanceCurrencies = new HashSet<>();
             for (MarketDataSubscription subscription : polls) {
-                if (phaser.isTerminated())
+                if (isTerminated())
                     break;
                 if (subscription.type().equals(MarketDataType.Balance)) {
                     balanceCurrencies.add(subscription.spec().base());
@@ -293,14 +265,16 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
                 }
             }
 
-            if (!phaser.isTerminated() && !balanceCurrencies.isEmpty()) {
+            if (isTerminated())
+                return;
+
+            if (!balanceCurrencies.isEmpty()) {
                 manageExchangeExceptions("Balances",
-                        () -> featchBalances(balanceCurrencies)
+                        () -> fetchBalances(balanceCurrencies)
                                 .forEach(balance ->
-                                        balanceOut.emit(
+                                        publisher.emit(
                                                 BalanceEvent.create(
                                                         exchangeName,
-                                                        balance.currency(),
                                                         balance
                                                 ))),
                         () -> polls.stream()
@@ -311,60 +285,49 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
             }
         }
 
-        private void suspend() throws InterruptedException {
-
-            log.debug("{} - poll going to sleep", exchangeName);
-
-            try {
-                if (subscriptionsFailed) {
-                    phaser.awaitAdvanceInterruptibly(phase, 1000, TimeUnit.MILLISECONDS);
-                } else {
-                    log.debug("{} - sleeping until phase {}", exchangeName, phase);
-                    lifecycleListener.onBlocked(exchangeName);
-                    phaser.awaitAdvanceInterruptibly(phase);
-                    log.debug("{} - poll woken up on request", exchangeName);
-                }
-            } catch (TimeoutException e) {
-                // fine
-            } catch (InterruptedException e) {
-                throw e;
-            } catch (Exception e) {
-                log.error("Failure in phaser wait for " + exchangeName, e);
-            }
-        }
 
         private Wallet wallet() throws IOException {
 
             exchangeService.rateController(exchangeName).acquire();
 
             Wallet wallet;
-            wallet = accountService.getAccountInfo().getWallet();
+
+            wallet = accountService.getAccountInfo()
+                    .getWallet();
+
             if (wallet == null) {
                 throw new IllegalStateException("No wallet returned");
             }
             return wallet;
         }
 
-        private Iterable<Balance> featchBalances(Collection<String> currencyCodes)
+        private Iterable<Balance> fetchBalances(Collection<String> currencyCodes)
                 throws IOException {
 
             Map<String, Balance> result = new HashMap<>();
 
-            currencyCodes.stream().map(Balance::zero)
-                    .forEach(balance -> result.put(balance.currency(), balance));
+            currencyCodes.stream()
+                    .map(Currency::getInstance)
+                    .map(Balance::zero)
+                    .forEach(balance -> result.put(balance.getCurrency().getCurrencyCode(), balance));
             wallet().getBalances().values().stream()
                     .filter(balance -> currencyCodes.contains(balance.getCurrency().getCurrencyCode()))
-                    .map(Balance::create)
-                    .forEach(balance -> result.put(balance.currency(), balance));
+                    .forEach(balance -> result.put(balance.getCurrency().getCurrencyCode(), balance));
             return result.values();
         }
 
         private void manageExchangeExceptions(String dataDescription,
                                               CheckedExceptions.ThrowingRunnable runnable,
-                                              Supplier<Iterable<MarketDataSubscription>> toUnsubscribe) {
+                                              Supplier<Iterable<MarketDataSubscription>> toUnsubscribe)
+                throws InterruptedException {
             try {
                 runnable.run();
+            } catch (InterruptedException e) {
+
+                throw e;
+
             } catch (UnsupportedOperationException e) {
+
                 log.warn("{} not available: {} ({})", dataDescription,
                         e.getClass().getSimpleName(), exceptionMessage(e));
 
@@ -372,19 +335,34 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
 
             } catch (SocketTimeoutException | SocketException
                     | ExchangeUnavailableException | SystemOverloadException | NonceException e) {
+
                 log.warn("Throttling {} - {} ({}) when fetching {}", exchangeName,
                         e.getClass().getSimpleName(), exceptionMessage(e), dataDescription);
                 exchangeService.rateController(exchangeName).throttle();
+
             } catch (HttpStatusIOException e) {
+
                 handleHttpStatusException(dataDescription, e);
+
             } catch (RateLimitExceededException | FrequencyLimitExceededException e) {
 
                 log.error("Hit rate limiting on {} when fetching {}. Backing off", exchangeName, dataDescription);
-                notificationService.error("Getting rate limiting errors on " + exchangeName + ". Pausing access and will "
-                        + "resume at a lower rate.");
+
+                notificationService.error("Getting rate limiting errors on " + exchangeName
+                        + ". Pausing access and will resume at a lower rate.");
+
                 RateController rateController = exchangeService.rateController(exchangeName);
+
                 rateController.backoff();
                 rateController.pause();
+
+            } catch (ExchangeException e) {
+
+                if (e.getCause() instanceof HttpStatusIOException) {
+                    handleHttpStatusException(dataDescription, (HttpStatusIOException) e.getCause());
+                } else {
+                    handleUnknownPollException(e);
+                }
             } catch (Exception e) {
                 handleUnknownPollException(e);
             }
@@ -491,7 +469,8 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
                     return;
                 }
 
-                log.info("{} - updating subscriptions to: {} from {}", exchangeName, subscriptions, oldSubscriptions);
+                log.info("{} - updating subscriptions to: {} from {}",
+                        exchangeName, subscriptions, oldSubscriptions);
 
                 // Отключите любые потоковые обмены,
                 // на которых подписанные в настоящее время тикеры не соответствуют
@@ -504,7 +483,7 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
                 // Очистите кэшированные тикеры и книги заказов для всего,
                 // что мы отписались, чтобы мы не передавали устаревшие данные
                 Sets.difference(oldSubscriptions, subscriptions)
-                        .forEach(this::clearCacheForSubscription);
+                        .forEach(publisher::clearCacheForSubscription);
 
                 // Добавить новые подписки, если у нас есть
                 if (subscriptions.isEmpty()) {
@@ -517,8 +496,7 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
                 subscriptionsFailed = true;
                 log.error("Error updating subscriptions", e);
                 if (nextSubscriptions.get(exchangeName).compareAndSet(null, subscriptions)) {
-                    int arrivedPhase = phaser.arrive();
-                    log.debug("Progressing to phase {}", arrivedPhase);
+                    wake();
                 }
                 throw e;
             }
@@ -526,7 +504,7 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
 
         /**
          * Подписать слушателей к бирже
-         *
+         * <p>
          * Поитогу получаем новый массив слушателей которые должны
          * быть подключены при следующей попытке
          *
@@ -534,7 +512,7 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
          */
         private void subscribe(Set<MarketDataSubscription> subscriptions) {
 
-            Builder<MarketDataSubscription> pollingBuilder = ImmutableSet.builder();
+            ImmutableSet.Builder<MarketDataSubscription> pollingBuilder = ImmutableSet.builder();
 
             if (streamingExchange != null) {
                 Set<MarketDataSubscription> remainingSubscriptions = openSubscriptionsWherePossible(subscriptions);
@@ -560,7 +538,7 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
             connectExchange(subscriptions);
 
             HashSet<MarketDataSubscription> connected = new HashSet<>(subscriptions);
-            Builder<MarketDataSubscription> remainder = ImmutableSet.builder();
+            ImmutableSet.Builder<MarketDataSubscription> remainder = ImmutableSet.builder();
             List<Disposable> disposables = new ArrayList<>();
 
             Consumer<MarketDataSubscription> marketAsNotSubscribed = subscription -> {
@@ -604,9 +582,8 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
                                     .getStreamingAccountService()
                                     .getBalanceChanges(
                                             Currency.getInstance(currency), "exchange")
-                                    .map(Balance::create)
-                                    .map(balance -> BalanceEvent.create(exchangeName, balance.currency(), balance))
-                                    .subscribe(balanceOut::emit,
+                                    .map(balance -> BalanceEvent.create(exchangeName, balance))
+                                    .subscribe(publisher::emit,
                                             e -> log.error("Error in balance stream for "
                                                     + exchangeName + "/" + currency, e))
                     );
@@ -632,7 +609,7 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
                 return;
             }
             log.info("Connecting to exchange: {}", exchangeName);
-            ProductSubscriptionBuilder builder = ProductSubscription.create();
+            ProductSubscription.ProductSubscriptionBuilder builder = ProductSubscription.create();
             boolean authenticated = exchangeService.isAuthenticated(exchangeName);
             subscriptionsForExchange
                     .forEach(subscription -> {
@@ -667,16 +644,6 @@ public class MarketDataSubscriptionManager extends AbstractExecutionThreadServic
                 default:
                     throw new NotAvailableFromExchangeException();
             }
-        }
-
-        /**
-         * Очистить кэшированные тикеры и книги заказов
-         *
-         * @param subscription Описание слушателя
-         */
-        private void clearCacheForSubscription(MarketDataSubscription subscription) {
-            balanceOut.removeFromCache(subscription.spec().exchange() + "/" + subscription.spec().base());
-            balanceOut.removeFromCache(subscription.spec().exchange() + "/" + subscription.spec().counter());
         }
 
         /**

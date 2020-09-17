@@ -9,6 +9,7 @@ import ru.webotix.datasource.wiring.WiringModule;
 import ru.webotix.exchange.ExchangeModule;
 import ru.webotix.job.JobModule;
 import ru.webotix.job.status.JobStatusModule;
+import ru.webotix.market.data.MarketDataModule;
 import ru.webotix.notification.NotificationModule;
 import ru.webotix.processors.ProcessorModule;
 import ru.webotix.telegram.TelegramModule;
@@ -66,5 +67,8 @@ public class WebotixModule extends AbstractModule
 
         // Регистрируем доступ к заданиям
         install(new ExchangeModule());
+
+        // Управление доступом к рыночным данных
+        install(new MarketDataModule());
     }
 }

@@ -1,8 +1,9 @@
-package ru.webotix.market.data;
-
-import io.reactivex.Flowable;
+package ru.webotix.exchange.api;
 
 import com.google.common.collect.ImmutableSet;
+import io.reactivex.Flowable;
+import ru.webotix.market.data.api.BalanceEvent;
+import ru.webotix.market.data.api.MarketDataSubscription;
 
 import java.util.Set;
 

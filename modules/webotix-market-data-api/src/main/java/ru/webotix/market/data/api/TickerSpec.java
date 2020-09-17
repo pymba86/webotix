@@ -1,4 +1,4 @@
-package ru.webotix.exchange.api;
+package ru.webotix.market.data.api;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;

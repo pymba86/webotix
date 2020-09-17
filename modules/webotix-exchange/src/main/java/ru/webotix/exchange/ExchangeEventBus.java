@@ -1,4 +1,4 @@
-package ru.webotix.market.data;
+package ru.webotix.exchange;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
@@ -7,7 +7,8 @@ import com.google.inject.Singleton;
 import io.reactivex.Flowable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.webotix.exchange.api.TickerSpec;
+import ru.webotix.exchange.api.ExchangeEventRegistry;
+import ru.webotix.market.data.api.*;
 
 import java.util.Set;
 import java.util.UUID;
@@ -33,13 +34,12 @@ public class ExchangeEventBus implements ExchangeEventRegistry {
     @Override
     public ExchangeEventSubscription subscribe(
             Set<MarketDataSubscription> targetSubscriptions) {
-        return null;
-    }
 
-    @Override
-    public ExchangeEventSubscription subscribe(
-            MarketDataSubscription... targetSubscriptions) {
-        return null;
+        ExchangeEventSubscription subscription = new ExchangeEventSubscription(targetSubscriptions);
+
+        log.debug("Created subscriber {} with subscriptions {}", subscription.name, targetSubscriptions);
+
+        return subscription;
     }
 
     private final class ExchangeEventSubscription
@@ -49,13 +49,16 @@ public class ExchangeEventBus implements ExchangeEventRegistry {
         private final String name;
 
         public ExchangeEventSubscription(Set<MarketDataSubscription> subscriptions) {
-            this.subscriptions = subscriptions;
-            this.name = UUID.randomUUID().toString();
+            this(subscriptions, UUID.randomUUID().toString());
         }
 
         public ExchangeEventSubscription(Set<MarketDataSubscription> subscriptions, String name) {
             this.subscriptions = subscriptions;
             this.name = name;
+
+            if (subscribeAll()) {
+                updateSubscriptions();
+            }
         }
 
         @Override
@@ -74,7 +77,7 @@ public class ExchangeEventBus implements ExchangeEventRegistry {
 
             return marketDataSubscriptionManager.getBalances()
                     .filter(e -> exchangeCurrenciesSubscribed.contains(
-                            e.exchange() + "/" + e.currency()
+                            e.exchange() + "/" + e.balance().getCurrency()
                     ))
                     .onBackpressureLatest();
         }
@@ -158,7 +161,9 @@ public class ExchangeEventBus implements ExchangeEventRegistry {
          * Обновить список слушателей
          */
         private void updateSubscriptions() {
-            // TODO marketDataSubscription manager update subscriptions
+            marketDataSubscriptionManager.updateSubscriptions(
+                    allSubscriptions.keySet()
+            );
         }
 
         /**
@@ -175,7 +180,8 @@ public class ExchangeEventBus implements ExchangeEventRegistry {
         }
 
         @Override
-        public ExchangeEventRegistry.ExchangeEventSubscription replace(Set<MarketDataSubscription> targetSubscriptions) {
+        public ExchangeEventRegistry.ExchangeEventSubscription replace(
+                Set<MarketDataSubscription> targetSubscriptions) {
             if (targetSubscriptions.equals(subscriptions)) {
                 return this;
             }

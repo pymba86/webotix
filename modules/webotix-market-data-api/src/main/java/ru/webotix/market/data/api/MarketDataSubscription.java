@@ -1,11 +1,9 @@
-package ru.webotix.market.data;
+package ru.webotix.market.data.api;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.auto.value.AutoValue;
-import ru.webotix.exchange.api.TickerSpec;
-
 @AutoValue
 @JsonDeserialize
 public abstract class MarketDataSubscription {

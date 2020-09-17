@@ -11,6 +11,7 @@ public class ExchangeConfiguration {
     private String passphrase;
     private boolean sandbox;
     private boolean loadRemoteData = true;
+    private boolean enabled = true;
 
     @JsonProperty
     public String getUserName() {
@@ -74,5 +75,15 @@ public class ExchangeConfiguration {
 
     public boolean isAuthenticated() {
         return StringUtils.isNotEmpty(apiKey);
+    }
+
+    @JsonProperty
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @JsonProperty
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
