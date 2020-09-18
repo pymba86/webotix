@@ -62,6 +62,16 @@ public class ExchangeEventBus implements ExchangeEventRegistry {
         }
 
         @Override
+        public Flowable<TickerEvent> getTickers() {
+
+            Set<TickerSpec> filtered = subscriptionsFor(MarketDataType.Ticker);
+
+            return marketDataSubscriptionManager.getTickers()
+                    .filter(e -> filtered.contains(e.spec()))
+                    .onBackpressureLatest();
+        }
+
+        @Override
         public Flowable<BalanceEvent> getBalances() {
 
             Set<String> exchangeCurrenciesSubscribed =
@@ -122,7 +132,7 @@ public class ExchangeEventBus implements ExchangeEventRegistry {
                 return true;
             }
             {
-                log.debug(" ... other suscribers still holding it open");
+                log.debug(" ... other subscribers still holding it open");
                 return false;
             }
         }

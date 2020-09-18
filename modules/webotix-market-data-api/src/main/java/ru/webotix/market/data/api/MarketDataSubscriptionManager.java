@@ -4,5 +4,7 @@ import io.reactivex.Flowable;
 
 public interface MarketDataSubscriptionManager extends SubscriptionController {
 
+    Flowable<TickerEvent> getTickers();
+
     Flowable<BalanceEvent> getBalances();
 }

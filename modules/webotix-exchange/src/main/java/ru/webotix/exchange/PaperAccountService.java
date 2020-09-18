@@ -11,13 +11,14 @@ import org.knowm.xchange.dto.account.AccountInfo;
 import org.knowm.xchange.dto.account.Balance;
 import org.knowm.xchange.dto.account.FundingRecord;
 import org.knowm.xchange.dto.account.Wallet;
+import org.knowm.xchange.dto.trade.LimitOrder;
+import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
 import org.knowm.xchange.service.account.AccountService;
 import org.knowm.xchange.service.trade.params.TradeHistoryParams;
 import org.knowm.xchange.service.trade.params.WithdrawFundsParams;
 import ru.webotix.exchange.api.ExchangeService;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
@@ -33,10 +34,8 @@ public class PaperAccountService implements AccountService {
     private static final BigDecimal INITIAL_BALANCE = new BigDecimal(1000);
 
     private final ConcurrentMap<Currency, AtomicReference<Balance>> balances;
-    private final String exchange;
 
-    PaperAccountService(String exchange, Set<Currency> currencies) {
-        this.exchange = exchange;
+    PaperAccountService(Set<Currency> currencies) {
         this.balances = new ConcurrentHashMap<>(currencies.stream().collect(Collectors.toMap(
                 Function.identity(),
                 k -> new AtomicReference<>(new Balance(k, INITIAL_BALANCE))
@@ -77,6 +76,120 @@ public class PaperAccountService implements AccountService {
         throw new NotAvailableFromExchangeException();
     }
 
+    private AtomicReference<Balance> defaultBalance(Currency currency) {
+        return new AtomicReference<>(new Balance(currency, INITIAL_BALANCE));
+    }
+
+    void reserve(LimitOrder order) {
+        reserve(order, false);
+    }
+
+    void releaseBalances(LimitOrder order) {
+        reserve(order, true);
+    }
+
+    private void reserve(LimitOrder order, boolean negate) {
+        switch (order.getType()) {
+            case ASK:
+                BigDecimal askAmount =
+                        negate ? order.getOriginalAmount().negate() : order.getOriginalAmount();
+                balances
+                        .computeIfAbsent(order.getCurrencyPair().base, this::defaultBalance)
+                        .updateAndGet(
+                                b -> {
+                                    if (b.getAvailable().compareTo(askAmount) < 0) {
+                                        throw new ExchangeException(
+                                                "Insufficient balance: "
+                                                        + askAmount.toPlainString()
+                                                        + order.getCurrencyPair().base
+                                                        + " required but only "
+                                                        + b.getAvailable()
+                                                        + " available");
+                                    }
+                                    return Balance.Builder.from(b)
+                                            .available(b.getAvailable().subtract(askAmount))
+                                            .frozen(b.getFrozen().add(askAmount))
+                                            .build();
+                                });
+                break;
+            case BID:
+                BigDecimal bid = order.getOriginalAmount().multiply(order.getLimitPrice());
+                BigDecimal bidAmount = negate ? bid.negate() : bid;
+                balances
+                        .computeIfAbsent(order.getCurrencyPair().counter, this::defaultBalance)
+                        .updateAndGet(
+                                b -> {
+                                    if (b.getAvailable().compareTo(bidAmount) < 0) {
+                                        throw new ExchangeException(
+                                                "Insufficient balance: "
+                                                        + bidAmount.toPlainString()
+                                                        + order.getCurrencyPair().counter
+                                                        + " required but only "
+                                                        + b.getAvailable()
+                                                        + " available");
+                                    }
+                                    return Balance.Builder.from(b)
+                                            .available(b.getAvailable().subtract(bidAmount))
+                                            .frozen(b.getFrozen().add(bidAmount))
+                                            .build();
+                                });
+                break;
+            default:
+                throw new NotAvailableFromExchangeException(
+                        "Order type " + order.getType() + " not supported");
+        }
+    }
+
+    public void fillLimitOrder(LimitOrder order) {
+
+        BigDecimal originalCounterAmount = order.getCumulativeAmount().multiply(order.getLimitPrice());
+        BigDecimal counterAmount = order.getCumulativeAmount().multiply(order.getAveragePrice());
+        switch (order.getType()) {
+            case ASK:
+                balances
+                        .computeIfAbsent(order.getCurrencyPair().base, this::defaultBalance)
+                        .updateAndGet(
+                                b ->
+                                        Balance.Builder.from(b)
+                                                .total(b.getTotal().subtract(order.getCumulativeAmount()))
+                                                .frozen(b.getFrozen().subtract(order.getCumulativeAmount()))
+                                                .build());
+                balances
+                        .computeIfAbsent(order.getCurrencyPair().counter, this::defaultBalance)
+                        .updateAndGet(
+                                b ->
+                                        Balance.Builder.from(b)
+                                                .total(b.getTotal().add(counterAmount))
+                                                .available(b.getAvailable().add(counterAmount))
+                                                .build());
+                break;
+            case BID:
+                balances
+                        .computeIfAbsent(order.getCurrencyPair().base, this::defaultBalance)
+                        .updateAndGet(
+                                b ->
+                                        Balance.Builder.from(b)
+                                                .total(b.getTotal().add(order.getCumulativeAmount()))
+                                                .available(b.getAvailable().add(order.getCumulativeAmount()))
+                                                .build());
+                balances
+                        .computeIfAbsent(order.getCurrencyPair().counter, this::defaultBalance)
+                        .updateAndGet(
+                                b ->
+                                        Balance.Builder.from(b)
+                                                .available(
+                                                        b.getAvailable().add(originalCounterAmount)
+                                                                .subtract(counterAmount))
+                                                .frozen(b.getFrozen().subtract(counterAmount))
+                                                .total(b.getTotal().subtract(counterAmount))
+                                                .build());
+                break;
+            default:
+                throw new NotAvailableFromExchangeException(
+                        "Order type " + order.getType() + " not supported");
+        }
+    }
+
     @Singleton
     public static class Factory implements AccountServiceFactory {
 
@@ -87,8 +200,8 @@ public class PaperAccountService implements AccountService {
                 .initialCapacity(1000)
                 .build(new CacheLoader<String, PaperAccountService>() {
                     @Override
-                    public PaperAccountService load(String exchange) throws Exception {
-                        return new PaperAccountService(exchange, exchangeService.get(exchange)
+                    public PaperAccountService load(String exchange) {
+                        return new PaperAccountService(exchangeService.get(exchange)
                                 .getExchangeMetaData()
                                 .getCurrencies()
                                 .keySet());

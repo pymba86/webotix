@@ -11,11 +11,15 @@ public class TradeServiceExchangeFactory extends AbstractExchangeServiceFactory<
 
     private final ExchangeService exchangeService;
 
+    private final PaperTradeService.Factory paperTradeServiceFactory;
+
     @Inject
     public TradeServiceExchangeFactory(Map<String, ExchangeConfiguration> configuration,
-                                       ExchangeService exchangeService) {
+                                       ExchangeService exchangeService,
+                                       PaperTradeService.Factory paperTradeServiceFactory) {
         super(configuration);
         this.exchangeService = exchangeService;
+        this.paperTradeServiceFactory = paperTradeServiceFactory;
     }
 
     @Override
@@ -26,6 +30,6 @@ public class TradeServiceExchangeFactory extends AbstractExchangeServiceFactory<
 
     @Override
     protected ExchangeServiceFactory<TradeService> getPaperFactory() {
-        return null;
+        return paperTradeServiceFactory;
     }
 }

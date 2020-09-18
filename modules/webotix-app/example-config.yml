@@ -4,40 +4,11 @@ telegram:
   botToken: 1383736175:AAEaML3a4hM1UUdHXaOi1uvAQWemsdlCcco
   chatId: 327871252
 exchanges:
-  simulated:
-    apiKey: DEMO
-  gdax:
-    apiKey:
-    secretKey:
-    passphrase:
-    sandbox: false # default
-    loadRemoteData: true # default. Disable if the exchange goes down to avoid spamming it for metadata requests
   binance:
     apiKey:
     secretKey:
     loadRemoteData: true
-  kucoin:
-    apiKey:
-    secretKey:
-    passphrase:
-    sandbox: false
-    loadRemoteData: true
-  bitfinex:
-    apiKey:
-    secretKey:
-    loadRemoteData: true
-  bitmex:
-    apiKey:
-    secretKey:
-    loadRemoteData: true
-  kraken:
-    apiKey:
-    secretKey:
-    loadRemoteData: true
-  bittrex:
-    apiKey:
-    secretKey:
-    loadRemoteData:
+    enabled: true
 jerseyClient:
   timeout: 5000ms
   connectionTimeout: 5000ms

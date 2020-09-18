@@ -95,15 +95,19 @@ public class CacheExchangeService implements ExchangeService {
         }
 
         private ExchangeSpecification createExchangeSpecification(String exchangeName, ExchangeConfiguration exchangeConfiguration) throws InstantiationException, IllegalAccessException {
+
             final ExchangeSpecification exSpec = ExchangeFactory.INSTANCE
                     .createExchangeWithoutSpecification(Exchanges.friendlyNameToClass(exchangeName))
                     .getDefaultExchangeSpecification();
+
             if (exchangeConfiguration.isSandbox()) {
                 LOGGER.info("Using {} sandbox", exchangeName);
                 exSpec.setExchangeSpecificParametersItem("Use_Sandbox", true);
             }
             exSpec.setShouldLoadRemoteMetaData(exchangeConfiguration.isLoadRemoteData());
-            RateLimiter rateLimiter = RateLimiter.create(0.25); // TODO make this exchange specific
+
+            RateLimiter rateLimiter = RateLimiter.create(0.25);
+
             exSpec.setExchangeSpecificParametersItem(
                     BEFORE_CONNECTION_HANDLER,
                     (Runnable) rateLimiter::acquire

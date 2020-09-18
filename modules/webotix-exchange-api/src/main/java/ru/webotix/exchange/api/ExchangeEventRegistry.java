@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import io.reactivex.Flowable;
 import ru.webotix.market.data.api.BalanceEvent;
 import ru.webotix.market.data.api.MarketDataSubscription;
+import ru.webotix.market.data.api.TickerEvent;
 
 import java.util.Set;
 
@@ -35,6 +36,13 @@ public interface ExchangeEventRegistry {
      * Подписчик на события биржы
      */
     public interface ExchangeEventSubscription extends AutoCloseable {
+
+
+        /**
+         * Получить поток событий изменений тикетов на бирже
+         * @return Подписка на события изменений тикетов на бирже
+         */
+        Flowable<TickerEvent> getTickers();
 
         /**
          * Получить поток событий баланса слушающей биржы

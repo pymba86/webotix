@@ -18,10 +18,7 @@ import ru.webotix.datasource.wiring.BackgroundProcessingConfiguration;
 import ru.webotix.exchange.*;
 import ru.webotix.exchange.api.ExchangeService;
 import ru.webotix.exchange.api.RateController;
-import ru.webotix.market.data.api.BalanceEvent;
-import ru.webotix.market.data.api.MarketDataSubscription;
-import ru.webotix.market.data.api.MarketDataType;
-import ru.webotix.market.data.api.TickerSpec;
+import ru.webotix.market.data.api.*;
 import ru.webotix.notification.api.NotificationService;
 import ru.webotix.utils.CheckedExceptions;
 import ru.webotix.utils.SafelyDispose;
@@ -334,7 +331,7 @@ public class MarketDataSubscriptionController extends AbstractPollingController 
                 Iterables.addAll(unavailableSubscriptions, toUnsubscribe.get());
 
             } catch (SocketTimeoutException | SocketException
-                    | ExchangeUnavailableException | SystemOverloadException | NonceException e) {
+                    | ExchangeUnavailableException | NonceException e) {
 
                 log.warn("Throttling {} - {} ({}) when fetching {}", exchangeName,
                         e.getClass().getSimpleName(), exceptionMessage(e), dataDescription);
@@ -431,11 +428,20 @@ public class MarketDataSubscriptionController extends AbstractPollingController 
                             case Order:
                                 // TODO В настоящее время не поддерживается опросом
                                 break;
+                            case Ticker:
+                                pollAndEmitTicker(spec);
+                                break;
                             default:
-                                throw new IllegalStateException("Market data type " + subscription.type() + " not supported in this way");
+                                throw new IllegalStateException("Market data type "
+                                        + subscription.type() + " not supported in this way");
                         }
                     },
                     () -> ImmutableSet.of(subscription));
+        }
+
+        private void pollAndEmitTicker(TickerSpec spec) throws IOException {
+            publisher.emit(TickerEvent.create(
+                    spec, marketDataService.getTicker(spec.currencyPair())));
         }
 
         /**
@@ -640,7 +646,13 @@ public class MarketDataSubscriptionController extends AbstractPollingController 
 
         private Disposable connectSubscription(MarketDataSubscription subscription) {
             switch (subscription.type()) {
-                // TODO Подписки к рынку данных
+                case Ticker:
+                    log.debug("Subscribing to {}", subscription.spec());
+                    return streamingExchange.getStreamingMarketDataService()
+                            .getTicker(subscription.spec().currencyPair())
+                            .map(t -> TickerEvent.create(subscription.spec(), t))
+                            .subscribe(publisher::emit,
+                                    e -> log.error("Error in ticker stream for " + subscription, e));
                 default:
                     throw new NotAvailableFromExchangeException();
             }

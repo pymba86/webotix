@@ -2,10 +2,7 @@ package ru.webotix.market.data;
 
 import com.google.inject.Singleton;
 import io.reactivex.Flowable;
-import ru.webotix.market.data.api.BalanceEvent;
-import ru.webotix.market.data.api.MarketDataSubscription;
-import ru.webotix.market.data.api.MarketDataSubscriptionManager;
-import ru.webotix.market.data.api.SubscriptionController;
+import ru.webotix.market.data.api.*;
 
 import java.util.Set;
 
@@ -15,8 +12,11 @@ public class SubscriptionPublisher implements MarketDataSubscriptionManager {
     private SubscriptionController controller;
 
     private final CachingPersistentPublisher<BalanceEvent, String> balanceOut;
+    private final CachingPersistentPublisher<TickerEvent, TickerSpec> tickerOut;
 
     public SubscriptionPublisher() {
+
+        this.tickerOut = new CachingPersistentPublisher<>(TickerEvent::spec);
 
         this.balanceOut =
                 new CachingPersistentPublisher<>(
@@ -34,6 +34,11 @@ public class SubscriptionPublisher implements MarketDataSubscriptionManager {
     }
 
     @Override
+    public Flowable<TickerEvent> getTickers() {
+        return tickerOut.getAll();
+    }
+
+    @Override
     public void updateSubscriptions(Set<MarketDataSubscription> subscriptions) {
         if (this.controller == null) {
             throw new IllegalStateException(
@@ -44,6 +49,10 @@ public class SubscriptionPublisher implements MarketDataSubscriptionManager {
 
     void emit(BalanceEvent e) {
         balanceOut.emit(e);
+    }
+
+    void emit(TickerEvent e) {
+        tickerOut.emit(e);
     }
 
     void clearCacheForSubscription(MarketDataSubscription subscription) {
