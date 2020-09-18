@@ -7,15 +7,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import io.reactivex.disposables.Disposable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.webotix.exchange.api.ExchangeEventRegistry;
+import ru.webotix.job.status.api.JobStatus;
 import ru.webotix.market.data.api.MarketDataSubscription;
 import ru.webotix.market.data.api.MarketDataType;
 import ru.webotix.market.data.api.TickerSpec;
+import ru.webotix.notification.api.Notification;
 import ru.webotix.utils.SafelyClose;
 import ru.webotix.utils.SafelyDispose;
 
@@ -154,6 +157,16 @@ public final class WebSocketServer {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Subscribe
+    void onNotification(Notification notification) {
+        send(notification, WebSocketNatureMessage.NOTIFICATION);
+    }
+
+    @Subscribe
+    void onStatusUpdate(JobStatus status) {
+        send(status, WebSocketNatureMessage.STATUS_UPDATE);
     }
 
 }
