@@ -6,17 +6,16 @@ $btn-prefix: 'ui-btn';
 
 .#{$btn-prefix} {
   display: inline-block;
-  height: $btn-size;
-  padding: 0 $btn-padding-x;
+  padding: 0.6em 1.5em;
   border: $border-width solid transparent;
   border-radius: $border-radius;
-  font-weight: $font-weight-normal;
+  font-weight: $font-weight-bold;
   font-size: $font-size-base;
   text-align: center;
+  line-height: 1em;
   white-space: nowrap;
   vertical-align: middle;
   user-select: none;
-  color: $gray-700;
 
   &:focus,
   &.focus {

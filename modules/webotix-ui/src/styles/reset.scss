@@ -336,3 +336,26 @@ template {
 [hidden] {
   display: none !important;
 }
+
+/* Site */
+
+::-moz-selection {
+  background-color: $highlight-bg;
+  color: $text-color;
+}
+::selection {
+  background-color: $highlight-bg;
+  color: $text-color;
+}
+
+/* Form */
+textarea::-moz-selection,
+input::-moz-selection {
+  background-color: $highlight-bg;
+  color: $text-color;
+}
+textarea::selection,
+input::selection {
+  background-color: $highlight-bg;
+  color: $text-color;
+}
