@@ -1,5 +1,5 @@
 import {Form} from './Form';
-import {FormItem} from './Item';
+import {FormItem} from './FormItem';
 
 Form.Item = FormItem;
 

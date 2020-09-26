@@ -1,7 +1,7 @@
 import {FormProps} from "./types";
 import React from "react";
 import classNames from 'classnames';
-import {FormItem} from "./Item";
+import {FormItem} from "./FormItem";
 
 export class Form extends React.Component<FormProps> {
 
@@ -9,7 +9,7 @@ export class Form extends React.Component<FormProps> {
 
     public static defaultProps = {
         prefixCls: 'ui-form'
-    }
+    };
 
     public render() {
 
