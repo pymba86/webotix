@@ -23,13 +23,13 @@ export const Button: React.FC<ButtonProps> = ({
             [`${prefixCls}-outline-${variant}`]: outline,
         },
         className
-    )
+    );
 
     return (
         <button {...props} className={classes}>
             {children}
         </button>
     )
-}
+};
 
 export default Button;

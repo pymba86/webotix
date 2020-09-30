@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useMemo} from "react"
-import {breakpoints} from "./confg";
+import {breakpoints, Panel, useUiConfig} from "./confg";
 import {Framework} from "./Framework";
+import {Layouts} from "react-grid-layout";
+import Immutable from "seamless-immutable"
 
 const windowToBreakpoint = (width: number) =>
     width < breakpoints.lg ? (width < breakpoints.md ? "sm" : "md") : "lg";
@@ -31,6 +33,8 @@ export const FrameworkContainer: React.FC = () => {
     const [paperTrading, setPaperTrading] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
 
+    const [uiConfig] = useUiConfig();
+
     const api: FrameworkApi = useMemo(
         () => ({
             paperTrading,
@@ -38,6 +42,27 @@ export const FrameworkContainer: React.FC = () => {
         }),
         [paperTrading]
     );
+
+    const layoutsAsObject = uiConfig.layouts;
+    const layouts = useMemo<Layouts>(
+        () => {
+            return {
+                lg: Object.values(layoutsAsObject.lg),
+                md: Object.values(layoutsAsObject.md),
+                sm: Object.values(layoutsAsObject.sm)
+            }
+        },
+        [layoutsAsObject]
+    );
+
+    const panelsAsObject = uiConfig.panels;
+    const panels = useMemo<Panel[]>(() => Object.values(panelsAsObject), [panelsAsObject]);
+
+    const hiddenPanels = useMemo<Panel[]>(
+        () => (panels ? panels.filter(panel => !panel.visible) : []),
+        [panels]
+    );
+
 
     useEffect(() => {
         window.addEventListener("resize",
@@ -52,6 +77,9 @@ export const FrameworkContainer: React.FC = () => {
                 showSettings={showSettings}
                 onToggleViewSettings={() => setShowSettings(!showSettings)}
                 onBreakpointChange={(breakpoint => setBreakpoint(breakpoint))}
+                panels={panels}
+                layouts={layouts}
+                hiddenPanels={hiddenPanels}
             />
         </FrameworkContext.Provider>
     )

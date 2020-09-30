@@ -1,0 +1,31 @@
+@import '../../styles/functions.scss';
+@import '../../styles/theme.scss';
+@import '../../styles/mixins.scss';
+
+$layout-prefix: 'ui-layout';
+
+.#{$layout-prefix} {
+  @include reset-component();
+
+  &-box {
+    height: 100%;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  &-wrapper {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+
+    > * {
+      margin: 8px;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import {Layout} from "react-grid-layout"
 import Immutable from "seamless-immutable"
 import {getFromLS, saveToLS} from "./modules/common/localStorage";
+import {useReducer} from "react";
 
 const VERSION = 1;
 
@@ -42,6 +43,30 @@ interface Meta {
     version: number;
 }
 
+export interface UiConfig {
+    layouts: AllKeyedLayouts;
+    panels: AllKeyedPanels;
+}
+
+export interface UiConfigApi {
+    panelToFront(key: string): void
+
+    togglePanelAttached(key: string): void
+
+    togglePanelVisible(key: string): void
+
+    movePanel(key: string, x: number, y: number): void
+
+    resizePanel(key: string, x: number, y: number, w: number, h: number): void
+
+    resetPanels(): void
+
+    resetLayouts(): void
+
+    resetPanelsAndLayouts(): void
+
+    updateLayouts(payload: object): void
+}
 
 const basePanels: AllKeyedPanels = Immutable({
     jobs: {
@@ -95,3 +120,20 @@ const initPanels: AllKeyedPanels
 const initLayouts: AllKeyedLayouts
     = loadedLayouts === null || version < VERSION ? baseLayouts : loadedLayouts;
 
+interface BaseAction {
+    reduce(state: UiConfig): UiConfig;
+}
+
+function reducer(state: UiConfig, action: BaseAction) {
+    return action.reduce(state);
+}
+
+export function useUiConfig(): [UiConfig] {
+
+    const [uiConfig, dispatch] = useReducer(reducer, {
+        panels: initPanels,
+        layouts: initLayouts
+    });
+
+    return [uiConfig]
+}

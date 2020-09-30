@@ -2,6 +2,9 @@ import React, {ReactElement} from "react"
 import {DragPanel, OfAllPanels, Panel} from "./confg";
 import {WidthProvider, Responsive, Layouts, Layout} from "react-grid-layout";
 import {Rnd, DraggableData} from "react-rnd";
+import {LayoutBox} from "./elements/layout";
+import {Section, SectionProvider} from "./elements/section";
+import {ErrorBoundary} from "./components/error";
 
 interface FrameworkProps {
 
@@ -39,8 +42,27 @@ export class Framework extends React.Component<FrameworkProps> {
     constructor(props: FrameworkProps) {
         super(props);
 
+        const Panel: React.FC<{ id: string }> = ({id, children}) => (
+            <SectionProvider value={{
+                draggable: true,
+                compactDragHandle: this.props.isMobile
+            }}>
+                <ErrorBoundary wrapper={({message, children}) =>
+                    <Section heading={message}>{children}</Section>}>
+                    {children}
+                </ErrorBoundary>
+            </SectionProvider>
+        );
+
+
         this.panelsRenders = {
-            jobs: () => (<div>123</div>)
+            jobs: () => (
+                <LayoutBox key={"jobs"}>
+                    <Panel id={"jobs"}>
+                        123
+                    </Panel>
+                </LayoutBox>
+            )
         }
     }
 
