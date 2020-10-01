@@ -14,16 +14,16 @@ export const SectionHeadingBox: React.FC<SectionHeadingBoxProps> = (
     }) => {
 
     const classes = classNames(
-        prefixCls,
-        {
-            [`${prefixCls}-heading-box`]: true,
-        },
-        className
+        prefixCls, `${prefixCls}-heading-box`, className
+    );
+
+    const headingClassName = classNames(
+        prefixCls, `${prefixCls}-heading`, className
     );
 
     return (
         <div className={classes}>
-            {children}
+            <h3 className={headingClassName}>{children}</h3>
         </div>
     );
 };

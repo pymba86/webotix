@@ -1,21 +1,21 @@
-import {Layout} from "react-grid-layout"
+import {Layout, Layouts} from "react-grid-layout"
 import Immutable from "seamless-immutable"
 import {getFromLS, saveToLS} from "./modules/common/localStorage";
-import {useReducer} from "react";
+import {useMemo, useReducer} from "react";
 
 const VERSION = 1;
+
+export type OfAllKeyPanel = 'jobs' | 'notifications';
+
+export type OfAllPanels<T> = Record<OfAllKeyPanel, T>;
 
 interface BasePanel {
     title: string;
     icon: string;
-    key: string;
+    key: OfAllKeyPanel;
     visible: boolean;
     detached: boolean;
-    position: number;
-}
-
-export interface OfAllPanels<T> {
-    jobs: T;
+    stackPosition: number;
 }
 
 export interface DragPanel {
@@ -31,11 +31,9 @@ export type KeyedLayouts = OfAllPanels<Layout>;
 
 export type AllKeyedLayouts = Breakpoints<KeyedLayouts>;
 
-interface Breakpoints<T> {
-    lg: T;
-    md: T;
-    sm: T;
-}
+export type Breakpoint = 'lg' | 'md' | 'sm';
+
+export type Breakpoints<T> = Record<Breakpoint, T>;
 
 export type Panel = BasePanel & DragPanel;
 
@@ -49,15 +47,15 @@ export interface UiConfig {
 }
 
 export interface UiConfigApi {
-    panelToFront(key: string): void
+    panelToFront(key: OfAllKeyPanel): void
 
-    togglePanelAttached(key: string): void
+    togglePanelAttached(key: OfAllKeyPanel): void
 
-    togglePanelVisible(key: string): void
+    togglePanelVisible(key: OfAllKeyPanel): void
 
-    movePanel(key: string, x: number, y: number): void
+    movePanel(key: OfAllKeyPanel, x: number, y: number): void
 
-    resizePanel(key: string, x: number, y: number, w: number, h: number): void
+    resizePanel(key: OfAllKeyPanel, x: number, y: number, w: number, h: number): void
 
     resetPanels(): void
 
@@ -65,7 +63,7 @@ export interface UiConfigApi {
 
     resetPanelsAndLayouts(): void
 
-    updateLayouts(payload: object): void
+    updateLayouts(payload: Layouts): void
 }
 
 const basePanels: AllKeyedPanels = Immutable({
@@ -75,7 +73,19 @@ const basePanels: AllKeyedPanels = Immutable({
         icon: "tasks",
         visible: true,
         detached: false,
-        position: 0,
+        stackPosition: 0,
+        x: 0,
+        y: 0,
+        h: 0,
+        w: 0
+    },
+    notifications: {
+        key: "notifications",
+        title: "Notifications",
+        icon: "tasks",
+        visible: true,
+        detached: false,
+        stackPosition: 0,
         x: 0,
         y: 0,
         h: 0,
@@ -85,13 +95,16 @@ const basePanels: AllKeyedPanels = Immutable({
 
 const baseLayouts: AllKeyedLayouts = Immutable({
     lg: {
-        jobs: {i: "jobs", x: 26, y: 300, w: 14, h: 9}
+        jobs: {i: "jobs", x: 26, y: 300, w: 14, h: 9},
+        notifications: { i: "notifications", x: 0, y: 200, w: 8, h: 9 },
     },
     md: {
         jobs: {i: "coins", x: 20, y: 100, w: 12, h: 11},
+        notifications: { i: "notifications", x: 20, y: 400, w: 12, h: 7 }
     },
     sm: {
         jobs: {i: "jobs", x: 0, y: 700, w: 4, h: 6},
+        notifications: { i: "notifications", x: 0, y: 800, w: 4, h: 6 }
     }
 });
 
@@ -100,6 +113,12 @@ export const breakpoints: Breakpoints<number> = {
     md: 992,
     sm: 0
 };
+
+export const cols: Breakpoints<number> = {
+    lg: 40,
+    md: 32,
+    sm: 4
+}
 
 const loadedPanels: AllKeyedPanels = getFromLS("panels");
 
@@ -124,16 +143,219 @@ interface BaseAction {
     reduce(state: UiConfig): UiConfig;
 }
 
+type PanelTransform = (panel: Panel) => Panel;
+
+class ResetPanelsAction implements BaseAction {
+
+    reduce(state: UiConfig): UiConfig {
+        return {
+            ...state,
+            panels: saveToLS("panels", basePanels)
+        };
+    }
+}
+
+class ResetLayoutsAction implements BaseAction {
+    reduce(state: UiConfig): UiConfig {
+        return {
+            ...state,
+            layouts: saveToLS("layouts", baseLayouts)
+        }
+    }
+}
+
+class ResetPanelsAndLayoutsAction implements BaseAction {
+    reduce(state: UiConfig): UiConfig {
+        return new ResetLayoutsAction()
+            .reduce(new ResetPanelsAction()
+                .reduce(state))
+    }
+}
+
+class PartialPanelUpdate implements BaseAction {
+
+    private readonly key: OfAllKeyPanel;
+    private readonly panelTransform: PanelTransform
+    private readonly resetLayouts: boolean
+
+    constructor(key: OfAllKeyPanel, panelTransform: PanelTransform, resetLayouts: boolean = false) {
+        this.key = key;
+        this.panelTransform = panelTransform;
+        this.resetLayouts = resetLayouts;
+    }
+
+    reduce(state: UiConfig): UiConfig {
+
+        return {
+            ...state,
+            panels: saveToLS(
+                "panels",
+                {
+                    ...state.panels,
+                    [this.key]: this.panelTransform(state.panels[this.key])
+
+                }
+            ),
+            layouts: this.resetLayouts
+                ? saveToLS(
+                    "layouts",
+                    {
+                        ...state.layouts,
+                        lg: {
+                            ...state.layouts.lg,
+                            [this.key]: baseLayouts.lg[this.key]
+                        },
+                        md: {
+                            ...state.layouts.lg,
+                            [this.key]: baseLayouts.md[this.key]
+                        },
+                        sm: {
+                            ...state.layouts.lg,
+                            [this.key]: baseLayouts.sm[this.key]
+                        }
+                    }
+                )
+                : state.layouts
+        }
+    }
+}
+
+class UpdateLayoutsAction implements BaseAction {
+    private payload: Layouts
+
+    constructor(payload: Layouts) {
+        this.payload = payload
+    }
+
+    reduce(state: UiConfig): UiConfig {
+
+        return {
+            ...state,
+            layouts: saveToLS(
+                "layouts",
+                {
+                    ...baseLayouts,
+                    lg: this.payload.lg
+                        .filter((l: Layout) => l.w !== 1)
+                        .reduce((acc: Record<string, Layout>, val) => {
+                            acc[val.i] = val;
+                            return acc;
+                        }, {}),
+                    md: this.payload.md
+                        .filter((l: Layout) => l.w !== 1)
+                        .reduce((acc: Record<string, Layout>, val) => {
+                            acc[val.i] = val;
+                            return acc;
+                        }, {}),
+                    sm: this.payload.sm
+                        .filter((l: Layout) => l.w !== 1)
+                        .reduce((acc: Record<string, Layout>, val) => {
+                            acc[val.i] = val;
+                            return acc;
+                        }, {}),
+                }
+            )
+        }
+
+    }
+}
+
 function reducer(state: UiConfig, action: BaseAction) {
     return action.reduce(state);
 }
 
-export function useUiConfig(): [UiConfig] {
+let nextStackPosition: number = Object.values<Panel>(initPanels)
+    .reduce((acc: number, next: Panel) =>
+        (next.stackPosition > acc ? next.stackPosition : acc), 0);
+
+export function useUiConfig(): [UiConfig, UiConfigApi] {
 
     const [uiConfig, dispatch] = useReducer(reducer, {
         panels: initPanels,
         layouts: initLayouts
     });
 
-    return [uiConfig]
+    const api: UiConfigApi = useMemo(
+        () => ({
+            panelToFront(key: OfAllKeyPanel) {
+
+                dispatch(new PartialPanelUpdate(
+                    key, (panel) => (
+                        {
+                            ...panel,
+                            stackPosition: nextStackPosition++
+                        }
+                    )
+                ))
+            },
+            togglePanelAttached(key: OfAllKeyPanel) {
+
+                dispatch(new PartialPanelUpdate(
+                    key, (panel) => (
+                        {
+                            ...panel,
+                            detached: !panel.detached,
+                            stackPosition: nextStackPosition++
+                        }
+                    ),
+                    true
+                ))
+            },
+            togglePanelVisible(key: OfAllKeyPanel) {
+
+                dispatch(new PartialPanelUpdate(
+                    key, (panel) => (
+                        {
+                            ...panel,
+                            visible: !panel.visible,
+                            stackPosition: nextStackPosition++
+                        }
+                    ),
+                    true
+                ))
+            },
+            movePanel(key: OfAllKeyPanel, x: number, y: number) {
+
+                dispatch(new PartialPanelUpdate(
+                    key, (panel) => (
+                        {
+                            ...panel,
+                            x,
+                            y
+                        }
+                    )
+                ));
+            },
+            resizePanel(key: OfAllKeyPanel, x: number, y: number, w: number, h: number) {
+
+                dispatch(new PartialPanelUpdate(
+                    key, (panel) => (
+                        {
+                            ...panel,
+                            x,
+                            y,
+                            w,
+                            h
+                        }
+                    )
+                ));
+            },
+            resetPanels() {
+                dispatch(new ResetPanelsAction());
+            },
+            resetLayouts() {
+                dispatch(new ResetLayoutsAction())
+            },
+            resetPanelsAndLayouts() {
+                dispatch(new ResetPanelsAndLayoutsAction())
+            },
+            updateLayouts(payload: Layouts) {
+                dispatch(new UpdateLayoutsAction(payload))
+            }
+
+        }),
+        [dispatch]
+    )
+
+    return [uiConfig, api]
 }

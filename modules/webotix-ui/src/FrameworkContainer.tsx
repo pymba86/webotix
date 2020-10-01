@@ -1,10 +1,11 @@
 import React, {useState, useEffect, useMemo} from "react"
-import {breakpoints, Panel, useUiConfig} from "./confg";
+import {Breakpoint, breakpoints, DragPanel, OfAllKeyPanel, Panel, useUiConfig} from "./confg";
 import {Framework} from "./Framework";
-import {Layouts} from "react-grid-layout";
-import Immutable from "seamless-immutable"
+import {Layout, Layouts} from "react-grid-layout";
+import {DraggableData} from "react-rnd";
+import Immutable, {ImmutableObject} from "seamless-immutable"
 
-const windowToBreakpoint = (width: number) =>
+const windowToBreakpoint = (width: number): Breakpoint =>
     width < breakpoints.lg ? (width < breakpoints.md ? "sm" : "md") : "lg";
 
 export interface FrameworkApi {
@@ -33,7 +34,7 @@ export const FrameworkContainer: React.FC = () => {
     const [paperTrading, setPaperTrading] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
 
-    const [uiConfig] = useUiConfig();
+    const [uiConfig, uiConfigApi] = useUiConfig();
 
     const api: FrameworkApi = useMemo(
         () => ({
@@ -44,14 +45,13 @@ export const FrameworkContainer: React.FC = () => {
     );
 
     const layoutsAsObject = uiConfig.layouts;
-    const layouts = useMemo<Layouts>(
-        () => {
-            return {
-                lg: Object.values(layoutsAsObject.lg),
-                md: Object.values(layoutsAsObject.md),
-                sm: Object.values(layoutsAsObject.sm)
-            }
-        },
+
+    const layouts = useMemo<ImmutableObject<Layouts>>(
+        () => Immutable<Layouts>({
+            lg: Object.values(layoutsAsObject.lg),
+            md: Object.values(layoutsAsObject.md),
+            sm: Object.values(layoutsAsObject.sm)
+        }),
         [layoutsAsObject]
     );
 
@@ -62,7 +62,6 @@ export const FrameworkContainer: React.FC = () => {
         () => (panels ? panels.filter(panel => !panel.visible) : []),
         [panels]
     );
-
 
     useEffect(() => {
         window.addEventListener("resize",
@@ -78,8 +77,16 @@ export const FrameworkContainer: React.FC = () => {
                 onToggleViewSettings={() => setShowSettings(!showSettings)}
                 onBreakpointChange={(breakpoint => setBreakpoint(breakpoint))}
                 panels={panels}
+                layoutsAsObj={layoutsAsObject[breakpoint]}
                 layouts={layouts}
                 hiddenPanels={hiddenPanels}
+                onLayoutChange={(layout: Layout[], layouts: Layouts) => uiConfigApi.updateLayouts(layouts)}
+                onMovePanel={(key: OfAllKeyPanel, d: DraggableData) => uiConfigApi.movePanel(key, d.x, d.y)}
+                onResetLayout={uiConfigApi.resetPanelsAndLayouts}
+                onResizePanel={(key: OfAllKeyPanel, d: DragPanel) => uiConfigApi.resizePanel(key, d.x, d.y, d.w, d.h)}
+                onTogglePanelAttached={uiConfigApi.togglePanelAttached}
+                onTogglePanelVisible={uiConfigApi.togglePanelVisible}
+                onInteractPanel={(key:OfAllKeyPanel) => uiConfigApi.panelToFront(key)}
             />
         </FrameworkContext.Provider>
     )

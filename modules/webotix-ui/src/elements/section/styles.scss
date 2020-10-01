@@ -59,4 +59,13 @@ $section-prefix: 'ui-section';
     z-index: 10;
     overflow: hidden;
   }
+
+  &-heading {
+    font-family: system-ui, sans-serif;
+    text-transform: uppercase;
+    display: inline;
+    white-space: nowrap;
+    font-weight: 700;
+    color: $gray-100;
+  }
 }

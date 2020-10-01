@@ -24,8 +24,8 @@ export const SectionContent: React.FC<SectionContentProps> = (
         {
             [`${prefixCls}-content`]: true,
             [`${prefixCls}-content-padding`]: !nopadding,
-            [`${prefixCls}-content-scroll-x`]: scroll == 'horizontal' || scroll == 'both',
-            [`${prefixCls}-content-scroll-y`]: scroll == 'vertical' || scroll == 'both',
+            [`${prefixCls}-content-scroll-x`]: scroll === 'horizontal' || scroll === 'both',
+            [`${prefixCls}-content-scroll-y`]: scroll === 'vertical' || scroll === 'both',
         },
         className
     );

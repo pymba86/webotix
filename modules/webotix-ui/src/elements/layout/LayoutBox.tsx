@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {ButtonHTMLAttributes} from 'react';
 import classNames from "classnames";
 
-export interface LayoutBoxProps {
+export type  LayoutBoxProps = ButtonHTMLAttributes<HTMLDivElement> & {
     prefixCls?: string;
     className?: string;
 }
@@ -9,7 +9,8 @@ export interface LayoutBoxProps {
 export const LayoutBox: React.FC<LayoutBoxProps> = ({
                                                         prefixCls = 'ui-layout',
                                                         className,
-                                                        children
+                                                        children,
+                                                        ...props
                                                     }) => {
 
     const classes = classNames(
@@ -21,7 +22,7 @@ export const LayoutBox: React.FC<LayoutBoxProps> = ({
     );
 
     return (
-        <div className={classes}>
+        <div {...props} className={classes}>
             {children}
         </div>
     )
