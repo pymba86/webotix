@@ -18,7 +18,11 @@ export interface FrameworkApi {
 export const FrameworkContext =
     React.createContext<FrameworkApi | null>(null);
 
-function withFramework<T>(Component: React.ComponentType<T>) {
+export interface FrameworkApiProps {
+    frameworkApi: FrameworkApi;
+}
+
+function withFramework<T extends FrameworkApiProps>(Component: React.ComponentType<T>) {
     return (props: T) => (
         <FrameworkContext.Consumer>
             {frameworkApi => <Component {...props} frameworkApi={frameworkApi}/>}
@@ -86,7 +90,7 @@ export const FrameworkContainer: React.FC = () => {
                 onResizePanel={(key: OfAllKeyPanel, d: DragPanel) => uiConfigApi.resizePanel(key, d.x, d.y, d.w, d.h)}
                 onTogglePanelAttached={uiConfigApi.togglePanelAttached}
                 onTogglePanelVisible={uiConfigApi.togglePanelVisible}
-                onInteractPanel={(key:OfAllKeyPanel) => uiConfigApi.panelToFront(key)}
+                onInteractPanel={(key: OfAllKeyPanel) => uiConfigApi.panelToFront(key)}
             />
         </FrameworkContext.Provider>
     )

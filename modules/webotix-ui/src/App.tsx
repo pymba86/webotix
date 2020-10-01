@@ -1,9 +1,12 @@
 import React from 'react';
 import {FrameworkContainer} from "./FrameworkContainer";
+import {Server} from "./modules/server/Server";
 
 function App() {
     return (
-        <FrameworkContainer/>
+        <Server>
+            <FrameworkContainer/>
+        </Server>
     );
 }
 
