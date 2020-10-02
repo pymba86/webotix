@@ -1,12 +1,15 @@
 import React from 'react';
 import {FrameworkContainer} from "./FrameworkContainer";
 import {Server} from "./modules/server/Server";
+import {LogManager} from "./modules/log/LogContext";
 
 function App() {
     return (
-        <Server>
-            <FrameworkContainer/>
-        </Server>
+        <LogManager>
+            <Server>
+                <FrameworkContainer/>
+            </Server>
+        </LogManager>
     );
 }
 

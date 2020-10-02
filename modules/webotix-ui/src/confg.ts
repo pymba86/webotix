@@ -70,7 +70,7 @@ const basePanels: AllKeyedPanels = Immutable({
     jobs: {
         key: "jobs",
         title: "Jobs",
-        icon: "tasks",
+        icon: "check-square",
         visible: true,
         detached: false,
         stackPosition: 0,
@@ -82,7 +82,7 @@ const basePanels: AllKeyedPanels = Immutable({
     notifications: {
         key: "notifications",
         title: "Notifications",
-        icon: "tasks",
+        icon: "mail",
         visible: true,
         detached: false,
         stackPosition: 0,

@@ -1,12 +1,15 @@
-import React, {useMemo, useState} from "react";
+import React, {useContext, useMemo, useState} from "react";
 import {ServerApi, ServerContext} from "./ServerContext"
 import {Job} from "./types";
 import jobService from "./jobService";
 import {useInterval} from "../common/hooks";
+import {LogContext} from "../log/LogContext";
 
 export const Server: React.FC = ({children}) => {
 
-    const [jobs, setJobs] = useState<Job[] | null>(null);
+    const [jobs, setJobs] = useState<Job[]>([]);
+
+    const logApi = useContext(LogContext);
 
     const fetchJobs = useMemo(
         () => () => {
@@ -27,7 +30,8 @@ export const Server: React.FC = ({children}) => {
 
     const api: ServerApi = useMemo(
         () => ({
-            jobs: jobs ? jobs : []
+            jobs: jobs ? jobs : [],
+            jobsLoading: !jobs
         }),
         [jobs]
     );

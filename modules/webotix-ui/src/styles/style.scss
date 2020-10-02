@@ -1,5 +1,6 @@
 @import 'reset.scss';
-@import 'base.scss';
+@import 'grid.scss';
+@import 'table.scss';
 
 // Basic
 
@@ -13,3 +14,6 @@
 // Form
 @import '../elements/input/styles.scss';
 @import '../elements/form/styles.scss';
+
+// Icon
+@import '../elements/icon/styles.scss';

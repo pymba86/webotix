@@ -6,15 +6,25 @@ import {Input} from "../../elements/input";
 
 export interface LoginProps {
     error: string;
+
     onLogin(details: string): void;
 }
 
-export const Login : React.FC<LoginProps> = () => {
+export const Login: React.FC<LoginProps> = () => {
+
+    const headerMarkup = (
+        <div>Login</div>
+    );
+
+    const footerMarkup = (
+        <div><Button variant={"primary"}>Login</Button></div>
+    );
 
     return (
-        <Modal visible={true} closable={false}
-               footer={(<div><Button variant={"primary"}>Login</Button></div>)}
-               header={(<div>Login</div>)}>
+        <Modal visible={true}
+               closable={false}
+               footer={footerMarkup}
+               header={headerMarkup}>
 
             <Form>
                 <Form.Item label={"Username"} required={true}

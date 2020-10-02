@@ -50,10 +50,15 @@ export class Framework extends React.Component<FrameworkProps> {
     constructor(props: FrameworkProps) {
         super(props);
 
-        const Panel: React.FC<{ id: string }> = ({children}) => (
+        const icons = new Map(props.panels.map(panel => [ panel.key, panel.icon ]));
+
+        const Panel: React.FC<{ id: OfAllKeyPanel }> = ({id, children}) => (
             <SectionProvider value={{
                 draggable: true,
-                compactDragHandle: this.props.isMobile
+                icon: icons.get(id),
+                compactDragHandle: this.props.isMobile,
+                onHide: () => this.props.onTogglePanelVisible(id),
+                onToggleAttached: this.props.isMobile ? undefined : () => this.props.onTogglePanelAttached(id)
             }}>
                 <ErrorBoundary
                     wrapper={({message, children}) =>
@@ -74,7 +79,7 @@ export class Framework extends React.Component<FrameworkProps> {
             notifications: () => (
                 <LayoutBox key={"notifications"} data-grid={props.layoutsAsObj.notifications}>
                     <Panel id={"notifications"}>
-                       <Logs/>
+                        <Logs/>
                     </Panel>
                 </LayoutBox>
             )
