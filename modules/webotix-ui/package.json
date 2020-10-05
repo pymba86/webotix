@@ -17,6 +17,7 @@
     "@types/react-transition-group": "^4.4.0",
     "@types/seamless-immutable": "^7.1.13",
     "classnames": "^2.2.6",
+    "connected-react-router": "^6.8.0",
     "cookies-js": "^1.2.3",
     "http-proxy-middleware": "^1.0.5",
     "immutable": "^4.0.0-rc.12",

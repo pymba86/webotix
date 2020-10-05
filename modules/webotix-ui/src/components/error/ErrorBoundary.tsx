@@ -6,7 +6,7 @@ export interface ErrorWrapperProps {
 }
 
 export interface ErrorBoundaryProps {
-    wrapper: React.ComponentType<ErrorWrapperProps>;
+    wrapper?: React.ComponentType<ErrorWrapperProps>;
 }
 
 export interface ErrorBoundaryState {

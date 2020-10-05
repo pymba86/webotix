@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useMemo} from "react"
-import {Breakpoint, breakpoints, DragPanel, OfAllKeyPanel, Panel, useUiConfig} from "./confg";
+import {Breakpoint, breakpoints, DragPanel, OfAllKeyPanel, Panel, useUiConfig} from "./config";
 import {Framework} from "./Framework";
 import {Layout, Layouts} from "react-grid-layout";
 import {DraggableData} from "react-rnd";

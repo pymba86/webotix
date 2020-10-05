@@ -5,7 +5,7 @@ import {useMemo, useReducer} from "react";
 
 const VERSION = 1;
 
-export type OfAllKeyPanel = 'jobs' | 'notifications';
+export type OfAllKeyPanel = 'jobs' | 'notifications' | 'coins';
 
 export type OfAllPanels<T> = Record<OfAllKeyPanel, T>;
 
@@ -90,19 +90,34 @@ const basePanels: AllKeyedPanels = Immutable({
         y: 0,
         h: 0,
         w: 0
-    }
+    },
+    coins: {
+        key: "coins",
+        title: "Coins",
+        icon: "folder-plus",
+        visible: true,
+        detached: false,
+        stackPosition: 0,
+        x: 0,
+        y: 0,
+        h: 0,
+        w: 0
+    },
 });
 
 const baseLayouts: AllKeyedLayouts = Immutable({
     lg: {
+        coins: { i: "coins", x: 0, y: 100, w: 8, h: 22 },
         jobs: {i: "jobs", x: 26, y: 300, w: 14, h: 9},
         notifications: { i: "notifications", x: 0, y: 200, w: 8, h: 9 },
     },
     md: {
+        coins: { i: "jobs", x: 20, y: 300, w: 12, h: 5 },
         jobs: {i: "coins", x: 20, y: 100, w: 12, h: 11},
         notifications: { i: "notifications", x: 20, y: 400, w: 12, h: 7 }
     },
     sm: {
+        coins: { i: "coins", x: 0, y: 100, w: 4, h: 12 },
         jobs: {i: "jobs", x: 0, y: 700, w: 4, h: 6},
         notifications: { i: "notifications", x: 0, y: 800, w: 4, h: 6 }
     }

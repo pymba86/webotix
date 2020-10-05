@@ -7,6 +7,7 @@ export interface ModalProps {
     className?: string;
     header?: React.ReactNode;
     footer?: React.ReactNode;
+    onClose?: () => void;
 }
 
 export interface ModalState {

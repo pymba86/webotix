@@ -1,13 +1,16 @@
 import React, {ReactElement} from "react"
-import {Breakpoint, breakpoints, cols, DragPanel, KeyedLayouts, OfAllKeyPanel, OfAllPanels, Panel} from "./confg";
+import {Breakpoint, breakpoints, cols, DragPanel, KeyedLayouts, OfAllKeyPanel, OfAllPanels, Panel} from "./config";
 import {WidthProvider, Responsive, Layouts, Layout} from "react-grid-layout";
-import {DraggableData} from "react-rnd";
+import {Rnd, DraggableData} from "react-rnd"
 import {LayoutBox} from "./elements/layout";
 import {Section, SectionProvider} from "./elements/section";
 import {ErrorBoundary} from "./components/error";
 import {ImmutableObject} from "seamless-immutable";
 import {JobsContainer} from "./containers/JobsContainer";
 import {Logs} from "./modules/log/Logs";
+import {Route} from "react-router-dom"
+import {AddCoinContainer} from "./containers/AddCoinContainer";
+import {CoinsContainer} from "./containers/CoinsContainer";
 
 interface FrameworkProps {
 
@@ -50,7 +53,7 @@ export class Framework extends React.Component<FrameworkProps> {
     constructor(props: FrameworkProps) {
         super(props);
 
-        const icons = new Map(props.panels.map(panel => [ panel.key, panel.icon ]));
+        const icons = new Map(props.panels.map(panel => [panel.key, panel.icon]));
 
         const Panel: React.FC<{ id: OfAllKeyPanel }> = ({id, children}) => (
             <SectionProvider value={{
@@ -82,6 +85,13 @@ export class Framework extends React.Component<FrameworkProps> {
                         <Logs/>
                     </Panel>
                 </LayoutBox>
+            ),
+            coins: () => (
+                <LayoutBox key={"coins"} data-grid={this.props.layoutsAsObj.coins}>
+                    <Panel id={"coins"}>
+                        <CoinsContainer/>
+                    </Panel>
+                </LayoutBox>
             )
         }
     }
@@ -93,11 +103,17 @@ export class Framework extends React.Component<FrameworkProps> {
             panels,
             layouts,
             onLayoutChange,
-            onBreakpointChange
+            onBreakpointChange,
+            onInteractPanel,
+            onMovePanel,
+            onResizePanel
         } = this.props;
 
         return (
             <React.Fragment>
+                <ErrorBoundary>
+                    <Route exact={true} path={"/addCoin"} component={AddCoinContainer}/>
+                </ErrorBoundary>
                 <ResponsiveReactGridLayout
                     breakpoints={breakpoints}
                     cols={cols}
@@ -114,7 +130,36 @@ export class Framework extends React.Component<FrameworkProps> {
                         .map(p => this.panelsRenders[p.key]())
                     }
                 </ResponsiveReactGridLayout>
-
+                {!isMobile && panels
+                    .filter(p => p.detached)
+                    .filter(p => p.visible)
+                    .map(p => (
+                        <Rnd
+                            key={p.key}
+                            bounds="parent"
+                            style={{
+                                border: "1px solid #131722",
+                                boxShadow: "0 0 16px rgba(0, 0, 0, 0.4)",
+                                zIndex: p.stackPosition
+                            }}
+                            dragHandleClassName="dragMe"
+                            position={{x: p.x ? p.x : 100, y: p.y ? p.y : 100}}
+                            size={{width: p.w ? p.w : 400, height: p.h ? p.h : 400}}
+                            onDragStart={() => onInteractPanel(p.key)}
+                            onResizeStart={() => onInteractPanel(p.key)}
+                            onDragStop={(e, d) => onMovePanel(p.key, d)}
+                            onResizeStop={(e, direction, ref, delta, position) => {
+                                onResizePanel(p.key, {
+                                    w: ref.offsetWidth,
+                                    h: ref.offsetHeight,
+                                    x: position.x,
+                                    y: position.y
+                                })
+                            }}
+                        >
+                            {this.panelsRenders[p.key]()}
+                        </Rnd>
+                    ))}
             </React.Fragment>
         )
     }

@@ -113,9 +113,16 @@ export class ModalPanel extends React.Component<ModalProps, ModalState> {
     };
 
     public handleExited = () => {
+
+        const {onClose} = this.props;
+
         this.setState({
             visible: false,
         });
+
+        if (typeof onClose === 'function') {
+            onClose();
+        }
     };
 
     public focusBody = () => {
