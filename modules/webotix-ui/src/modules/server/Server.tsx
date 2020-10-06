@@ -3,10 +3,12 @@ import {ServerApi, ServerContext} from "./ServerContext"
 import {Job} from "./types";
 import jobService from "./jobService";
 import {useInterval} from "../common/hooks";
+import {Coin} from "../market";
 
 export const Server: React.FC = ({children}) => {
 
     const [jobs, setJobs] = useState<Job[]>([]);
+    const [subscriptions, setSubscriptions] = useState<Coin[]>([]);
 
     const fetchJobs = useMemo(
         () => () => {
@@ -28,9 +30,14 @@ export const Server: React.FC = ({children}) => {
     const api: ServerApi = useMemo(
         () => ({
             jobs: jobs ? jobs : [],
-            jobsLoading: !jobs
+            jobsLoading: !jobs,
+            subscriptions,
+            removeSubscription(coin: Coin) {
+            },
+            addSubscription(coin: Coin) {
+            }
         }),
-        [jobs]
+        [jobs, subscriptions]
     );
 
     return (

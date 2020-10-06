@@ -4,6 +4,7 @@ import {Button} from "../elements/button";
 import {Modal} from "../elements/modal";
 import {Form} from "../elements/form";
 import {Input} from "../elements/input";
+import {Select} from "../elements/select";
 
 export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
 
@@ -28,7 +29,7 @@ export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
                 <Form.Item label={"Exchange"} required={true}
                            message={"Please input your name"} invalid={false}
                            status={"error"}>
-                    <Input placeholder={"Enter name"}/>
+                    <Select placeholder={"Enter name"}/>
                 </Form.Item>
                 <Form.Item label={"Pair"} required={true}
                            message={"Please input your name"} invalid={false}

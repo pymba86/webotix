@@ -1,0 +1,15 @@
+@import '../../styles/functions.scss';
+@import '../../styles/theme.scss';
+@import '../../styles/mixins.scss';
+
+$table-prefix: 'ui-table';
+
+.#{$table-prefix} {
+
+  @include reset-component();
+
+  &-link {
+    color: rgba(170, 170, 170, 0.8);
+    cursor: pointer;
+  }
+}

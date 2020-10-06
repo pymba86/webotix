@@ -5,7 +5,8 @@ import {useMemo, useReducer} from "react";
 
 const VERSION = 1;
 
-export type OfAllKeyPanel = 'jobs' | 'notifications' | 'coins';
+export type OfAllKeyPanel = 'jobs' | 'notifications' | 'balance'
+    | 'coins' | 'openOrders' | 'marketData' | 'chart' | 'tradeSelector';
 
 export type OfAllPanels<T> = Record<OfAllKeyPanel, T>;
 
@@ -103,23 +104,98 @@ const basePanels: AllKeyedPanels = Immutable({
         h: 0,
         w: 0
     },
+    openOrders: {
+        title: "Orders",
+        icon: "target",
+        key: "openOrders",
+        visible: true,
+        detached: false,
+        stackPosition: 0,
+        x: 0,
+        y: 0,
+        h: 0,
+        w: 0
+    },
+    marketData: {
+        title: "Market",
+        icon: "book",
+        key: "marketData",
+        visible: true,
+        detached: false,
+        stackPosition: 0,
+        x: 0,
+        y: 0,
+        h: 0,
+        w: 0
+    },
+    chart: {
+        title: "Chart",
+        icon: "activity",
+        key: "chart",
+        visible: true,
+        detached: false,
+        stackPosition: 0,
+        x: 0,
+        y: 0,
+        h: 0,
+        w: 0
+    },
+    balance: {
+        title: "Balance",
+        key: "balance",
+        icon: "dollar-sign",
+        visible: true,
+        detached: false,
+        stackPosition: 0,
+        x: 0,
+        y: 0,
+        h: 0,
+        w: 0
+    },
+    tradeSelector: {
+        title: "Trading",
+        icon: "paperclip",
+        key: "tradeSelector",
+        visible: true,
+        detached: false,
+        stackPosition: 0,
+        x: 0,
+        y: 0,
+        h: 0,
+        w: 0
+    },
 });
 
 const baseLayouts: AllKeyedLayouts = Immutable({
     lg: {
-        coins: { i: "coins", x: 0, y: 100, w: 8, h: 22 },
+        coins: {i: "coins", x: 0, y: 100, w: 8, h: 22},
         jobs: {i: "jobs", x: 26, y: 300, w: 14, h: 9},
-        notifications: { i: "notifications", x: 0, y: 200, w: 8, h: 9 },
+        notifications: {i: "notifications", x: 0, y: 200, w: 8, h: 9},
+        openOrders: {i: "openOrders", x: 26, y: 200, w: 14, h: 11},
+        chart: { i: "chart", x: 8, y: 100, w: 18, h: 18 },
+        marketData: { i: "marketData", x: 26, y: 100, w: 14, h: 11 },
+        tradeSelector: { i: "tradeSelector", x: 8, y: 300, w: 18, h: 9 },
+        balance: { i: "balance", x: 8, y: 200, w: 18, h: 4 },
     },
     md: {
-        coins: { i: "jobs", x: 20, y: 300, w: 12, h: 5 },
+        coins: {i: "jobs", x: 20, y: 300, w: 12, h: 5},
+        chart: { i: "chart", x: 0, y: 100, w: 20, h: 13 },
         jobs: {i: "coins", x: 20, y: 100, w: 12, h: 11},
-        notifications: { i: "notifications", x: 20, y: 400, w: 12, h: 7 }
+        notifications: {i: "notifications", x: 20, y: 400, w: 12, h: 7},
+        tradeSelector: { i: "tradeSelector", x: 0, y: 400, w: 20, h: 9 },
+        marketData: { i: "marketData", x: 20, y: 200, w: 12, h: 8 },
+        balance: { i: "balance", x: 0, y: 300, w: 20, h: 4 },
+        openOrders: {i: "openOrders", x: 0, y: 200, w: 20, h: 5}
     },
     sm: {
-        coins: { i: "coins", x: 0, y: 100, w: 4, h: 12 },
+        coins: {i: "coins", x: 0, y: 100, w: 4, h: 12},
+        chart: { i: "chart", x: 0, y: 200, w: 4, h: 12 },
         jobs: {i: "jobs", x: 0, y: 700, w: 4, h: 6},
-        notifications: { i: "notifications", x: 0, y: 800, w: 4, h: 6 }
+        notifications: {i: "notifications", x: 0, y: 800, w: 4, h: 6},
+        tradeSelector: { i: "tradeSelector", x: 0, y: 500, w: 4, h: 9 },
+        balance: { i: "balance", x: 0, y: 400, w: 4, h: 4 },
+        marketData: { i: "marketData", x: 0, y: 600, w: 4, h: 6 },
+        openOrders: {i: "openOrders", x: 0, y: 300, w: 4, h: 6}
     }
 });
 

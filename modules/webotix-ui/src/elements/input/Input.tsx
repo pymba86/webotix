@@ -1,5 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
+import {Icon} from "../icon";
 
 export type InputSize = 'small' | 'default' | 'large';
 
@@ -104,7 +105,13 @@ export class Input extends React.Component<InputProps> {
 
         return prefix || suffix ? (
             <div className={classNames(`${prefixCls}-wrapper`, wrapperClassName)} {...otherWrapperProps}>
+                {prefix ? (
+                    <Icon type={prefix} className={classNames(`${prefixCls}-prefix-icon`, prefixClassName)} />
+                ) : null}
                 {inputNode}
+                {suffix ? (
+                    <Icon type={suffix} className={classNames(`${prefixCls}-suffix-icon`, suffixClassName)} />
+                ) : null}
             </div>
         ) : (
             inputNode

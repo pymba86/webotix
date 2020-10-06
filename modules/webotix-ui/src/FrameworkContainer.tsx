@@ -4,6 +4,8 @@ import {Framework} from "./Framework";
 import {Layout, Layouts} from "react-grid-layout";
 import {DraggableData} from "react-rnd";
 import Immutable, {ImmutableObject} from "seamless-immutable"
+import {CoinCallback} from "./components/coins";
+import {Coin} from "./modules/market";
 
 const windowToBreakpoint = (width: number): Breakpoint =>
     width < breakpoints.lg ? (width < breakpoints.md ? "sm" : "md") : "lg";
@@ -13,10 +15,22 @@ export interface FrameworkApi {
     paperTrading: boolean;
 
     enablePaperTrading(): void;
+
+    alertsCoin: Coin | null;
+
+    setAlertsCoin: CoinCallback;
 }
 
 export const FrameworkContext =
-    React.createContext<FrameworkApi | null>(null);
+    React.createContext<FrameworkApi>({
+        alertsCoin: null,
+        enablePaperTrading() {
+        },
+        paperTrading: false,
+        setAlertsCoin() {
+
+        }
+    });
 
 export interface FrameworkApiProps {
     frameworkApi: FrameworkApi;
@@ -37,15 +51,19 @@ export const FrameworkContainer: React.FC = () => {
     const [width, setWidth] = useState(window.innerWidth);
     const [paperTrading, setPaperTrading] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [alertsCoin, setAlertsCoin] = useState<Coin | null>(null);
+
 
     const [uiConfig, uiConfigApi] = useUiConfig();
 
     const api: FrameworkApi = useMemo(
         () => ({
             paperTrading,
-            enablePaperTrading: () => setPaperTrading(true)
+            enablePaperTrading: () => setPaperTrading(true),
+            setAlertsCoin,
+            alertsCoin
         }),
-        [paperTrading]
+        [alertsCoin, paperTrading]
     );
 
     const layoutsAsObject = uiConfig.layouts;
@@ -91,6 +109,7 @@ export const FrameworkContainer: React.FC = () => {
                 onTogglePanelAttached={uiConfigApi.togglePanelAttached}
                 onTogglePanelVisible={uiConfigApi.togglePanelVisible}
                 onInteractPanel={(key: OfAllKeyPanel) => uiConfigApi.panelToFront(key)}
+                onLogout={() => {}}
             />
         </FrameworkContext.Provider>
     )

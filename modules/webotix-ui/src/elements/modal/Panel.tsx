@@ -2,6 +2,7 @@ import {ModalProps, ModalState} from "./types";
 import React from "react";
 import classNames from 'classnames';
 import {CSSTransition} from 'react-transition-group';
+import {Icon} from "../icon";
 
 const ESC_KEY: string = 'Escape';
 
@@ -73,7 +74,8 @@ export class ModalPanel extends React.Component<ModalProps, ModalState> {
                             <div className={`${prefixCls}-header`}>
                                 {header}
                                 {closable && <div className={`${prefixCls}-close`}
-                                                  onClick={this.handleClose}>x
+                                                  onClick={this.handleClose}>
+                                    <Icon type={"x"}/>
                                 </div>}
                             </div>
                         )}

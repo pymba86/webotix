@@ -1,8 +1,25 @@
-import React from "react"
+import React from "react";
+import classNames from 'classnames';
 
-export const Toolbar: React.FC = () => {
+export interface ToolbarProps {
+    prefixCls?: string;
+    className?: string;
+}
+
+export const Toolbar: React.FC<ToolbarProps> = ({
+                                                    prefixCls = 'ui-toolbar',
+                                                    className
+                                                }) => {
+
+    const boxClasses = classNames(
+        prefixCls,
+        {
+            [`${prefixCls}-box`]: true,
+        },
+        className
+    );
 
     return (
-        <div>toolbar</div>
+        <div className={boxClasses}>toolbar</div>
     )
 }

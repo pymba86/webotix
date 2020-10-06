@@ -11,6 +11,12 @@ import {Logs} from "./modules/log/Logs";
 import {Route} from "react-router-dom"
 import {AddCoinContainer} from "./containers/AddCoinContainer";
 import {CoinsContainer} from "./containers/CoinsContainer";
+import {OrdersContainer} from "./containers/OrdersContainer";
+import {MarketContainer} from "./containers/MarketContainer";
+import {ChartContainer} from "./containers/ChartContainer";
+import {BalanceContainer} from "./containers/BalanceContainer";
+import {TradeContainer} from "./containers/TradeContainer";
+import {ToolbarContainer} from "./containers/ToolbarContainer";
 
 interface FrameworkProps {
 
@@ -38,7 +44,13 @@ interface FrameworkProps {
 
     onInteractPanel(key: OfAllKeyPanel): void;
 
-    onBreakpointChange(breakpoint: Breakpoint): void
+    onBreakpointChange(breakpoint: Breakpoint): void;
+
+    onToggleViewSettings(): void;
+
+    onTogglePanelVisible(key: string): void;
+
+    onLogout(): void;
 }
 
 interface Renders extends OfAllPanels<() => ReactElement> {
@@ -92,7 +104,42 @@ export class Framework extends React.Component<FrameworkProps> {
                         <CoinsContainer/>
                     </Panel>
                 </LayoutBox>
-            )
+            ),
+            openOrders: () => (
+                <LayoutBox key="openOrders" data-grid={this.props.layoutsAsObj.openOrders}>
+                    <Panel id={"openOrders"}>
+                        <OrdersContainer/>
+                    </Panel>
+                </LayoutBox>
+            ),
+            marketData: () => (
+                <LayoutBox key="marketData" data-grid={this.props.layoutsAsObj.marketData}>
+                    <Panel id="marketData">
+                        <MarketContainer/>
+                    </Panel>
+                </LayoutBox>
+            ),
+            chart: () => (
+                <LayoutBox key="chart" data-grid={this.props.layoutsAsObj.chart}>
+                    <Panel id="chart">
+                        <ChartContainer/>
+                    </Panel>
+                </LayoutBox>
+            ),
+            balance: () => (
+                <LayoutBox key="balance" data-grid={this.props.layoutsAsObj.balance}>
+                    <Panel id="balance">
+                        <BalanceContainer/>
+                    </Panel>
+                </LayoutBox>
+            ),
+            tradeSelector: () => (
+                <LayoutBox key="tradeSelector" data-grid={this.props.layoutsAsObj.tradeSelector}>
+                    <Panel id="tradeSelector">
+                        <TradeContainer/>
+                    </Panel>
+                </LayoutBox>
+            ),
         }
     }
 
@@ -106,11 +153,25 @@ export class Framework extends React.Component<FrameworkProps> {
             onBreakpointChange,
             onInteractPanel,
             onMovePanel,
-            onResizePanel
+            onResizePanel,
+            onToggleViewSettings,
+            hiddenPanels,
+            width,
+            onLogout,
+            onTogglePanelVisible
         } = this.props;
 
         return (
             <React.Fragment>
+                <ErrorBoundary>
+                    <ToolbarContainer
+                        mobile={isMobile}
+                        onShowViewSettings={onToggleViewSettings}
+                    onTogglePanelVisible={onTogglePanelVisible}
+                    hiddenPanels={hiddenPanels}
+                    onLogout={onLogout}
+                    width={width}/>
+                </ErrorBoundary>
                 <ErrorBoundary>
                     <Route exact={true} path={"/addCoin"} component={AddCoinContainer}/>
                 </ErrorBoundary>

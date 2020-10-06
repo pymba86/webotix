@@ -1,0 +1,16 @@
+@import '../../styles/functions.scss';
+@import '../../styles/theme.scss';
+@import '../../styles/mixins.scss';
+
+$toolbar-prefix: 'ui-toolbar';
+
+.#{$toolbar-prefix} {
+
+  &-box {
+    position: relative;
+    display: flex;
+    padding: 0 8px 0 8px;
+    align-items: center;
+    height: 56px;
+  }
+}

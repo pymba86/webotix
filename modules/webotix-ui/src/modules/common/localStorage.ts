@@ -1,9 +1,9 @@
 export function getFromLS<T>(key: string): T {
-    const result = getValueFromLs(key);
+    const result = getValueFromLS(key);
     return result === null ? null : JSON.parse(result);
 }
 
-export function getValueFromLs(key: string): string | null {
+export function getValueFromLS(key: string): string | null {
     try {
         return localStorage.getItem(key) || null;
     } catch (e) {
