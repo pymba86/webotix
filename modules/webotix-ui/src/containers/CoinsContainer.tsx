@@ -54,8 +54,8 @@ export const CoinsContainer: React.FC = () => {
                          </SectionLink>
                      )}>
                 <Coins data={data}
-                onRemove={(coin => serverApi.removeSubscription(coin))}
-                onClickAlerts={frameworkApi.setAlertsCoin}/>
+                       onRemove={(coin => serverApi.removeSubscription(coin))}
+                       onClickAlerts={frameworkApi.setAlertsCoin}/>
             </Section>
         </RenderIf>
     )
