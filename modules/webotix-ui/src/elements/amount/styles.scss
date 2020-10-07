@@ -1,0 +1,54 @@
+@import '../../styles/functions.scss';
+@import '../../styles/theme.scss';
+@import '../../styles/mixins.scss';
+
+$amount-prefix: 'ui-amount';
+
+.#{$amount-prefix} {
+  @include reset-component();
+
+  &-up {
+    background-color: #2aa599;
+
+    &.#{$amount-prefix}-sell,
+    &.#{$amount-prefix}-buy {
+      color: #000;
+    }
+  }
+
+  &-down {
+    background-color: #ef5451;
+
+    &.#{$amount-prefix}-sell,
+    &.#{$amount-prefix}-buy {
+      color: #000;
+    }
+  }
+
+  &-noflash {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  &-bare {
+    margin: 0;
+    font-size: 12px;
+    cursor: copy;
+    color: #aaa;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    &:hover {
+      color: #3BB3E4;
+    }
+  }
+
+  &-buy {
+    color: #2aa599;
+  }
+
+  &-sell {
+    color: #ef5451;
+  }
+}
+

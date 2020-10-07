@@ -49,12 +49,12 @@ export class Trade {
 }
 
 export class UserTrade extends Trade {
-    feeAmount: number
-    feeCurrency: string
+    feeAmount: number;
+    feeCurrency: string;
 
     constructor(source: ServerTrade, exchange: string) {
-        super(source, exchange)
-        this.feeAmount = source.fa
+        super(source, exchange);
+        this.feeAmount = source.fa;
         this.feeCurrency = source.fc
     }
 }

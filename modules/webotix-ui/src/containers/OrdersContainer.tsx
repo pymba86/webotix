@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {useVisibility} from "../components/visibility/Visibility";
 import {RenderIf} from "../components/render/RenderIf";
 import {Section, SectionTab} from "../elements/section";
+import {TradeHistoryContainer} from "./TradeHistoryContainer";
 
 enum Mode {
     OPEN = "open",
@@ -18,6 +19,7 @@ export const OrdersContainer: React.FC = () => {
         <RenderIf condition={visible}>
             <Section id={"orders"}
                      heading={"Orders"}
+                     nopadding={true}
                      buttons={() => (
                          <React.Fragment>
                              <SectionTab
@@ -32,8 +34,12 @@ export const OrdersContainer: React.FC = () => {
                              </SectionTab>
                          </React.Fragment>
                      )}>
-                orders
+                {mode === Mode.OPEN ? (
+                    <div>orders</div>
+                ) : (
+                    <TradeHistoryContainer/>
+                )}
             </Section>
         </RenderIf>
     )
-}
+};

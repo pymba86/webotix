@@ -1,52 +1,98 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {formatNumber} from "../../modules/common/number";
 import classNames from 'classnames';
+import {Coin} from "../../modules/market";
 
-import Timeout = NodeJS.Timeout;
-
-export type MovementType = "up" | "down" | "none";
+export type MovementType = "up" | "down" | null;
 
 export type AmountColor = "buy" | "sell";
 
 export interface AmountProps {
     noflash?: boolean;
     prefixCls?: string;
+    className?: string;
     noValue?: string;
-    value: number;
-    color: AmountColor;
+    value?: number;
+    color?: AmountColor;
+    coin?: Coin;
     scale: number;
     bare?: boolean;
-    onClick: (value: number) => void;
+    onClick?: (value: number) => void;
 }
 
-export interface AmountState {
-    movement: MovementType;
-}
+export const Amount: React.FC<AmountProps> = ({
+                                                  prefixCls = 'ui-amount',
+                                                  className, value, color,
+                                                  onClick, bare,
+                                                  scale, noValue, noflash
+                                              }) => {
 
-export const Amount: React.FC<AmountProps> = ({prefixCls, value}) => {
+    const [movement, setMovement] = useState<MovementType>(null);
 
-    const [movement, setMovement] = useState<AmountState>({movement: "none"});
+    const [initialValue, setInitialValue] = useState<number | undefined>(value);
 
-    const noValue = this.props.noValue ? this.props.noValue : "...";
+    const timeout = useRef<number | null>(null);
+
+    const emptyValue = useMemo(
+        () => noValue ? noValue : "...",
+        [noValue]);
 
     const classes = classNames(
         prefixCls,
         {
-            [`${prefixCls}-${variant}`]: !outline,
-            [`${prefixCls}-outline-${variant}`]: outline,
+            [`${prefixCls}-bare`]: bare,
+            [`${prefixCls}-${color}`]: color,
+            [`${prefixCls}-${movement}`]: movement,
+            [`${prefixCls}-noflash`]: noflash,
         },
         className
     );
 
+    useEffect(() => {
+
+        if (!noflash) {
+
+            let movement: MovementType = null;
+
+            if (Number(value) > Number(initialValue)) {
+                movement = "up";
+            } else if (Number(value) < Number(initialValue)) {
+                movement = "down";
+            }
+
+            if (movement) {
+
+                if (timeout.current !== null) {
+                    clearTimeout(timeout.current);
+                }
+
+                setMovement(movement);
+
+                timeout.current = window.setTimeout(
+                    () => {
+                        timeout.current = null;
+                        setMovement(null);
+                    }, 2100)
+            }
+            if (initialValue !== value) {
+                setInitialValue(value);
+            }
+        }
+        return () => {
+            if (timeout.current)
+                clearTimeout(timeout.current);
+        }
+    }, [value]);
+
+    const handleClick = useCallback(() => {
+        if (onClick && value) {
+            onClick(value);
+        }
+    }, [onClick, value]);
+
     return (
-        <BareAmountValue
-            px={this.props.noflash ? 0 : 1}
-            movement={this.state.movement}
-            onClick={this.onClick}
-            color={this.props.color}
-            className={this.props.className}
-        >
-            {this.props.children === "--" ? "--" : formatNumber(this.props.value, this.props.scale, noValue)}
-        </BareAmountValue>
+        <span className={classes} onClick={handleClick}>
+            {value ? formatNumber(value, scale, emptyValue) : "--"}
+        </span>
     )
-}
+};
