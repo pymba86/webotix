@@ -1,6 +1,52 @@
 import {Coin, PartialServerCoin} from "../market";
 import {augmentCoin} from "../market/utils";
 
+export interface BaseOrder {
+    type: OrderType;
+    originalAmount: number;
+    remainingAmount: number;
+    stopPrice: number;
+    limitPrice: number;
+}
+
+export enum OrderStatus {
+    PENDING_NEW = "PENDING_NEW",
+    NEW = "NEW",
+    PARTIALLY_FILLED = "PARTIALLY_FILLED",
+    FILLED = "FILLED",
+    PENDING_CANCEL = "PENDING_CANCEL",
+    PARTIALLY_CANCELED = "PARTIALLY_CANCELED",
+    CANCELED = "CANCELED",
+    PENDING_REPLACE = "PENDING_REPLACE",
+    REPLACED = "REPLACED",
+    STOPPED = "STOPPED",
+    REJECTED = "REJECTED",
+    EXPIRED = "EXPIRED",
+    UNKNOWN = "UNKNOWN"
+}
+
+export enum RunningAtType {
+    SERVER = "SERVER",
+    EXCHANGE = "EXCHANGE"
+}
+
+export interface DisplayOrder extends Order {
+    runningAt: RunningAtType;
+    jobId: string;
+}
+
+export interface Order extends BaseOrder {
+    id: string;
+    timestamp: number;
+    status: OrderStatus;
+    currencyPair: PartialServerCoin;
+    cumulativeAmount: number;
+    averagePrice: number;
+    fee: number;
+    deleted: boolean;
+    serverTimestamp: number;
+}
+
 export interface Ticker {
     bid: number;
     last: number;

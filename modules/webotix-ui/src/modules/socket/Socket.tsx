@@ -5,6 +5,7 @@ import {Map} from "immutable"
 import {useLocation} from "react-router-dom";
 import {locationToCoin} from "../../selectors/coins";
 import {ServerContext} from "../server/ServerContext";
+import {useOrders} from "./useOrders";
 
 export const Socket: React.FC = ({children}) => {
 
@@ -13,12 +14,13 @@ export const Socket: React.FC = ({children}) => {
     const location = useLocation();
 
     const [tickers, setTickers] = useState(Map<String, Ticker>());
+    const [openOrders, openOrdersUpdateApi] = useOrders();
 
     const [userTrades, userTradesUpdateApi] = useState<UserTrade[]>([
         {
             coin: {base: "123", counter: "123", exchange: "123", key: "123", name: "123", shortName: "213"},
             feeAmount: 8,
-            feeCurrency: "123",
+            feeCurrency: "BTC",
             id: "2",
             originalAmount: 10,
             price: 12,
@@ -27,7 +29,7 @@ export const Socket: React.FC = ({children}) => {
         }, {
             coin: {base: "123", counter: "123", exchange: "123", key: "123", name: "123", shortName: "213"},
             feeAmount: 8,
-            feeCurrency: "123",
+            feeCurrency: "ETH",
             id: "3",
             originalAmount: 10,
             price: 12,
@@ -36,7 +38,7 @@ export const Socket: React.FC = ({children}) => {
         }, {
             coin: {base: "123", counter: "123", exchange: "123", key: "123", name: "123", shortName: "213"},
             feeAmount: 80,
-            feeCurrency: "2",
+            feeCurrency: "SOK",
             id: "1",
             originalAmount: 100,
             price: 224,
@@ -55,9 +57,10 @@ export const Socket: React.FC = ({children}) => {
         () => ({
             connected,
             tickers,
-            userTrades
+            userTrades,
+            openOrders
         }),
-        [connected, tickers]
+        [connected, openOrders, tickers, userTrades]
     );
 
 

@@ -7,6 +7,16 @@ $amount-prefix: 'ui-amount';
 .#{$amount-prefix} {
   @include reset-component();
 
+  &-container {
+    margin: 0 8px;
+  }
+
+  &-key {
+    font-size: 12px;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
   &-up {
     background-color: #2aa599;
 
@@ -49,6 +59,12 @@ $amount-prefix: 'ui-amount';
 
   &-sell {
     color: #ef5451;
+  }
+
+  &-heading {
+    color: $white;
+    padding: 3px;
+    font-size: 16px;
   }
 }
 

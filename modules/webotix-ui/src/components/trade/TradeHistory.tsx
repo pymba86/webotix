@@ -48,7 +48,7 @@ const priceColumn = {
         <Amount scale={1} coin={original.coin}
                 color={original.type === BUY_SIDE ? "buy" : "sell"}
                 value={original.price}
-                noflash bare/>
+                noflash/>
     ),
     headerStyle: numberStyle,
     style: numberStyle,
@@ -63,7 +63,7 @@ const amountColumn = {
         <Amount scale={1} coin={original.coin}
                 color={original.type === BUY_SIDE ? "buy" : "sell"}
                 value={original.originalAmount}
-                noflash bare/>
+                noflash/>
     ),
     headerStyle: numberStyle,
     style: numberStyle,
@@ -75,7 +75,7 @@ const amountColumn = {
 const feeAmountColumn = {
     Header: "Fee",
     Cell: ({original}: { original: Trade }) => (
-        <Amount scale={1} color={original.type === BUY_SIDE ? "buy" : "sell"} noflash bare noValue="--"
+        <Amount scale={1} color={original.type === BUY_SIDE ? "buy" : "sell"} noflash noValue="--"
                 value={original instanceof UserTrade ? (original as UserTrade).feeAmount : undefined}/>
     ),
     headerStyle: numberStyle,

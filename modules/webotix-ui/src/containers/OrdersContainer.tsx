@@ -3,6 +3,7 @@ import {useVisibility} from "../components/visibility/Visibility";
 import {RenderIf} from "../components/render/RenderIf";
 import {Section, SectionTab} from "../elements/section";
 import {TradeHistoryContainer} from "./TradeHistoryContainer";
+import {OpenOrdersContainer} from "./OpenOrdersContainer";
 
 enum Mode {
     OPEN = "open",
@@ -35,7 +36,10 @@ export const OrdersContainer: React.FC = () => {
                          </React.Fragment>
                      )}>
                 {mode === Mode.OPEN ? (
-                    <div>orders</div>
+                    <OpenOrdersContainer coin={{
+                        base: "123", counter: "123",
+                        exchange: "123", key: "123", name: "213", shortName: "123"
+                    }}/>
                 ) : (
                     <TradeHistoryContainer/>
                 )}

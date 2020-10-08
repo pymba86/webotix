@@ -12,18 +12,21 @@ export interface AmountProps {
     prefixCls?: string;
     className?: string;
     noValue?: string;
+    name?: string;
     value?: number;
+    heading?: boolean;
     color?: AmountColor;
     coin?: Coin;
     scale: number;
-    bare?: boolean;
     onClick?: (value: number) => void;
 }
 
 export const Amount: React.FC<AmountProps> = ({
                                                   prefixCls = 'ui-amount',
                                                   className, value, color,
-                                                  onClick, bare,
+                                                  onClick,
+                                                  name,
+                                                  heading = false,
                                                   scale, noValue, noflash
                                               }) => {
 
@@ -40,10 +43,11 @@ export const Amount: React.FC<AmountProps> = ({
     const classes = classNames(
         prefixCls,
         {
-            [`${prefixCls}-bare`]: bare,
+            [`${prefixCls}-bare`]: true,
             [`${prefixCls}-${color}`]: color,
             [`${prefixCls}-${movement}`]: movement,
             [`${prefixCls}-noflash`]: noflash,
+            [`${prefixCls}-heading`]: heading,
         },
         className
     );
@@ -82,7 +86,7 @@ export const Amount: React.FC<AmountProps> = ({
             if (timeout.current)
                 clearTimeout(timeout.current);
         }
-    }, [value]);
+    }, [initialValue, noflash, value]);
 
     const handleClick = useCallback(() => {
         if (onClick && value) {
@@ -90,9 +94,22 @@ export const Amount: React.FC<AmountProps> = ({
         }
     }, [onClick, value]);
 
-    return (
-        <span className={classes} onClick={handleClick}>
+    if (heading) {
+        return (
+            <div className={classNames(prefixCls, `${prefixCls}-container`)}>
+                <div className={classNames(prefixCls, `${prefixCls}-key`)}>
+                    {name}
+                </div>
+                <div className={classes} onClick={handleClick}>
+                    {value ? formatNumber(value, scale, emptyValue) : "--"}
+                </div>
+            </div>
+        )
+    } else {
+        return (
+            <span className={classes} onClick={handleClick}>
             {value ? formatNumber(value, scale, emptyValue) : "--"}
         </span>
-    )
+        )
+    }
 };
