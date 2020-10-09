@@ -4,7 +4,6 @@
 
 $select-prefix: 'ui-select';
 
-
 $zIndex__base: 0;
 
 $bg__default: white;
@@ -54,118 +53,92 @@ $clickableIcon__hover: #717171;
   }
 }
 
-  @include style('-container') {
-    background: $bg__default;
-    color: $textColor__default;
-    position: relative;
+@include style('-container') {
+  position: relative;
+  width: 100%;
 
-    @include disabled {
-      background: $bg__disabled;
-      color: $textColor__disabled;
-    }
+}
+
+@include style('-currentValue') {
+  left: 8px;
+  pointer-events: none;
+  position: absolute;
+  color: $input-color;
+
+  &#{makeClassName('-placeholder')} {
+    color: $input-placeholder-color;
   }
+}
 
-  @include style('-currentValue') {
-    left: 14px;
-    pointer-events: none;
-    position: absolute;
+@include style('-hidden') {
+  visibility: hidden;
+}
 
-    &#{makeClassName('-placeholder')} {
-      color: $textColor__disabled;
-    }
-  }
+@include style('-labelWrapper') {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 4px;
+  padding-left: 2px;
+}
 
-  @include style('-hidden') {
-    visibility: hidden;
-  }
+@include style('-inputWrapper') {
+  align-items: center;
+  cursor: default;
+  display: flex;
+  z-index: $zIndex__base;
 
-  @include style('-labelWrapper') {
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: 4px;
-    padding-left: 2px;
-  }
-
-  @include style('-label') {
-  }
-
-  @include style('-inputWrapper') {
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    cursor: default;
-    display: flex;
-    padding: 8px 12px;
-    z-index: $zIndex__base;
-
-    @include active {
-      border: 1px solid #999;
-    }
-
+  @include active {
     input {
-      border: 0;
-      font-family: inherit;
-      font-size: inherit;
-      width: 100%;
-
-      &:focus {
-        outline: none;
-      }
-
-      &[readonly] {
-        cursor: default;
-      }
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
     }
   }
+}
 
-  input#{makeClassName('-selectInput')} {
-    background: $bg__default;
+@include style('-optionsWrapper') {
+
+  overflow-x: hidden;
+  overflow-y: auto;
+  color: #aaa;
+  border-radius: 0 0 $border-radius $border-radius;
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+  background-color: $input-focus-bg;
+  display: flex;
+  flex-direction: column;
+  max-height: 11em;
+
+  position: absolute;
+  width: 100%;
+  z-index: $zIndex__base + 1;
+}
+
+@include style('-option') {
+  cursor: pointer;
+  display: flex;
+  padding: 8px 8px;
+  user-select: none;
+
+  &#{makeClassName('-highlighted')} {
+    background: rgba(0, 0, 0, .2);
+    color: hsla(0, 0%, 66.7%, .95);
+  }
+
+  @include selected {
+    background: rgba(0,0,0,.15);
+  }
+
+  &#{makeClassName('-noOptionsMessage')} {
+    align-self: center;
+    color: $textColor__disabled;
     cursor: default;
-
-    @include disabled {
-      background: $bg__disabled;
-    }
   }
 
-  @include style('-optionsWrapper') {
-    background: $bg__default;
-    border-radius: 4px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0 0 0 1px, rgba(0, 0, 0, 0.1) 0 4px 11px;
-    display: flex;
-    flex-direction: column;
-    margin-top: 4px;
-    padding: 4px 0;
-    position: absolute;
-    width: 100%;
-    z-index: $zIndex__base + 1;
+  @include disabled {
+    color: $textColor__disabledOption;
+    cursor: default;
+    text-decoration: line-through;
   }
-
-  @include style('-option') {
-    cursor: pointer;
-    display: flex;
-    padding: 8px 12px;
-    user-select: none;
-
-    &#{makeClassName('-highlighted')} {
-      background: $bg__optionHover;
-    }
-
-    @include selected {
-      background: $bg__optionSelected;
-    }
-
-    &#{makeClassName('-noOptionsMessage')} {
-      align-self: center;
-      color: $textColor__disabled;
-      cursor: default;
-    }
-
-    @include disabled {
-      color: $textColor__disabledOption;
-      cursor: default;
-      text-decoration: line-through;
-    }
-  }
+}
 
 .#{$select-prefix} {
   @include reset-component();

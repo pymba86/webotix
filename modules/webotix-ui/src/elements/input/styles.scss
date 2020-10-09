@@ -18,7 +18,6 @@ $prefix-cls: 'ui-input';
 
   &:focus {
     background-color: $input-focus-bg;
-    border-color: $input-focus-border-color;
   }
 
   &-small {
@@ -69,7 +68,6 @@ $prefix-cls: 'ui-input';
     font-size: $input-icon-size;
     color: $input-icon-color;
     user-select: none;
-    z-index: 1;
   }
 
   &-prefix-icon {

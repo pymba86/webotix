@@ -206,7 +206,7 @@ $input-icon-size: 14px !default;
 
 $input-color: $gray-500 !default;
 $input-bg: $bg !default;
-$input-placeholder-color: fade($input-color, 40%) !default;
+$input-placeholder-color: fade_out($input-color, 0.4) !default;
 $input-icon-color: $input-placeholder-color !default;
 
 $input-border-color: $border-color !default;

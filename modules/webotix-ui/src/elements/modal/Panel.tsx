@@ -4,14 +4,12 @@ import classNames from 'classnames';
 import {CSSTransition} from 'react-transition-group';
 import {Icon} from "../icon";
 
-const ESC_KEY: string = 'Escape';
-
 export class ModalPanel extends React.Component<ModalProps, ModalState> {
 
     public static defaultProps = {
         prefixCls: 'ui-modal',
         closable: true
-    }
+    };
 
     public readonly bodyRef: React.RefObject<HTMLDivElement>;
 
@@ -21,7 +19,7 @@ export class ModalPanel extends React.Component<ModalProps, ModalState> {
         this.state = {
             visible: props.visible,
             bodyVisible: props.visible
-        }
+        };
 
         this.bodyRef = React.createRef();
     }
@@ -67,7 +65,6 @@ export class ModalPanel extends React.Component<ModalProps, ModalState> {
                     onExited={this.handleExited}>
 
                     <div className={classNames(`${prefixCls}-panel`, className)}
-                         onKeyDown={closable ? this.handleKeydown : undefined}
                          tabIndex={-1}
                          ref={this.bodyRef}>
                         {header && (
@@ -134,10 +131,4 @@ export class ModalPanel extends React.Component<ModalProps, ModalState> {
         }
     };
 
-    public handleKeydown = (event: React.KeyboardEvent) => {
-        if (event.key === ESC_KEY) {
-            event.stopPropagation();
-            this.closeModal();
-        }
-    };
 }

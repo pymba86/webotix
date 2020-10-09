@@ -14,7 +14,6 @@ export interface SelectProps<T> {
     noOptionsMessage?: string;
     getOptionKey: (option: T) => string;
     getOptionLabel: (option: T) => string;
-    getOptionValue: (option: T) => T;
     placeholder: string;
     value?: T;
     prefix?: string;
@@ -36,7 +35,6 @@ export function Select<T>(props: SelectProps<T>) {
         prefixCls = 'ui-select',
         placeholder = 'Select...',
         getOptionLabel,
-        getOptionValue,
         getOptionKey,
         value,
         searchable,
@@ -58,38 +56,38 @@ export function Select<T>(props: SelectProps<T>) {
     const menuRef = React.useRef<HTMLDivElement>(null);
 
     const css = React.useCallback((className: string) => {
-        return `${prefixCls}${className}`;
+        return `${prefixCls}-${className}`;
     }, [prefixCls]);
 
     const styles = React.useMemo(() => ({
-        active: css('-active'),
-        container: css('-container'),
-        currentValue: css('-currentValue'),
-        disabled: css('-disabled'),
-        hidden: css('-hidden'),
-        highlighted: css('-highlighted'),
-        inputWrapper: css('-inputWrapper'),
-        label: css('-label'),
-        labelWrapper: css('-labelWrapper'),
-        loader: css('-loader'),
-        loaderItem: css('-loaderItem'),
-        loaderWrapper: css('-loaderWrapper'),
-        noOptionsMessage: css('-noOptionsMessage'),
-        option: css('-option'),
-        optionsWrapper: css('-optionsWrapper'),
-        placeholder: css('-placeholder'),
-        selected: css('-selected'),
-        icon: css('-icon'),
-        iconVisible: css('-icon-visible'),
-    }), [css])
+        active: css('active'),
+        container: css('container'),
+        currentValue: css('currentValue'),
+        disabled: css('disabled'),
+        hidden: css('hidden'),
+        highlighted: css('highlighted'),
+        inputWrapper: css('inputWrapper'),
+        label: css('label'),
+        labelWrapper: css('labelWrapper'),
+        loader: css('loader'),
+        loaderItem: css('loaderItem'),
+        loaderWrapper: css('loaderWrapper'),
+        noOptionsMessage: css('noOptionsMessage'),
+        option: css('option'),
+        optionsWrapper: css('optionsWrapper'),
+        placeholder: css('placeholder'),
+        selected: css('selected'),
+        icon: css('icon'),
+        iconVisible: css('icon-visible'),
+    }), [css]);
 
     const handleInsideClick = (event: Event) => {
-        if (disabled) return
+        if (disabled) return;
 
         const refs = menuIsOpen ? [menuRef] : [];
 
         for (let i = 0; i < refs.length; i += 1) {
-            const ref = refs[i].current
+            const ref = refs[i].current;
             if (ref && ref.contains(event.target as Node)) {
                 return;
             }
@@ -102,7 +100,7 @@ export function Select<T>(props: SelectProps<T>) {
         }
     };
 
-    const handOutsideClick = React.useCallback((_event: Event) => {
+    const handOutsideClick = React.useCallback(() => {
         api.blur(options);
     }, [api, options]);
 
@@ -135,13 +133,13 @@ export function Select<T>(props: SelectProps<T>) {
     const setSelectedOption = React.useCallback(
         (option: T) => {
             onChange(option);
-            openMenu();
+            closeMenu();
         },
-        [onChange, openMenu],
+        [onChange, closeMenu],
     );
 
     const selectHighlightedOption = React.useCallback(() => {
-        const option = visibleOptions[highlightedIdx]
+        const option = visibleOptions[highlightedIdx];
         if (option) {
             if (optionIsDisabled && optionIsDisabled(option, highlightedIdx)) {
                 return;
@@ -151,9 +149,38 @@ export function Select<T>(props: SelectProps<T>) {
         }
     }, [optionIsDisabled, setSelectedOption, highlightedIdx, visibleOptions]);
 
+    const scrollItemIntoView = React.useCallback(() => {
+
+        if (menuRef.current) {
+            const menu = menuRef.current;
+            console.log(menu);
+
+            if (menu) {
+
+                const item: HTMLElement | null = menu.querySelector(
+                    `.${styles.highlighted}`);
+
+                if (item) {
+
+                    const isOutOfUpperView = item.offsetTop < menu.scrollTop;
+                    const isOutOfLowerView = item.offsetTop + item.clientHeight > menu.scrollTop + menu.clientHeight;
+
+                    if (isOutOfUpperView) {
+                        menu.scrollTop = item.offsetTop;
+                    } else if (isOutOfLowerView) {
+                        menu.scrollTop = item.offsetTop + item.clientHeight - menu.clientHeight;
+                    }
+                }
+            }
+
+        }
+
+    }, [highlightedIdx, styles]);
+
     const handleUpKey = React.useCallback(() => {
         if (menuIsOpen) {
             api.setHighlightedOption(-1, true);
+            scrollItemIntoView();
         } else {
             openMenu();
         }
@@ -162,14 +189,19 @@ export function Select<T>(props: SelectProps<T>) {
     const handleDownKey = React.useCallback(() => {
         if (menuIsOpen) {
             api.setHighlightedOption(1, true);
+            scrollItemIntoView();
         } else {
             openMenu();
         }
     }, [menuIsOpen, api, openMenu]);
 
     const handleEnterKey = React.useCallback(() => {
-        selectHighlightedOption();
-    }, [selectHighlightedOption]);
+        if (menuIsOpen) {
+            selectHighlightedOption();
+        } else {
+            openMenu();
+        }
+    }, [selectHighlightedOption, menuIsOpen, openMenu]);
 
     const handleEscKey = React.useCallback(() => {
         closeMenu();
@@ -191,11 +223,11 @@ export function Select<T>(props: SelectProps<T>) {
     const handleOptionMouseDown = (event: React.MouseEvent) => {
         event.preventDefault();
         event.stopPropagation();
-    }
+    };
 
     const handleOptionMouseOver = (event: React.MouseEvent, idx: number) => {
         api.setHighlightedOption(idx, false);
-    }
+    };
 
     const handleOptionClick = React.useCallback(
         option => {
@@ -236,14 +268,13 @@ export function Select<T>(props: SelectProps<T>) {
              ref={containerRef}>
             <div
                 className={classNames(styles.inputWrapper, {
-                    [styles.active]: active,
+                    [styles.active]: menuIsOpen,
                     [styles.disabled]: disabled,
                 })}>
 
                 <Input
                     value={inputValue}
                     disabled={disabled}
-                    placeholder={(value && getOptionLabel(value)) || placeholder}
                     size={size}
                     onChange={(value => api.inputChange(value, options, getOptionLabel))}
                     onFocus={api.focus}
@@ -258,6 +289,17 @@ export function Select<T>(props: SelectProps<T>) {
                     })}
                 />
 
+                <div
+                    className={classNames(styles.currentValue, {
+                        [styles.hidden]: !!inputValue,
+                        [styles.placeholder]: !value,
+                    })}
+
+                >
+                    {(value && getOptionLabel(value)) || placeholder}
+                </div>
+
+
             </div>
 
             {menuIsOpen && (
@@ -271,29 +313,29 @@ export function Select<T>(props: SelectProps<T>) {
                             const isHighlighted = idx === highlightedIdx;
 
                             const isSelected = value
-                                && (getOptionValue(option) === getOptionValue(value));
+                                && (getOptionKey(option) === getOptionKey(value));
 
                             const isDisabled = optionIsDisabled
                                 ? optionIsDisabled(option, idx)
                                 : false;
 
                             return (
-                                <div
-                                    className={classNames(styles.option, {
-                                        [styles.highlighted]: isHighlighted,
-                                        [styles.selected]: isSelected,
-                                        [styles.disabled]: isDisabled,
-                                    })}
-                                    key={key}
-                                    onClick={
-                                        isDisabled ? undefined : () => handleOptionClick(option)
-                                    }
-                                    onMouseDown={isDisabled ? undefined : handleOptionMouseDown}
-                                    onMouseOver={
-                                        isDisabled
-                                            ? undefined
-                                            : event => handleOptionMouseOver(event, idx)
-                                    }>
+                                <div tabIndex={idx}
+                                     className={classNames(styles.option, {
+                                         [styles.highlighted]: isHighlighted,
+                                         [styles.selected]: isSelected,
+                                         [styles.disabled]: isDisabled,
+                                     })}
+                                     key={key}
+                                     onClick={
+                                         isDisabled ? undefined : () => handleOptionClick(option)
+                                     }
+                                     onMouseDown={isDisabled ? undefined : handleOptionMouseDown}
+                                     onMouseOver={
+                                         isDisabled
+                                             ? undefined
+                                             : event => handleOptionMouseOver(event, idx)
+                                     }>
                                     {getOptionLabel(option)}
                                 </div>
                             )

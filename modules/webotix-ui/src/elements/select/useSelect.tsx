@@ -78,7 +78,7 @@ class InputChangeAction<T> implements BaseAction<T> {
         const filterOptions = (option: T) =>
             this.getOptionLabel(option)
                 .toLowerCase()
-                .includes(this.inputValue.toLowerCase())
+                .includes(this.inputValue.toLowerCase());
 
         return options.filter(filterOptions)
     }
@@ -108,7 +108,7 @@ class UpdateHighlightIndex<T> implements BaseAction<T> {
         } else {
             return {
                 ...state,
-                highlightedIdx: this.idx
+                highlightedIdx
             };
         }
     }
