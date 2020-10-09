@@ -221,7 +221,7 @@ export function useOrders(): [Array<Order>, UserOrderApi] {
                 dispatch(new UpdateSnapshotAction(orders, timestamp));
             }
         }),
-        []
+        [dispatch]
     )
 
     return [value, api];

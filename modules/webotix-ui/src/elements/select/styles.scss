@@ -4,6 +4,169 @@
 
 $select-prefix: 'ui-select';
 
+
+$zIndex__base: 0;
+
+$bg__default: white;
+$bg__disabled: #f7f7f7;
+
+$bg__optionSelected: #ddd;
+$bg__optionHover: #eee;
+
+$textColor__default: #333;
+$textColor__disabled: #717171;
+$textColor__disabledOption: #adadad;
+
+$clickableIcon__idle: #aaa;
+$clickableIcon__hover: #717171;
+
+@function makeClassName($name) {
+  @return '.#{$select-prefix}#{$name}';
+}
+
+@mixin style($name) {
+  #{makeClassName($name)} {
+    @content;
+  }
+}
+
+@mixin active {
+  &#{makeClassName('-active')} {
+    @content;
+  }
+}
+
+@mixin not__active {
+  &:not(#{makeClassName('-active')}) {
+    @content;
+  }
+}
+
+@mixin disabled {
+  &#{makeClassName('-disabled')} {
+    @content;
+  }
+}
+
+@mixin selected {
+  &#{makeClassName('-selected')} {
+    @content;
+  }
+}
+
+  @include style('-container') {
+    background: $bg__default;
+    color: $textColor__default;
+    position: relative;
+
+    @include disabled {
+      background: $bg__disabled;
+      color: $textColor__disabled;
+    }
+  }
+
+  @include style('-currentValue') {
+    left: 14px;
+    pointer-events: none;
+    position: absolute;
+
+    &#{makeClassName('-placeholder')} {
+      color: $textColor__disabled;
+    }
+  }
+
+  @include style('-hidden') {
+    visibility: hidden;
+  }
+
+  @include style('-labelWrapper') {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 4px;
+    padding-left: 2px;
+  }
+
+  @include style('-label') {
+  }
+
+  @include style('-inputWrapper') {
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: default;
+    display: flex;
+    padding: 8px 12px;
+    z-index: $zIndex__base;
+
+    @include active {
+      border: 1px solid #999;
+    }
+
+    input {
+      border: 0;
+      font-family: inherit;
+      font-size: inherit;
+      width: 100%;
+
+      &:focus {
+        outline: none;
+      }
+
+      &[readonly] {
+        cursor: default;
+      }
+    }
+  }
+
+  input#{makeClassName('-selectInput')} {
+    background: $bg__default;
+    cursor: default;
+
+    @include disabled {
+      background: $bg__disabled;
+    }
+  }
+
+  @include style('-optionsWrapper') {
+    background: $bg__default;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 0 0 1px, rgba(0, 0, 0, 0.1) 0 4px 11px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 4px;
+    padding: 4px 0;
+    position: absolute;
+    width: 100%;
+    z-index: $zIndex__base + 1;
+  }
+
+  @include style('-option') {
+    cursor: pointer;
+    display: flex;
+    padding: 8px 12px;
+    user-select: none;
+
+    &#{makeClassName('-highlighted')} {
+      background: $bg__optionHover;
+    }
+
+    @include selected {
+      background: $bg__optionSelected;
+    }
+
+    &#{makeClassName('-noOptionsMessage')} {
+      align-self: center;
+      color: $textColor__disabled;
+      cursor: default;
+    }
+
+    @include disabled {
+      color: $textColor__disabledOption;
+      cursor: default;
+      text-decoration: line-through;
+    }
+  }
+
 .#{$select-prefix} {
   @include reset-component();
   display: inline-block;
@@ -16,78 +179,4 @@ $select-prefix: 'ui-select';
       transform: rotate(180deg);
     }
   }
-
-  &-panel {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    max-height: $select-panel-height;
-    margin-top: 5px;
-    box-shadow: $select-panel-shadow;
-    background-color: $white;
-    border-radius: $border-radius;
-    transition: $select-panel-transition;
-    transform-origin: center top;
-    box-sizing: border-box;
-    z-index: $zindex-select;
-    overflow: scroll;
-
-    &-enter {
-      opacity: 0;
-      transform: scaleY(0);
-    }
-
-    &-enter-active {
-      opacity: 1;
-      transform: scaleY(1);
-    }
-
-    &-exit {
-      opacity: 1;
-      transform: scaleY(1);
-    }
-
-    &-exit-active {
-      opacity: 0;
-      transform: scaleY(0);
-    }
-  }
-
-  &-option {
-    height: $select-option-height;
-    padding: $input-padding-y $input-padding-x;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    cursor: pointer;
-    background: $white;
-    box-sizing: border-box;
-    color: $select-color;
-    line-height: 20px;
-    transition: $select-option-transition;
-
-    &:hover {
-      background: $select-option-hover-bg;
-    }
-
-    &-active {
-      background: $select-option-active-bg;
-      font-weight: bold;
-      transition: none;
-
-      &:hover {
-        background: $select-option-active-bg;
-      }
-    }
-
-    &-disabled {
-      color: lighten($select-color, 20%);
-      cursor: not-allowed;
-      transition: none;
-
-      &:hover {
-        background: $white;
-      }
-    }
-  }
-
 }

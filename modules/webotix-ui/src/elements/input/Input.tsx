@@ -8,7 +8,6 @@ export type InputProps<> = {
     className?: string;
     prefixCls?: string;
     size?: InputSize;
-    name?: string;
     disabled?: boolean;
     value?: string;
     defaultValue?: string;
@@ -16,11 +15,12 @@ export type InputProps<> = {
     type?: 'text' | 'password' | 'number';
     digits?: number;
     prefix?: string;
+    readOnly?: boolean;
     prefixClassName?: string;
     suffix?: string;
     suffixClassName?: string;
     wrapperProps?: any;
-    wrapperRef?: React.RefObject<HTMLDivElement>;
+    wrapperRef?: React.RefObject<HTMLInputElement>;
     onChange?: (value: string) => void;
     onBlur?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onFocus?: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -94,6 +94,7 @@ export class Input extends React.Component<InputProps> {
             <input
                 {...attributes}
                 className={inputClassName}
+                ref={wrapperRef}
                 readOnly={disabled}
                 type={inputType}
                 onChange={this.handleChange}

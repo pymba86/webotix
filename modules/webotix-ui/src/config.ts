@@ -351,7 +351,7 @@ class UpdateLayoutsAction implements BaseAction {
     }
 }
 
-function reducer(state: UiConfig, action: BaseAction) {
+function reducer(state: UiConfig, action: BaseAction): UiConfig {
     return action.reduce(state);
 }
 

@@ -6,6 +6,11 @@ import {Form} from "../elements/form";
 import {Input} from "../elements/input";
 import {Select} from "../elements/select";
 
+interface Person {
+    id: number,
+    name: string;
+}
+
 export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
 
     const headerMarkup = (
@@ -18,6 +23,18 @@ export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
         </Button>
     );
 
+    const options: Person[] = [
+        {id: 1, name: "Artem"}
+    ];
+
+    const getOptionKey = (person: Person) => `${person.id}`;
+    const getOptionLabel = (person: Person) => `${person.name}`;
+    const getOptionValue = (person: Person) => person;
+
+    const handleChange = (person: Person) => {
+        console.log(person.name);
+    }
+
     return (
         <Modal visible={true}
                closable={true}
@@ -29,7 +46,13 @@ export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
                 <Form.Item label={"Exchange"} required={true}
                            message={"Please input your name"} invalid={false}
                            status={"error"}>
-                    <Select placeholder={"Enter name"}/>
+                    <Select placeholder={"Enter name"}
+                            options={options}
+                            onChange={handleChange}
+                            getOptionKey={getOptionKey}
+                            getOptionLabel={getOptionLabel}
+                            getOptionValue={getOptionValue}
+                    />
                 </Form.Item>
                 <Form.Item label={"Pair"} required={true}
                            message={"Please input your name"} invalid={false}
