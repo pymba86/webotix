@@ -117,6 +117,7 @@ $clickableIcon__hover: #717171;
   display: flex;
   padding: 8px 8px;
   user-select: none;
+  border-top: 1px solid rgba(0,0,0,.2);
 
   &#{makeClassName('-highlighted')} {
     background: rgba(0, 0, 0, .2);
@@ -128,7 +129,7 @@ $clickableIcon__hover: #717171;
   }
 
   &#{makeClassName('-noOptionsMessage')} {
-    align-self: center;
+    justify-content: center;
     color: $textColor__disabled;
     cursor: default;
   }
