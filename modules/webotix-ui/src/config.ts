@@ -209,7 +209,7 @@ export const cols: Breakpoints<number> = {
     lg: 40,
     md: 32,
     sm: 4
-}
+};
 
 const loadedPanels: AllKeyedPanels = getFromLS("panels");
 
@@ -266,8 +266,8 @@ class ResetPanelsAndLayoutsAction implements BaseAction {
 class PartialPanelUpdate implements BaseAction {
 
     private readonly key: OfAllKeyPanel;
-    private readonly panelTransform: PanelTransform
-    private readonly resetLayouts: boolean
+    private readonly panelTransform: PanelTransform;
+    private readonly resetLayouts: boolean;
 
     constructor(key: OfAllKeyPanel, panelTransform: PanelTransform, resetLayouts: boolean = false) {
         this.key = key;
@@ -312,7 +312,7 @@ class PartialPanelUpdate implements BaseAction {
 }
 
 class UpdateLayoutsAction implements BaseAction {
-    private payload: Layouts
+    private payload: Layouts;
 
     constructor(payload: Layouts) {
         this.payload = payload
@@ -446,7 +446,7 @@ export function useUiConfig(): [UiConfig, UiConfigApi] {
 
         }),
         [dispatch]
-    )
+    );
 
     return [uiConfig, api]
 }

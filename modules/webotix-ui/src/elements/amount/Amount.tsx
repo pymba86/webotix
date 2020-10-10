@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {formatNumber} from "../../modules/common/number";
 import classNames from 'classnames';
 import {Coin} from "../../modules/market";
+import {Icon} from "../icon";
 
 export type MovementType = "up" | "down" | null;
 
@@ -17,6 +18,7 @@ export interface AmountProps {
     heading?: boolean;
     color?: AmountColor;
     coin?: Coin;
+    icon?: string;
     scale: number;
     onClick?: (value: number) => void;
 }
@@ -27,6 +29,7 @@ export const Amount: React.FC<AmountProps> = ({
                                                   onClick,
                                                   name,
                                                   heading = false,
+                                                  icon,
                                                   scale, noValue, noflash
                                               }) => {
 
@@ -98,7 +101,7 @@ export const Amount: React.FC<AmountProps> = ({
         return (
             <div className={classNames(prefixCls, `${prefixCls}-container`)}>
                 <div className={classNames(prefixCls, `${prefixCls}-key`)}>
-                    {name}
+                    {name} {icon && <Icon type={icon}/>}
                 </div>
                 <div className={classes} onClick={handleClick}>
                     {value ? formatNumber(value, scale, emptyValue) : "--"}

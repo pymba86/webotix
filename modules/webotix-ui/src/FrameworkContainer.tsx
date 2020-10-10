@@ -10,6 +10,8 @@ import {Coin} from "./modules/market";
 const windowToBreakpoint = (width: number): Breakpoint =>
     width < breakpoints.lg ? (width < breakpoints.md ? "sm" : "md") : "lg";
 
+type LastFocusedFieldPopulate = (value: number) => void;
+
 export interface FrameworkApi {
 
     paperTrading: boolean;
@@ -17,6 +19,10 @@ export interface FrameworkApi {
     enablePaperTrading(): void;
 
     alertsCoin: Coin | null;
+
+    populateLastFocusedField: LastFocusedFieldPopulate;
+
+    setLastFocusedFieldPopulate(populate: LastFocusedFieldPopulate): void;
 
     setAlertsCoin: CoinCallback;
 }
@@ -29,6 +35,11 @@ export const FrameworkContext =
         paperTrading: false,
         setAlertsCoin() {
 
+        },
+        populateLastFocusedField() {
+
+        },
+        setLastFocusedFieldPopulate(populate: (value: number) => void): void {
         }
     });
 
@@ -52,6 +63,7 @@ export const FrameworkContainer: React.FC = () => {
     const [paperTrading, setPaperTrading] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const [alertsCoin, setAlertsCoin] = useState<Coin | null>(null);
+    const [lastFocusedFieldPopulate, setLastFocusedFieldPopulate] = useState<LastFocusedFieldPopulate[]>([]);
 
 
     const [uiConfig, uiConfigApi] = useUiConfig();
@@ -61,7 +73,16 @@ export const FrameworkContainer: React.FC = () => {
             paperTrading,
             enablePaperTrading: () => setPaperTrading(true),
             setAlertsCoin,
-            alertsCoin
+            alertsCoin,
+            populateLastFocusedField: value => {
+                if (lastFocusedFieldPopulate.length === 1) {
+                    const populate = lastFocusedFieldPopulate[0];
+                    if (populate) {
+                        populate(value);
+                    }
+                }
+            },
+            setLastFocusedFieldPopulate: (fn: LastFocusedFieldPopulate) => setLastFocusedFieldPopulate([fn])
         }),
         [alertsCoin, paperTrading]
     );
@@ -109,7 +130,8 @@ export const FrameworkContainer: React.FC = () => {
                 onTogglePanelAttached={uiConfigApi.togglePanelAttached}
                 onTogglePanelVisible={uiConfigApi.togglePanelVisible}
                 onInteractPanel={(key: OfAllKeyPanel) => uiConfigApi.panelToFront(key)}
-                onLogout={() => {}}
+                onLogout={() => {
+                }}
             />
         </FrameworkContext.Provider>
     )

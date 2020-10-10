@@ -11,8 +11,8 @@ export const Market: React.FC<MarketProps> = ({coin, children}) => {
     const [exchanges, setExchanges] = useState<Array<Exchange>>([]);
 
     const selectedExchange = useMemo(() => {
-        return !coin ? null : exchanges.find(e => e.code === coin.exchange)
-    }, [coin, exchanges])
+        return !coin ? undefined : exchanges.find(e => e.code === coin.exchange)
+    }, [coin, exchanges]);
 
 
     const api: MarketApi = useMemo(
@@ -23,7 +23,7 @@ export const Market: React.FC<MarketProps> = ({coin, children}) => {
             }
         }),
         [exchanges, selectedExchange]
-    )
+    );
 
     return <MarketContext.Provider value={api}>{children}</MarketContext.Provider>
-}
+};

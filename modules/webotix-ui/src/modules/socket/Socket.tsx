@@ -1,6 +1,6 @@
 import React, {useContext, useMemo, useState} from "react";
 import {SocketApi, SocketContext} from "./SocketContext";
-import {OrderType, Ticker, UserTrade} from "./types";
+import {Balance, OrderType, Ticker, UserTrade} from "./types";
 import {Map} from "immutable"
 import {useLocation} from "react-router-dom";
 import {locationToCoin} from "../../selectors/coins";
@@ -14,6 +14,7 @@ export const Socket: React.FC = ({children}) => {
     const location = useLocation();
 
     const [tickers, setTickers] = useState(Map<String, Ticker>());
+    const [balances, setBalances] = useState(Map<String, Balance>());
     const [openOrders, openOrdersUpdateApi] = useOrders();
 
     const [userTrades, userTradesUpdateApi] = useState<UserTrade[]>([
@@ -50,17 +51,20 @@ export const Socket: React.FC = ({children}) => {
 
     const selectedCoin = useMemo(() => locationToCoin(location), [location]);
 
-    const selectedCoinTicker = useMemo(() => (selectedCoin ? tickers.get(selectedCoin.key) : null),
+    const selectedCoinTicker = useMemo(
+        () => (selectedCoin ? tickers.get(selectedCoin.key) : undefined),
         [tickers, selectedCoin]);
 
     const api: SocketApi = useMemo(
         () => ({
             connected,
             tickers,
+            balances,
             userTrades,
-            openOrders
+            openOrders,
+            selectedCoinTicker
         }),
-        [connected, openOrders, tickers, userTrades]
+        [connected, openOrders, tickers, userTrades, selectedCoinTicker, balances]
     );
 
 

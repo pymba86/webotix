@@ -3,7 +3,7 @@ import {Exchange} from "./types";
 
 export interface MarketData {
     exchanges: Array<Exchange>;
-    selectedExchange: Exchange | null | undefined;
+    selectedExchange?: Exchange;
 }
 
 
@@ -13,7 +13,6 @@ export interface MarketApi {
 
 export const MarketContext = React.createContext<MarketApi>({
     data: {
-        exchanges: [],
-        selectedExchange: null
+        exchanges: []
     }
 });

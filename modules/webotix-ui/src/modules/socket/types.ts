@@ -9,6 +9,11 @@ export interface BaseOrder {
     limitPrice: number;
 }
 
+export interface Balance {
+    total: number;
+    available: number;
+}
+
 export enum OrderStatus {
     PENDING_NEW = "PENDING_NEW",
     NEW = "NEW",

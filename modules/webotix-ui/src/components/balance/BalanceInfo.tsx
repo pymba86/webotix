@@ -2,21 +2,29 @@ import React from "react";
 import {Coin} from "../../modules/market";
 import classNames from 'classnames';
 import {Amount} from "../../elements/amount";
+import {Map} from "immutable";
+import {Balance, Ticker} from "../../modules/socket";
 
-export interface BalanceProps {
+export interface BalanceInfoProps {
     prefixCls?: string;
     className?: string;
-    coin: Coin;
+    coin?: Coin;
+    balances?: Map<String, Balance>;
+    ticker?: Ticker;
 }
 
 const LOG_10 = Math.log(10);
 const log10 = (x: number) => Math.log(1 / x) / LOG_10;
 const scaleOfValue = (x: number) => Math.floor(log10(x));
 
-export const Balance: React.FC<BalanceProps> = ({
-                                                    prefixCls = 'ui-balance',
-                                                    className, coin
-                                                }) => {
+export const BalanceInfo: React.FC<BalanceInfoProps> = (
+    {
+        prefixCls = 'ui-balance-info',
+        className,
+        balances,
+        ticker,
+        coin
+    }) => {
 
     const classes = classNames(prefixCls,
         `${prefixCls}-container`, className);

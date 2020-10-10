@@ -1,19 +1,50 @@
-import React from "react";
+import React, {useContext} from "react";
 import {Panel} from "../config";
 import {Toolbar} from "../components/toolbar";
+import {FrameworkContext} from "../FrameworkContainer";
+import {SocketContext} from "../modules/socket/SocketContext";
+import {Coin} from "../modules/market";
+import {MarketContext} from "../modules/market/MarketContext";
 
 interface ToolbarContainerProps {
     onLogout(): void;
+
     onTogglePanelVisible(key: string): void;
+
     onShowViewSettings(): void;
+
     width: number;
     mobile: boolean;
     hiddenPanels: Panel[];
+    coin?: Coin;
 }
 
-export const ToolbarContainer: React.FC<ToolbarContainerProps> = props => {
+export const ToolbarContainer: React.FC<ToolbarContainerProps> = (
+    {
+        mobile,
+        coin,
+        hiddenPanels,
+        width,
+        onTogglePanelVisible,
+        onLogout,
+        onShowViewSettings
+    }) => {
+
+    const frameworkApi = useContext(FrameworkContext);
+    const socketApi = useContext(SocketContext);
+    const marketApi = useContext(MarketContext);
 
     return (
-        <Toolbar {...props}/>
+        <Toolbar updateFocusedField={frameworkApi.populateLastFocusedField}
+                 ticker={socketApi.selectedCoinTicker}
+                 mobile={mobile}
+                 width={width}
+                 onShowPanel={key => onTogglePanelVisible(key)}
+                 hiddenPanels={hiddenPanels}
+                 balances={socketApi.balances}
+                 onLogout={onLogout}
+                 exchange={marketApi.data.selectedExchange}
+                 coin={coin}
+        />
     )
-}
+};
