@@ -25,7 +25,6 @@ $modal-prefix: 'ui-modal';
     background-color: $modal-bg;
     border-radius: $border-radius;
     box-shadow: $modal-box-shadow;
-    transition: $modal-transition;
 
     &-enter {
       opacity: 0;

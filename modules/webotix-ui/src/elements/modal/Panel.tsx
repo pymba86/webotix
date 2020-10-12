@@ -54,7 +54,7 @@ export class ModalPanel extends React.Component<ModalProps, ModalState> {
 
         return (
             <div className={`${prefixCls}`}>
-                <CSSTransition timeout={300} in={this.state.bodyVisible} classNames={`${prefixCls}-mask`}>
+                <CSSTransition timeout={500} in={this.state.bodyVisible} classNames={`${prefixCls}-mask`}>
                     <div className={`${prefixCls}-mask`}/>
                 </CSSTransition>
                 <CSSTransition

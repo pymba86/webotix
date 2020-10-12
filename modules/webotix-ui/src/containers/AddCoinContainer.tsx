@@ -28,7 +28,7 @@ export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
 
     useEffect(() => {
         refreshExchanges();
-    }, [refreshExchanges])
+    }, [refreshExchanges]);
 
     const onChangeExchange = (exchange: Exchange) => {
 
@@ -50,14 +50,14 @@ export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
 
     const onChangePair = (pair: Coin) => {
         setPair(pair);
-    }
+    };
 
     const onSubmit = () => {
         if (pair) {
             serverApi.addSubscription(pair);
             history.push("/coin/" + pair.key);
         }
-    }
+    };
 
     const footerMarkup = (
         <Button disabled={!pair}
@@ -97,4 +97,4 @@ export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
             </Form>
         </Modal>
     )
-}
+};

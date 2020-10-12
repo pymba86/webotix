@@ -20,8 +20,9 @@ export const ErrorPopup: React.FC<ErrorPopupProps> = ({message, onClose}) => {
         <Modal visible={true}
                closable={true}
                header={"Error"}
-               footer={footerMarkup}>
+               footer={footerMarkup}
+               onClose={onClose}>
             {message}
         </Modal>
     )
-}
+};

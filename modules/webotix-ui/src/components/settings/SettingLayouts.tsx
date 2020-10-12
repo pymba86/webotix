@@ -1,8 +1,6 @@
 import React from "react";
 import {Modal} from "../../elements/modal";
 import {Button} from "../../elements/button";
-import {Form} from "../../elements/form";
-import {Input} from "../../elements/input";
 import {OfAllKeyPanel, Panel} from "../../config";
 import {Checkbox, CheckboxGroup} from "../../elements/checkbox";
 
@@ -16,27 +14,40 @@ export interface SettingLayoutsProps {
     onClose(): void;
 }
 
-export const SettingLayouts: React.FC<SettingLayoutsProps> = ({onClose}) => {
+export const SettingLayouts: React.FC<SettingLayoutsProps> = (
+    {
+        onClose,
+        onReset,
+        onTogglePanelVisible,
+        panels
+    }) => {
 
     const footerMarkup = (
         <React.Fragment>
-            <Button variant={"primary"} onClick={onClose}>
-                Ok
+            <Button variant={"danger"} onClick={onReset}>
+                Reset
             </Button>
         </React.Fragment>
     );
 
     return (
         <Modal visible={true}
-               closable={false}
+               closable={true}
                footer={footerMarkup}
-               header={"Settings"}>
+               header={"Panels"}
+               onClose={onClose}>
 
-           <CheckboxGroup>
-               <Checkbox type={"checkbox"}>213</Checkbox>
-               <Checkbox type={"checkbox"}>213</Checkbox>
-           </CheckboxGroup>
+            <CheckboxGroup>
+                {panels.map(panel => (
+                    <Checkbox key={panel.key}
+                              type={"checkbox"}
+                              onChange={() => onTogglePanelVisible(panel.key)}
+                              checked={panel.visible}>
+                        {panel.title}
+                    </Checkbox>
+                ))}
+            </CheckboxGroup>
 
         </Modal>
     )
-}
+};

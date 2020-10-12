@@ -170,7 +170,7 @@ export class Framework extends React.Component<FrameworkProps> {
                     onClose={onToggleViewSettings}
                     onReset={onResetLayout}
                 />
-            ) : (<React.Fragment/>)
+            ) : (<React.Fragment/>);
 
         return (
             <React.Fragment>

@@ -65,6 +65,15 @@ $checkbox-prefix: 'ui-checkbox';
   &-group {
     display: flex;
     flex-direction: column;
+
+    label {
+      clear: both;
+      margin: 0 0 1em;
+    }
+
+    label:last-child {
+      margin: 0;
+    }
   }
 
   &-checked &-indicator {
