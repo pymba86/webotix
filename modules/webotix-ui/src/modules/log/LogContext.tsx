@@ -61,14 +61,20 @@ export const LogManager: React.FC = ({children}) => {
                     dateTime: new Date()
                 }
             }
-            setLogs([...logs, last.current])
+            if (last.current) {
+
+                const entry = last.current;
+
+                setLogs(state => {
+                    return [entry, ...state]
+                })
+            }
         },
-        [logs]
+        [setLogs]
     )
 
-    const api: LogApi = useMemo(
+    const methods = useMemo(
         () => ({
-            logs,
             errorPopup: (message: string) => {
                 setError(message);
             },
@@ -77,11 +83,16 @@ export const LogManager: React.FC = ({children}) => {
             localMessage: (message: string) => add({message, level: INFO}),
             trace: (message: string) => add({message, level: TRACE}),
             add,
-            clear: () => {
-                setLogs([])
-            }
+            clear: () => setLogs([])
+        }), [add, setLogs, setError]
+    )
+
+    const api: LogApi = useMemo(
+        () => ({
+            logs,
+            ...methods
         }),
-        [add, logs]
+        [logs, methods]
     )
 
     return (

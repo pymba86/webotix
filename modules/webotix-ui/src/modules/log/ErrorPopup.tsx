@@ -10,10 +10,6 @@ export interface ErrorPopupProps {
 
 export const ErrorPopup: React.FC<ErrorPopupProps> = ({message, onClose}) => {
 
-    const headerMarkup = (
-        <div>Login</div>
-    );
-
     const footerMarkup = (
         <Button variant={"primary"} onClick={onClose}>
             Ok
@@ -23,7 +19,7 @@ export const ErrorPopup: React.FC<ErrorPopupProps> = ({message, onClose}) => {
     return (
         <Modal visible={true}
                closable={true}
-               header={headerMarkup}
+               header={"Error"}
                footer={footerMarkup}>
             {message}
         </Modal>

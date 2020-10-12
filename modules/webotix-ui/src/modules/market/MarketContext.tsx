@@ -6,13 +6,21 @@ export interface MarketData {
     selectedExchange?: Exchange;
 }
 
+export interface MarketActions {
+    refreshExchanges(): void;
+}
 
 export interface MarketApi {
-    data: MarketData
+    data: MarketData,
+    actions: MarketActions;
 }
 
 export const MarketContext = React.createContext<MarketApi>({
     data: {
         exchanges: []
+    },
+    actions: {
+        refreshExchanges(): void {
+        }
     }
 });

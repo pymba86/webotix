@@ -1,82 +1,99 @@
-import React from "react";
+import React, {useContext, useEffect} from "react";
 import {RouteComponentProps} from "react-router";
 import {Button} from "../elements/button";
 import {Modal} from "../elements/modal";
 import {Form} from "../elements/form";
-import {Input} from "../elements/input";
 import {Select} from "../elements/select";
+import {MarketContext} from "../modules/market/MarketContext";
+import {Coin, Exchange, PartialServerCoin} from "../modules/market";
+import {LogContext} from "../modules/log/LogContext";
+import exchangeService from "../modules/market/exchangeService";
+import {augmentCoin} from "../modules/market/utils";
+import {ServerContext} from "../modules/server/ServerContext";
 
-interface Person {
-    id: number,
-    name: string;
-}
 
 export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
 
-    const [value, setValue] = React.useState<Person | undefined>(undefined);
+    const marketApi = useContext(MarketContext);
+    const logApi = useContext(LogContext);
+    const serverApi = useContext(ServerContext);
 
-    const headerMarkup = (
-        <div>Add coin</div>
-    );
+    const [exchange, setExchange] = React.useState<Exchange | undefined>(undefined);
+
+    const [pair, setPair] = React.useState<Coin | undefined>(undefined);
+
+    const [pairs, setPairs] = React.useState<Array<Coin>>([]);
+
+    const refreshExchanges = marketApi.actions.refreshExchanges;
+
+    useEffect(() => {
+        refreshExchanges();
+    }, [refreshExchanges])
+
+    const onChangeExchange = (exchange: Exchange) => {
+
+        setExchange(exchange);
+
+        setPair(undefined);
+
+        logApi.trace("Fetching pairs for exchange: " + exchange.name);
+
+        exchangeService.fetchPairs(exchange.code)
+            .then(response => response.json())
+            .then((pairs: Array<PartialServerCoin>) => {
+                setPairs(pairs.map(p => augmentCoin(p, exchange.code)));
+                logApi.trace(pairs.length + " pairs fetched");
+            })
+            .catch(error => logApi.errorPopup(error.message));
+    };
+
+    const onChangePair = (pair: Coin) => {
+        setPair(pair);
+    }
+
+    const onSubmit = () => {
+        if (pair) {
+            serverApi.addSubscription(pair);
+            history.push("/coin/" + pair.key);
+        }
+    }
 
     const footerMarkup = (
-        <Button variant={"primary"}>
+        <Button disabled={!pair}
+                variant={"primary"}
+                onClick={onSubmit}>
             Add
         </Button>
     );
 
-    const options: Person[] = [
-        {id: 1, name: "Binance"},
-        {id: 2, name: "Yobit"},
-        {id: 3, name: "B"},
-        {id: 4, name: "C"},
-        {id: 5, name: "D"},
-        {id: 6, name: "E"},
-        {id: 7, name: "H"},
-        {id: 8, name: "D"},
-        {id: 9, name: "A"},
-        {id: 10, name: "V"},
-    ];
-
-    const getOptionKey = (person: Person) => `${person.id}`;
-    const getOptionLabel = (person: Person) => `${person.name}`;
-
-    const handleChange = (person: Person) => {
-        setValue(person);
-    };
-
     return (
-        <Modal visible={true}
-               closable={true}
+        <Modal visible={true} closable={true}
                footer={footerMarkup}
-               header={headerMarkup}
+               header={"Add coin"}
                onClose={() => history.push("/")}>
 
             <Form>
-                <Form.Item label={"Exchange"} required={true}
-                           message={"Please input your name"} invalid={false}
-                           status={"error"}>
-                    <Select placeholder={"Enter name"}
-                            value={value}
-                            options={options}
-                            onChange={handleChange}
-                            getOptionKey={getOptionKey}
-                            getOptionLabel={getOptionLabel}
+                <Form.Item label={"Exchange"} required={true}>
+                    <Select placeholder={"Select exchange"}
+                            value={exchange}
+                            loading={marketApi.data.exchanges.length === 0}
+                            options={marketApi.data.exchanges}
+                            onChange={onChangeExchange}
+                            getOptionKey={exchange => exchange.code}
+                            getOptionLabel={exchange => exchange.name}
                     />
                 </Form.Item>
-                <Form.Item label={"Pair"} required={true}
-                           message={"Please input your name"} invalid={false}
-                           status={"error"}>
-                    <Select placeholder={"Enter name"}
-                            value={value}
-                            options={options}
-                            onChange={handleChange}
-                            getOptionKey={getOptionKey}
-                            getOptionLabel={getOptionLabel}
+                <Form.Item label={"Pair"} required={true}>
+                    <Select placeholder={"Select pair"}
+                            value={pair}
+                            loading={pairs.length === 0}
+                            options={pairs}
+                            onChange={onChangePair}
+                            getOptionKey={pair => pair.key}
+                            getOptionLabel={pair => pair.shortName}
                     />
                 </Form.Item>
             </Form>
-
         </Modal>
     )
 }

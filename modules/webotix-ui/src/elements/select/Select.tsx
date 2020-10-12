@@ -12,10 +12,12 @@ export interface SelectProps<T> {
     disabled?: boolean;
     searchable?: boolean;
     noOptionsMessage?: string;
+    loadingMessage?: string;
     getOptionKey: (option: T) => string;
     getOptionLabel: (option: T) => string;
     placeholder: string;
     value?: T;
+    loading?: boolean;
     prefix?: string;
     optionIsDisabled?: (option: T, idx: number) => boolean;
     onChange: (option: T) => void;
@@ -29,8 +31,10 @@ export function Select<T>(props: SelectProps<T>) {
         optionIsDisabled,
         onChange,
         disabled = false,
+        loading = false,
         prefixClassName,
         noOptionsMessage = 'No options',
+        loadingMessage = 'Loading...',
         prefix,
         prefixCls = 'ui-select',
         placeholder = 'Select...',
@@ -175,7 +179,7 @@ export function Select<T>(props: SelectProps<T>) {
 
         }
 
-    }, [highlightedIdx, styles]);
+    }, [styles]);
 
     const handleUpKey = React.useCallback(() => {
         if (menuIsOpen) {
@@ -184,7 +188,7 @@ export function Select<T>(props: SelectProps<T>) {
         } else {
             openMenu();
         }
-    }, [menuIsOpen, api, openMenu]);
+    }, [menuIsOpen, api, scrollItemIntoView, openMenu]);
 
     const handleDownKey = React.useCallback(() => {
         if (menuIsOpen) {
@@ -193,7 +197,7 @@ export function Select<T>(props: SelectProps<T>) {
         } else {
             openMenu();
         }
-    }, [menuIsOpen, api, openMenu]);
+    }, [menuIsOpen, api, scrollItemIntoView, openMenu]);
 
     const handleEnterKey = React.useCallback(() => {
         if (menuIsOpen) {
@@ -282,10 +286,10 @@ export function Select<T>(props: SelectProps<T>) {
                     prefix={prefix}
                     type={"text"}
                     prefixClassName={prefixClassName}
-                    suffix="chevron-down"
+                    suffix={loading ? "loader" : "chevron-down"}
                     wrapperRef={inputRef}
                     suffixClassName={classNames(styles.icon, {
-                        [styles.iconVisible]: menuIsOpen
+                        [styles.iconVisible]: !loading && menuIsOpen
                     })}
                 />
 
@@ -342,7 +346,7 @@ export function Select<T>(props: SelectProps<T>) {
                         })
                     ) : (
                         <div className={classNames(styles.option, styles.noOptionsMessage)}>
-                            {noOptionsMessage}
+                            {loading ? loadingMessage : noOptionsMessage}
                         </div>
                     )}
                 </div>

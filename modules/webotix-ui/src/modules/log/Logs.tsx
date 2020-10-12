@@ -21,11 +21,11 @@ const columns = [
         accessor: "notificationType",
         Cell: ({original}: { original: LogEntry }) =>
             original.level === "ERROR" ? (
-                <Icon type="alert-circle"/>
+                <Icon type="disc"/>
             ) : original.level === "ALERT" ? (
                 <Icon type="check"/>
             ) : (
-                <Icon type="info"/>
+                <Icon type="terminal"/>
             ),
         headerStyle: iconStyle,
         style: iconStyle,

@@ -10,7 +10,7 @@ function App() {
     return (
         <BrowserRouter>
             <LogManager>
-                <Market coin={null}>
+                <Market>
                     <Server>
                         <Socket>
                             <FrameworkContainer/>

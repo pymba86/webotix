@@ -4,7 +4,7 @@ import {Icon} from "../icon";
 
 export type InputSize = 'small' | 'default' | 'large';
 
-export type InputProps<> = {
+export type InputProps = {
     className?: string;
     prefixCls?: string;
     size?: InputSize;
