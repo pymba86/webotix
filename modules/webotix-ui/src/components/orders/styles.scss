@@ -1,0 +1,27 @@
+@import '../../styles/theme.scss';
+
+/* OCO control */
+.oco-deemphasis {
+  color: $deemphasis !important;
+}
+
+.oco-emphasis {
+  color: $emphasis !important;
+  text-shadow: 0 0 5px $emphasis;
+}
+
+.oco-buy {
+  color: $buy;
+}
+
+.oco-sell {
+  color: $sell;
+}
+
+.oco-PENDING_CANCEL {
+  opacity: 0.4;
+}
+
+.oco-PENDING_NEW {
+  color: $emphasis;
+}

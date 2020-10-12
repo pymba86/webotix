@@ -1,0 +1,277 @@
+//
+// Color
+//
+$white: #fff !default;
+$gray-100: #f6f7fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #6c757d !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #283e59 !default;
+$black: #000 !default;
+
+$grays: () !default;
+$grays: map-merge(
+                (
+                        "100": $gray-100,
+                        "200": $gray-200,
+                        "300": $gray-300,
+                        "400": $gray-400,
+                        "500": $gray-500,
+                        "600": $gray-600,
+                        "700": $gray-700,
+                        "800": $gray-800,
+                        "900": $gray-900
+                ),
+                $grays
+);
+
+$blue: #3bb3e4 !default;
+$red: #e63757 !default;
+$yellow: #f6c343 !default;
+$green: #00d97e !default;
+$bg: #131722 !default;
+$deemphasis: #aaa !default;
+$emphasis: #3BB3E4 !default;
+$buy: #2aa599 !default;
+$sell: #ef5451 !default;
+
+$default: $gray-100 !default;
+$primary: $blue !default;
+$success: $green !default;
+$info: $gray-600 !default;
+$warning: $yellow !default;
+$danger: $red !default;
+$dark: $gray-900 !default;
+$light: $gray-100 !default;
+
+$theme-colors: () !default;
+$theme-colors: map-merge(
+                (
+                        "default": $default,
+                        "primary": $primary,
+                        "success": $success,
+                        "info": $info,
+                        "warning": $warning,
+                        "danger": $danger
+                ),
+                $theme-colors
+);
+
+$ease-base-out: cubic-bezier(0.7, 0.3, 0.1, 1);
+$ease-base-in: cubic-bezier(0.9, 0, 0.3, 0.7);
+$ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+$ease-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+$ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+$ease-out-back: cubic-bezier(0.12, 0.4, 0.29, 1.46);
+$ease-in-back: cubic-bezier(0.71, -0.46, 0.88, 0.6);
+$ease-in-out-back: cubic-bezier(0.71, -0.46, 0.29, 1.46);
+$ease-fade: cubic-bezier(0.23, 1, 0.32, 1);
+
+//Body
+//
+$body-bg: $bg !default;
+$body-color: $gray-900 !default;
+
+// Links
+//
+$link-color: $primary !default;
+$link-decoration: none !default;
+$link-hover-color: darken($link-color, 15%) !default;
+$link-hover-decoration: underline !default;
+
+// Components
+//
+$border-width: 1px !default;
+$border-color: $bg !default; // #e3ebf6 !default;
+$border-radius: 4px !default;
+$border-radius-lg: 5px !default;
+$border-radius-sm: 3px !default;
+$component-active-color: $white !default;
+$component-active-bg: $primary !default;
+$disabled-opacity: .65 !default;
+
+// Fonts
+//
+$font-family-sans-serif: Trebuchet MS, Tahoma, Arial, sans-serif;
+$font-family-base: $font-family-sans-serif !default;
+$font-size-base: 13px !default;
+$font-size-lg: 16px !default;
+$font-size-sm: 12px !default;
+$font-weight-light: 300 !default;
+$font-weight-normal: 400 !default;
+$font-weight-bold: 700 !default;
+$font-weight-base: $font-weight-normal !default;
+$line-height-base: 1.5 !default;
+
+$h1-font-size: $font-size-base * 2.25 !default;
+$h2-font-size: $font-size-base * 2 !default;
+$h3-font-size: $font-size-base * 1.75 !default;
+$h4-font-size: $font-size-base * 1.5 !default;
+$h5-font-size: $font-size-base * 1.25 !default;
+$h6-font-size: $font-size-base !default;
+$headings-margin-bottom: 8px !default;
+$headings-font-family: inherit !default;
+$headings-font-weight: 500 !default;
+$headings-line-height: 1.2 !default;
+$headings-color: inherit !default;
+$text-color: $gray-400 !default;
+
+// highlight text
+
+$highlight-bg: rgba(100, 100, 100, 0.4) !default;
+$heading-color: $gray-300 !default;
+
+// z-index
+//
+$zindex-popover: 1060 !default;
+$zindex-tooltip: 1070 !default;
+$zindex-modal-background: 1040 !default;
+$zindex-modal: 1050 !default;
+$zindex-message: 1060 !default;
+$zindex-calendar: 1060 !default;
+$zindex-select: 1060 !default;
+
+// Buttons
+//
+$btn-type-colors: () !default;
+$btn-type-colors: map-merge(
+                (
+                        "primary": $primary,
+                        "success": $success,
+                        "info": $info,
+                        "warning": $warning,
+                        "danger": $danger
+                ),
+                $btn-type-colors
+);
+
+$btn-size: 34px !default;
+$btn-size-lg: 42px !default;
+$btn-size-sm: 26px !default;
+$btn-padding-x: 12px !default;
+$btn-padding-x-lg: 16px !default;
+$btn-padding-x-sm: 8px !default;
+$btn-box-shadow: inset 0 1px 0 rgba($white, .15), 0 1px 1px rgba($black, .075) !default;
+$btn-disabled-opacity: .65 !default;
+$btn-link-disabled-color: $gray-600 !default;
+$btn-loading-size: $font-size-base !default;
+$btn-loading-size-lg: $font-size-lg !default;
+$btn-loading-size-sm: $font-size-sm !default;
+
+// Modal
+//
+$modal-bg: #2F3241 !default;
+$modal-header-bg: #343747 !default;
+$modal-footer-bg: #282b38 !default;
+$modal-padding-x: 14px !default;
+$modal-padding-y: 12px !default;
+$modal-box-shadow: 1px 3px 3px 0 rgba(0, 0, 0, 0.2), 1px 3px 15px 2px rgba(0, 0, 0, 0.2) !default;
+$modal-transfrom-y: -150px !default;
+$modal-transition: transform 300ms $ease-fade, opacity 300ms $ease-fade !default;
+$modal-mask-transition: opacity 300ms $ease-fade !default;
+$modal-type-colors: (
+        "info": $info,
+        "success": $success,
+        "warning": $warning,
+        "error": $danger,
+        "confirm": $warning
+) !default;
+
+
+// Input
+//
+
+$input-type-colors: () !default;
+$input-type-colors: map-merge(
+                (
+                        "success": $success,
+                        "info": $info,
+                        "warning": $warning,
+                        "error": $danger
+                ),
+                $input-type-colors
+);
+
+$input-width: 100% !default;
+$input-height: 34px !default;
+$input-height-sm: 24px !default;
+$input-height-lg: 40px !default;
+$input-padding-y: 6px !default;
+$input-padding-x: 8px !default;
+$input-icon-size: 14px !default;
+
+$input-color: $gray-500 !default;
+$input-bg: $bg !default;
+$input-placeholder-color: fade_out($input-color, 0.4) !default;
+$input-icon-color: $input-placeholder-color !default;
+
+$input-border-color: $border-color !default;
+
+$input-focus-bg: $input-bg !default;
+$input-focus-border-color: $gray-700 !default;
+
+$input-hover-border-color: $input-focus-border-color !default;
+$input-disabled-bg: $bg !default;
+$input-disabled-opacity: .5 !default;
+$input-disabled-border-color: darken($input-border-color, 10%);
+
+
+// Form
+//
+$form-item-height: $input-height !default;
+$form-margin-y: 24px !default;
+$form-label-height: $input-height !default;
+$form-label-padding-x: 12px !default;
+$form-label-padding-y: 10px !default;
+$form-message-font-size: 12px !default;
+$form-message-padding-y: 6px !default;
+
+// Icon
+
+$icon-font-size: 24px !default;
+
+$calendar-panel-shadow: 0 2px 8px rgba($black, .25) !default;
+$calendar-panel-padding: 12px !default;
+$calendar-panel-transition: transform 300ms $ease-fade, opacity 300ms $ease-fade !default;
+
+// Select
+//
+$select-width: 220px !default;
+$select-icon-size: 16px !default;
+$select-icon-color: $input-placeholder-color !default;
+
+$calendar-item-hover-bg: $light !default;
+$calendar-time-active-bg: #edf2f9 !default;
+$calendar-time-item-width: 66px !default;
+$calendar-time-item-height: 32px !default;
+
+$select-color: $input-color !default;
+
+$select-panel-height: 256px !default;
+$select-panel-shadow: $calendar-panel-shadow !default;
+$select-panel-transition: $calendar-panel-transition !default;
+
+$select-option-hover-bg: $calendar-item-hover-bg !default;
+$select-option-active-bg: $calendar-time-active-bg !default;
+$select-option-height: $calendar-time-item-height !default;
+$select-option-transition: background 300ms ease !default;
+$select-option-group-height: 32px !default;
+
+$select-disabled-bg: $input-disabled-bg !default;
+$select-disabled-opacity: $input-disabled-opacity !default;
+$select-disabled-border-color: $input-disabled-border-color !default;
+
+
+// Checkbox
+//
+$checkbox-size:                     14px !default;
+$checkbox-margin-right:             16px !default;
+$checkbox-padding-x:                8px !default;
+$checkbox-active-color:             $primary !default;
+$checkbox-border-radius:            2px !default;
+$checkbox-indicator-transtion:      border-color .25s ease, background-color .25s ease !default;
+$checkbox-disabled-opacity:         .65 !default;

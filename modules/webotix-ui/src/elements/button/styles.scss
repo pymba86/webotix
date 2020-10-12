@@ -1,0 +1,224 @@
+@import '../../styles/functions.scss';
+@import '../../styles/theme.scss';
+@import '../../styles/mixins.scss';
+
+$btn-prefix: 'ui-btn';
+
+.#{$btn-prefix} {
+  display: inline-block;
+  padding: 0.6em 1.5em;
+  border: $border-width solid transparent;
+  border-radius: $border-radius;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-base;
+  text-align: center;
+  line-height: 1em;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+
+  &:focus,
+  &.focus {
+    outline: 0;
+    text-decoration: none;
+  }
+
+  &.disabled,
+  &:disabled {
+    opacity: $btn-disabled-opacity;
+    pointer-events: none;
+  }
+
+  &:not(:disabled):not(.disabled) {
+    cursor: pointer;
+  }
+
+  &::-moz-focus-inner {
+    border: 0;
+  }
+
+  &-link {
+    font-weight: $font-weight-normal;
+    color: $link-color;
+    background-color: transparent;
+
+    &:hover {
+      color: $link-hover-color;
+      text-decoration: $link-hover-decoration;
+      background-color: transparent;
+      border-color: transparent;
+    }
+
+    &:focus,
+    &.focus {
+      text-decoration: $link-hover-decoration;
+      border-color: transparent;
+      box-shadow: none;
+    }
+
+    &:disabled,
+    &.disabled {
+      color: $btn-link-disabled-color;
+    }
+  }
+
+  &-default,
+  &-outline-default {
+    border-color: $border-color;
+    background-color: $white;
+
+    &:focus,
+    &:hover {
+      border-color: $primary;
+      color: $primary;
+      background-color: lighten($primary, 70%);
+    }
+
+    &:active {
+      color: darken($primary, 10%);
+      border-color: darken($primary, 10%);
+      background-color: mix($white, $light, 35%);
+    }
+  }
+
+  &-outline-default {
+    &:focus {
+      background-color: mix($white, $light, 35%);
+    }
+  }
+
+  &-rounded {
+    border-radius: $btn-size / 2;
+  }
+
+  &-icon {
+    font-size: $font-size-base;
+
+    &-with-child {
+      margin-right: 6px;
+    }
+
+    &-only {
+      width: $btn-size;
+      height: $btn-size;
+      padding: 0;
+    }
+  }
+
+  &-loading {
+    display: inline-block;
+    width: $btn-loading-size;
+    height: $btn-loading-size;
+    position: relative;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    animation: buttonLoadingRotate 1s infinite linear;
+    box-sizing: border-box;
+    vertical-align: middle;
+
+    &-wrapper {
+      display: inline-block;
+    }
+
+    &-default {
+      border-left: 2px solid $primary;
+    }
+
+    &-with-child {
+      margin-right: 6px;
+    }
+
+    &-large {
+      width: $btn-loading-size-lg;
+      height: $btn-loading-size-lg;
+    }
+
+    &-small {
+      width: $btn-loading-size-sm;
+      height: $btn-loading-size-sm;
+      border-width: 1px;
+    }
+  }
+
+  // Button Sizes
+  //
+  &-large {
+    height: $btn-size-lg;
+    padding: 0 $btn-padding-x-lg;
+    font-size: $font-size-lg;
+    border-radius: $border-radius-lg;
+
+    &.#{$btn-prefix}-rounded {
+      border-radius: $btn-size-lg / 2;
+    }
+
+    &.#{$btn-prefix}-icon-only {
+      width: $btn-size-lg;
+      height: $btn-size-lg;
+    }
+
+    .#{$btn-prefix}-icon {
+      font-size: $font-size-lg;
+    }
+
+    .#{$btn-prefix}-icon-with-child {
+      margin-right: 8px;
+    }
+  }
+
+  &-small {
+    height: $btn-size-sm;
+    padding: 0 $btn-padding-x-sm;
+    font-size: $font-size-sm;
+    border-radius: $border-radius-sm;
+
+    &.#{$btn-prefix}-rounded {
+      border-radius: $btn-size-sm / 2;
+    }
+
+    &.#{$btn-prefix}-icon-only {
+      width: $btn-size-sm;
+      height: $btn-size-sm;
+    }
+
+    .#{$btn-prefix}-icon {
+      font-size: $font-size-sm;
+    }
+
+    .#{$btn-prefix}-icon-with-child {
+      margin-right: 4px;
+    }
+  }
+
+  // Alternate buttons
+  //
+  @each $type,
+  $color in $btn-type-colors {
+    &-#{$type} {
+      @include button-variant($color);
+    }
+  }
+
+  @each $type,
+  $color in $btn-type-colors {
+    &-outline-#{$type} {
+      @include button-outline-variant($color);
+    }
+  }
+}
+
+// Future-proof disabling of clicks on `<a>` elements
+a.#{$btn-prefix}.disabled,
+fieldset:disabled a.#{$btn-prefix} {
+  pointer-events: none;
+}
+
+
+@keyframes buttonLoadingRotate {
+  0% {
+    transform: rotate(120deg)
+  }
+  100% {
+    transform: rotate(-240deg)
+  }
+}

@@ -1,0 +1,156 @@
+@import '../../styles/functions.scss';
+@import '../../styles/theme.scss';
+@import '../../styles/mixins.scss';
+
+$select-prefix: 'ui-select';
+
+$zIndex__base: 0;
+
+$bg__default: white;
+$bg__disabled: #f7f7f7;
+
+$bg__optionSelected: #ddd;
+$bg__optionHover: #eee;
+
+$textColor__default: #333;
+$textColor__disabled: #717171;
+$textColor__disabledOption: #adadad;
+
+$clickableIcon__idle: #aaa;
+$clickableIcon__hover: #717171;
+
+@function makeClassName($name) {
+  @return '.#{$select-prefix}#{$name}';
+}
+
+@mixin style($name) {
+  #{makeClassName($name)} {
+    @content;
+  }
+}
+
+@mixin active {
+  &#{makeClassName('-active')} {
+    @content;
+  }
+}
+
+@mixin not__active {
+  &:not(#{makeClassName('-active')}) {
+    @content;
+  }
+}
+
+@mixin disabled {
+  &#{makeClassName('-disabled')} {
+    @content;
+  }
+}
+
+@mixin selected {
+  &#{makeClassName('-selected')} {
+    @content;
+  }
+}
+
+@include style('-container') {
+  position: relative;
+  width: 100%;
+
+}
+
+@include style('-currentValue') {
+  left: 8px;
+  pointer-events: none;
+  position: absolute;
+  color: $input-color;
+
+  &#{makeClassName('-placeholder')} {
+    color: $input-placeholder-color;
+  }
+}
+
+@include style('-hidden') {
+  visibility: hidden;
+}
+
+@include style('-labelWrapper') {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 4px;
+  padding-left: 2px;
+}
+
+@include style('-inputWrapper') {
+  align-items: center;
+  cursor: default;
+  display: flex;
+  z-index: $zIndex__base;
+
+  @include active {
+    input {
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+}
+
+@include style('-optionsWrapper') {
+
+  overflow-x: hidden;
+  overflow-y: auto;
+  color: #aaa;
+  border-radius: 0 0 $border-radius $border-radius;
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+  background-color: $input-focus-bg;
+  display: flex;
+  flex-direction: column;
+  max-height: 11em;
+
+  position: absolute;
+  width: 100%;
+  z-index: $zIndex__base + 1;
+}
+
+@include style('-option') {
+  cursor: pointer;
+  display: flex;
+  padding: 8px 8px;
+  user-select: none;
+  border-top: 1px solid rgba(0,0,0,.2);
+
+  &#{makeClassName('-highlighted')} {
+    background: rgba(0, 0, 0, .2);
+    color: hsla(0, 0%, 66.7%, .95);
+  }
+
+  @include selected {
+    background: rgba(0,0,0,.15);
+  }
+
+  &#{makeClassName('-noOptionsMessage')} {
+    justify-content: center;
+    color: $textColor__disabled;
+    cursor: default;
+  }
+
+  @include disabled {
+    color: $textColor__disabledOption;
+    cursor: default;
+    text-decoration: line-through;
+  }
+}
+
+.#{$select-prefix} {
+  @include reset-component();
+  display: inline-block;
+
+  &-icon {
+    transform: rotate(0deg);
+    transition: transform 200ms linear;
+
+    &-visible {
+      transform: rotate(180deg);
+    }
+  }
+}

@@ -1,0 +1,115 @@
+@import '../../styles/functions.scss';
+@import '../../styles/theme.scss';
+@import '../../styles/mixins.scss';
+
+$section-prefix: 'ui-section';
+
+.#{$section-prefix} {
+
+  @include reset-component();
+
+  &-icon {
+    position: absolute;
+    font-size: 4em;
+    top: 4px;
+    right: 30px;
+    z-index: -1;
+    opacity: 0.15;
+    color: black;
+    line-height: 0;
+  }
+
+  &-link {
+    color: rgba(170, 170, 170, 0.8);
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  &-span {
+    color: rgba(170, 170, 170, 0.8);
+  }
+
+  &-tab {
+    border-radius: 2px;
+    display: inline;
+    color: #aaa;
+    background: rgba(255, 255, 255, 0.05);
+    border-color: transparent;
+    border-width: 2px;
+    border-style: solid;
+    margin-right: 4px;
+    padding: 0 4px;
+    line-height: 1.15;
+    font-size: 12px;
+
+    &:hover {
+      color: #3BB3E4;
+      cursor: pointer;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    &-selected {
+      color: black;
+      background: rgba(255, 255, 255, 0.9);
+
+      &:hover {
+        color: black;
+        cursor: auto;
+        background-color: rgba(255, 255, 255, 0.7);
+      }
+
+    }
+
+  }
+
+  &-content {
+    background-color: #282b38;
+    flex: 1;
+    position: relative;
+    overflow-x: auto;
+    overflow-y: auto;
+
+    &-padding {
+      padding: 10px 8px 8px;
+    }
+
+    &-scroll-x {
+      overflow-x: scroll;
+    }
+
+    &-scroll-y {
+      overflow-y: scroll;
+    }
+  }
+
+  &-box {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  &-heading-box {
+    background-color: #343747;
+    vertical-align: middle;
+    padding: 8px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.15);
+    position: relative;
+    z-index: 10;
+    overflow: hidden;
+  }
+
+  &-heading {
+    font-family: system-ui, sans-serif;
+    text-transform: uppercase;
+    display: inline;
+    white-space: nowrap;
+    font-weight: 700;
+    color: $gray-100;
+  }
+}
