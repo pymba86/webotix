@@ -20,6 +20,7 @@ export interface ToolbarProps {
     mobile: boolean;
     updateFocusedField?: (value: number) => void;
     coin?: Coin;
+    connected: boolean;
     ticker?: Ticker;
     onShowPanel: (key: OfAllKeyPanel) => void;
     width: number;
@@ -41,6 +42,7 @@ export const Toolbar: React.FC<ToolbarProps> = (
         updateFocusedField,
         onShowViewSettings,
         hiddenPanels,
+        connected,
         onShowPanel,
         onLogout,
         width,
@@ -111,7 +113,7 @@ export const Toolbar: React.FC<ToolbarProps> = (
                         onClick={() => onShowPanel(panel.key)}
                     />
                 ))}
-            <ToolbarSocket connected={true}/>
+            <ToolbarSocket connected={connected}/>
             <ToolbarLink icon={"code"} onClick={onLogout}/>
             <ToolbarLink icon={"layout"} onClick={onShowViewSettings}/>
             <ToolbarLink icon={"lock"} onClick={onLogout}/>

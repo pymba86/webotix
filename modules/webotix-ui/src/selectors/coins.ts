@@ -2,7 +2,7 @@ import {Coin} from "../modules/market";
 import {coinFromKey} from "../modules/market/utils";
 import * as H from "history";
 
-export const locationToCoin = (location: H.Location): Coin | null => {
+export const locationToCoin = (location: H.Location): Coin | undefined => {
     if (
         location &&
         location.pathname &&
@@ -11,6 +11,6 @@ export const locationToCoin = (location: H.Location): Coin | null => {
     ) {
         return coinFromKey(location.pathname.substring(6))
     } else {
-        return null
+        return undefined
     }
-}
+};

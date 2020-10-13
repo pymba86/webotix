@@ -2,7 +2,7 @@ import {useMemo, useReducer} from "react";
 import {Order, OrderStatus} from "./types";
 import Immutable from "seamless-immutable";
 
-const PLACEHOLDER_ID = "PLACEHOLDER"
+const PLACEHOLDER_ID = "PLACEHOLDER";
 
 export interface UserOrderApi {
 
@@ -80,7 +80,7 @@ class UpdateSnapshotAction implements BaseAction {
         const idsPresent = new Set<string>();
 
         for (const order of this.orders) {
-            idsPresent.add(order.id)
+            idsPresent.add(order.id);
             result = orderUpdated(result, order, this.timestamp)
         }
 
@@ -108,13 +108,13 @@ class UpdateSnapshotAction implements BaseAction {
 }
 
 class StateUpdateAction implements BaseAction {
-    private readonly timestamp: number
-    private readonly id: string
-    private readonly status: OrderStatus
+    private readonly timestamp: number;
+    private readonly id: string;
+    private readonly status: OrderStatus;
 
     constructor(id: string, status: OrderStatus, timestamp: number) {
-        this.id = id
-        this.status = status
+        this.id = id;
+        this.status = status;
         this.timestamp = timestamp
     }
 
@@ -165,7 +165,7 @@ function orderUpdated(state: Array<Order>, order: Order, timestamp: number): Arr
         ]
     }
 
-    const prevVersion = state[index]
+    const prevVersion = state[index];
     if (prevVersion.deleted) {
         return state;
     }
@@ -222,7 +222,7 @@ export function useOrders(): [Array<Order>, UserOrderApi] {
             }
         }),
         [dispatch]
-    )
+    );
 
     return [value, api];
 }

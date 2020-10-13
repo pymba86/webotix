@@ -1,7 +1,17 @@
 import {Coin, PartialServerCoin, ServerCoin} from "./types";
 
+export function coin(exchange: string, counter: string, base: string): Coin {
+    return augmentCoin(
+        {
+            counter: counter,
+            base: base
+        },
+        exchange
+    )
+}
+
 export function coinFromKey(key: string): Coin {
-    const split = key.split("/")
+    const split = key.split("/");
     return augmentCoin(
         {
             counter: split[1],

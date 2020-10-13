@@ -30,6 +30,21 @@ export enum OrderStatus {
     UNKNOWN = "UNKNOWN"
 }
 
+export interface LimitOrder extends Order {
+    limitPrice: number;
+}
+
+export interface StopOrder extends Order {
+    limitPrice: number;
+    stopPrice: number;
+}
+
+export interface OrderBook {
+    asks: Array<LimitOrder>;
+    bids: Array<LimitOrder>;
+    timestamp: Date;
+}
+
 export enum RunningAtType {
     SERVER = "SERVER",
     EXCHANGE = "EXCHANGE"

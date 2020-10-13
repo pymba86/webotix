@@ -2,10 +2,10 @@ import React, {useMemo, useRef, useState} from 'react';
 import {showBrowserNotification} from "../common/browser";
 import {ErrorPopup} from "./ErrorPopup";
 
-const ERROR = "ERROR"
-const ALERT = "ALERT"
-const INFO = "INFO"
-const TRACE = "TRACE"
+const ERROR = "ERROR";
+const ALERT = "ALERT";
+const INFO = "INFO";
+const TRACE = "TRACE";
 export type LogLevel = typeof ERROR | typeof ALERT | typeof INFO | typeof TRACE;
 
 export interface LogRequest {
@@ -71,7 +71,7 @@ export const LogManager: React.FC = ({children}) => {
             }
         },
         [setLogs]
-    )
+    );
 
     const methods = useMemo(
         () => ({
@@ -85,7 +85,7 @@ export const LogManager: React.FC = ({children}) => {
             add,
             clear: () => setLogs([])
         }), [add, setLogs, setError]
-    )
+    );
 
     const api: LogApi = useMemo(
         () => ({
@@ -93,7 +93,7 @@ export const LogManager: React.FC = ({children}) => {
             ...methods
         }),
         [logs, methods]
-    )
+    );
 
     return (
         <LogContext.Provider value={api}>
@@ -105,4 +105,4 @@ export const LogManager: React.FC = ({children}) => {
         </LogContext.Provider>
     )
 
-}
+};

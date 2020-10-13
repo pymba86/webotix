@@ -20,18 +20,9 @@ export const OpenOrdersContainer: React.FC<OpenOrdersContainerProps> = ({coin}) 
         [openOrders]
     );
 
-    const jobsAsOrders: DisplayOrder[] = [
+    const jobsAsOrders: DisplayOrder[] = [];
 
-        {
-            status: OrderStatus.PENDING_NEW, timestamp: 1232132132131, serverTimestamp: 213213213213213,
-            deleted: false, averagePrice: 213, cumulativeAmount: 213, currencyPair: {
-                counter: "BCD", base: "SAD"
-            }, fee: 21, id: "213", jobId: "13", limitPrice: 213, originalAmount: 213, remainingAmount: 213,
-            runningAt: RunningAtType.SERVER, stopPrice: 0, type: OrderType.ASK
-        },
-    ];
-
-    const orders: DisplayOrder[] = coin && allOrders ? allOrders.concat(jobsAsOrders) : []
+    const orders: DisplayOrder[] = coin && allOrders ? allOrders.concat(jobsAsOrders) : [];
 
     return (
         <OpenOrders
