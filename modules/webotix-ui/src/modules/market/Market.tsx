@@ -1,4 +1,4 @@
-import React, {useContext, useMemo, useState} from "react";
+import React, {useContext, useEffect, useMemo, useState} from "react";
 import {MarketApi, MarketContext} from "./MarketContext";
 import {Coin, Exchange} from "./types";
 import {LogContext} from "../log/LogContext";
@@ -22,10 +22,9 @@ export const Market: React.FC<MarketProps> = ({coin, children}) => {
     const errorPopup = logApi.errorPopup;
 
     const refreshExchanges = useMemo(
-        () => async () => {
+        () => () => {
             trace("Fetching exchanges");
             exchangeService.fetchExchanges()
-                .then(response => response.json())
                 .then((exchanges: Array<Exchange>) => {
                     setExchanges(exchanges);
                     trace("Fetched " + exchanges.length + " exchanges");
@@ -35,6 +34,11 @@ export const Market: React.FC<MarketProps> = ({coin, children}) => {
                 })
         }, [errorPopup, trace, setExchanges]
     )
+
+    useEffect(() => {
+        refreshExchanges()
+    }, [refreshExchanges])
+
 
     const api: MarketApi = useMemo(
         () => ({

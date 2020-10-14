@@ -1,9 +1,11 @@
 import React from "react";
-import {Job} from "./types";
+import {CoinMetadata, Job} from "./types";
 import {Coin} from "../market";
 
 export interface ServerApi {
     subscriptions: Coin[];
+
+    coinMetadata: Map<String, CoinMetadata>;
 
     addSubscription(coin: Coin): void;
 
@@ -17,6 +19,7 @@ export const ServerContext = React.createContext<ServerApi>({
     jobs: [],
     jobsLoading: true,
     subscriptions: [],
+    coinMetadata: new Map(),
     addSubscription(coin: Coin) {
         console.warn("addSubscription not implemented");
     },

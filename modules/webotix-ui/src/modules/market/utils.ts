@@ -29,5 +29,16 @@ export function augmentCoin(p: ServerCoin | PartialServerCoin, exchange?: string
         name: p.base + "/" + p.counter + " (" + exchange + ")",
         shortName: p.base + "/" + p.counter
     }
+}
 
+export function coinFromTicker(t: ServerCoin): Coin {
+    return augmentCoin(t, t.exchange)
+}
+
+export function tickerFromCoin(coin: Coin): ServerCoin {
+    return {
+        counter: coin.counter,
+        base: coin.base,
+        exchange: coin.exchange
+    }
 }

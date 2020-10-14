@@ -9,7 +9,6 @@ $table-prefix: 'ui-table';
   @include reset-component();
 
   &-link {
-    color: rgba(170, 170, 170, 0.8);
     cursor: pointer;
   }
 }

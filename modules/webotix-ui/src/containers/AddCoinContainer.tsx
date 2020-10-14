@@ -40,7 +40,6 @@ export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
         logApi.trace("Fetching pairs for exchange: " + exchange.name);
 
         exchangeService.fetchPairs(exchange.code)
-            .then(response => response.json())
             .then((pairs: Array<PartialServerCoin>) => {
                 setPairs(pairs.map(p => augmentCoin(p, exchange.code)));
                 logApi.trace(pairs.length + " pairs fetched");

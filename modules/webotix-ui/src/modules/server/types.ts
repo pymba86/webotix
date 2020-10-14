@@ -21,3 +21,9 @@ export interface Notification {
 export interface AlertJob extends Job {
     notification: Notification;
 }
+
+export interface CoinMetadata {
+    maximumAmount: number;
+    minimumAmount: number;
+    priceScale: number;
+}

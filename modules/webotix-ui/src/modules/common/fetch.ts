@@ -5,7 +5,7 @@ const X_XSRF_TOKEN = "x-xsrf-token";
 
 let xsrfToken = localStorage.getItem(X_XSRF_TOKEN);
 
-const defaultSettings = { method: "GET" };
+const defaultSettings = {method: "GET"};
 
 export function setAccessToken(token: string, expires: boolean): void {
     Cookies.set(ACCESS_TOKEN, token, {
@@ -25,24 +25,36 @@ export function clearXsrfToken(): void {
     localStorage.removeItem(X_XSRF_TOKEN);
 }
 
-export async function getWeb(url: string): Promise<Response> {
-    return fetch(url);
+export async function getWeb<T>(url: string): Promise<T> {
+    return api(url);
 }
 
-export async function get(url: string): Promise<Response> {
-    return fetch("/api/" + url, action("GET"))
+export async function get<T>(url: string): Promise<T> {
+    return api("/api/" + url, action("GET"))
 }
 
-export async function put(url: string, content?: string): Promise<Response> {
-    return fetch("/api/" + url, action("PUT", content))
+export async function put<T>(url: string, content?: string): Promise<T> {
+    return api("/api/" + url, action("PUT", content))
 }
 
-export async function post(url: string, content?: string): Promise<Response> {
-    return fetch("/api/" + url, action("POST", content))
+export async function post<T>(url: string, content?: string): Promise<T> {
+    return api("/api/" + url, action("POST", content))
 }
 
-export async function del(url: string, content?: string): Promise<Response> {
-    return fetch("/api/" + url, action("DELETE", content))
+export async function del<T>(url: string, content?: string): Promise<T> {
+    return api("/api/" + url, action("DELETE", content))
+}
+
+function api<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
+    return fetch(input, init)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+
+            return response.text()
+                .then(data => data ? JSON.parse(data) : null);
+        })
 }
 
 function action(method: string, content?: string): RequestInit {
@@ -53,7 +65,6 @@ function action(method: string, content?: string): RequestInit {
         redirect: "follow",
         headers: xsrfToken
             ? {
-               // [X_XSRF_TOKEN]: xsrfToken,
                 "Content-type": "application/json"
             }
             : {

@@ -25,6 +25,7 @@
         <module>modules/webotix-job</module>
         <module>modules/webotix-job-api</module>
         <module>modules/webotix-processors</module>
+        <module>modules/webotix-subscription</module>
         <module>modules/webotix-app</module>
         <module>modules/webotix-ui</module>
     </modules>
@@ -60,6 +61,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>webotix-base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-subscription</artifactId>
             <version>${project.version}</version>
         </dependency>
 

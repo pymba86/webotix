@@ -5,6 +5,7 @@ import ReactTable from "react-table";
 import {Link} from "react-router-dom";
 import {Icon} from "../../elements/icon";
 import {TableLink} from "../../elements/table";
+import {Amount} from "../../elements/amount";
 
 export interface FullCoinData {
     exchangeMeta: Exchange | undefined;
@@ -39,7 +40,7 @@ const exchangeColumn = {
     id: "exchange",
     Header: "Exchange",
     accessor: "exchange",
-    Cell: ({ original }: { original: FullCoinData }) => (
+    Cell: ({original}: { original: FullCoinData }) => (
         <Link to={"/coin/" + original.key} title="Open coin">
             {original.exchangeMeta ? original.exchangeMeta.name : original.exchange}
         </Link>
@@ -54,7 +55,7 @@ const nameColumn = {
     id: "name",
     Header: "Name",
     accessor: "shortName",
-    Cell: ({ original }: { original: FullCoinData }) => (
+    Cell: ({original}: { original: FullCoinData }) => (
         <Link to={"/coin/" + original.key} title="Open coin">
             {original.shortName}
         </Link>
@@ -68,10 +69,9 @@ const nameColumn = {
 const priceColumn = {
     id: "price",
     Header: "Price",
-    Cell: ({ original }: { original: FullCoinData }) => (
-        <TableLink>
-            {original.ticker ? original.ticker.last : undefined}
-        </TableLink>
+    Cell: ({original}: { original: FullCoinData }) => (
+        <Amount coin={original} scale={1}
+                value={original.ticker ? original.ticker.last : undefined}/>
     ),
     headerStyle: numberStyle,
     style: numberStyle,
@@ -84,12 +84,10 @@ const changeColumn = {
     id: "change",
     Header: "Change",
     accessor: "change",
-    Cell: ({ original }: { original: FullCoinData }) => (
+    Cell: ({original}: { original: FullCoinData }) => (
         <TableLink
             color={original.priceChange.slice(0, 1) === "-" ? "sell" : "buy"}
-
-            title="Set reference price"
-        >
+            title="Set reference price">
             {original.priceChange}
         </TableLink>
     ),
@@ -102,9 +100,9 @@ const changeColumn = {
 const closeColumn = (onRemove: CoinCallback) => ({
     id: "close",
     Header: null,
-    Cell: ({ original }: { original: FullCoinData }) => (
+    Cell: ({original}: { original: FullCoinData }) => (
         <TableLink title="Remove coin" onClick={() => onRemove(original)}>
-            <Icon type="close" />
+            <Icon type="close"/>
         </TableLink>
     ),
     headerStyle: textStyle,
@@ -116,10 +114,10 @@ const closeColumn = (onRemove: CoinCallback) => ({
 
 const alertColumn = (onClickAlerts: CoinCallback) => ({
     id: "alert",
-    Header: <Icon  type="bell outline" />,
-    Cell: ({ original }: { original: FullCoinData }) => (
+    Header: <Icon type="bell outline"/>,
+    Cell: ({original}: { original: FullCoinData }) => (
         <TableLink title="Manage alerts" onClick={() => onClickAlerts(original)}>
-            <Icon  type={original.hasAlert ? "bell" : "bell outline"} />
+            <Icon type={original.hasAlert ? "bell" : "bell outline"}/>
         </TableLink>
     ),
     headerStyle: textStyle,

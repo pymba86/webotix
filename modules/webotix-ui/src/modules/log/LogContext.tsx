@@ -75,9 +75,7 @@ export const LogManager: React.FC = ({children}) => {
 
     const methods = useMemo(
         () => ({
-            errorPopup: (message: string) => {
-                setError(message);
-            },
+            errorPopup: (message: string) => setError(message),
             localError: (message: string) => add({message, level: ERROR}),
             localAlert: (message: string) => add({message, level: ALERT}),
             localMessage: (message: string) => add({message, level: INFO}),

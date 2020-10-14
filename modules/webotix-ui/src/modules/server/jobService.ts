@@ -1,7 +1,8 @@
 import {get} from "../common/fetch";
+import {Job} from "./types";
 
 class JobService {
-    async fetchJobs(): Promise<Response> {
+    async fetchJobs(): Promise<Job[]> {
         return await get("jobs")
     }
 }

@@ -6,6 +6,7 @@ import {SocketContext} from "../modules/socket/SocketContext";
 import {Coin} from "../modules/market";
 import {MarketContext} from "../modules/market/MarketContext";
 import {ServerContext} from "../modules/server/ServerContext";
+import {formatNumber} from "../modules/common/number";
 
 interface ToolbarContainerProps {
     onLogout(): void;
@@ -35,6 +36,23 @@ export const ToolbarContainer: React.FC<ToolbarContainerProps> = (
     const socketApi = useContext(SocketContext);
     const marketApi = useContext(MarketContext);
     const serverApi = useContext(ServerContext);
+
+    const allMetadata = serverApi.coinMetadata;
+    const ticker = socketApi.selectedCoinTicker;
+
+    const coinMetadata = useMemo(() => {
+        return coin ? allMetadata.get(coin.key) : null;
+    }, [coin, allMetadata]);
+
+    if (!socketApi.connected) {
+        document.title = "Not connected";
+    } else if (ticker && coin) {
+        document.title =
+            formatNumber(ticker.last, coinMetadata ? coinMetadata.priceScale : 8,
+                "No price") + " " + coin.base + "/" + coin.counter;
+    } else {
+        document.title = "No coin";
+    }
 
     return (
         <Toolbar updateFocusedField={frameworkApi.populateLastFocusedField}
