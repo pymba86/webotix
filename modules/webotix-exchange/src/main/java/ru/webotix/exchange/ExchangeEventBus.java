@@ -72,6 +72,60 @@ public class ExchangeEventBus implements ExchangeEventRegistry {
         }
 
         @Override
+        public Iterable<Flowable<TickerEvent>> getTickersSplit() {
+            return subscriptionsFor(MarketDataType.Ticker).stream()
+                    .map(spec -> marketDataSubscriptionManager
+                            .getTickers()
+                            .filter(e -> e.spec().equals(spec))
+                            .onBackpressureLatest()).collect(Collectors.toList());
+        }
+
+        @Override
+        public Flowable<OpenOrdersEvent> getOrderSnapshots() {
+            Set<TickerSpec> filtered = subscriptionsFor(MarketDataType.OpenOrders);
+            return marketDataSubscriptionManager
+                    .getOrderSnapshots()
+                    .filter(e -> filtered.contains(e.spec()))
+                    .onBackpressureLatest();
+        }
+
+        @Override
+        public Flowable<OrderBookEvent> getOrderBooks() {
+            Set<TickerSpec> filtered = subscriptionsFor(MarketDataType.OrderBook);
+            return marketDataSubscriptionManager
+                    .getOrderBookSnapshots()
+                    .filter(e -> filtered.contains(e.spec()))
+                    .onBackpressureLatest();
+        }
+
+        @Override
+        public Flowable<TradeEvent> getTrades() {
+            Set<TickerSpec> filtered = subscriptionsFor(MarketDataType.Trades);
+            return marketDataSubscriptionManager
+                    .getTrades()
+                    .filter(e -> filtered.contains(e.spec()))
+                    .onBackpressureBuffer();
+        }
+
+        @Override
+        public Flowable<OrderChangeEvent> getOrderChanges() {
+            Set<TickerSpec> filtered = subscriptionsFor(MarketDataType.Order);
+            return marketDataSubscriptionManager
+                    .getOrderChanges()
+                    .filter(e -> filtered.contains(e.spec()))
+                    .onBackpressureBuffer();
+        }
+
+        @Override
+        public Flowable<UserTradeEvent> getUserTrades() {
+            Set<TickerSpec> filtered = subscriptionsFor(MarketDataType.UserTrade);
+            return marketDataSubscriptionManager
+                    .getUserTrades()
+                    .filter(e -> filtered.contains(e.spec()))
+                    .onBackpressureBuffer();
+        }
+
+        @Override
         public Flowable<BalanceEvent> getBalances() {
 
             Set<String> exchangeCurrenciesSubscribed =

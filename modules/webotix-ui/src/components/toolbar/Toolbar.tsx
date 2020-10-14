@@ -12,7 +12,6 @@ import {ToolbarSocket} from "./ToolbarSocket";
 import {ToolbarLink} from "./ToolbarLink";
 import {ToolbarCoin} from "./ToolbarCoin";
 import {ToolbarLogo} from "./ToolbarLogo";
-import {useHistory} from "react-router-dom";
 
 export interface ToolbarProps {
     prefixCls?: string;
@@ -51,8 +50,6 @@ export const Toolbar: React.FC<ToolbarProps> = (
         className
     }) => {
 
-    const history = useHistory();
-
     const boxClasses = classNames(
         prefixCls,
         {
@@ -63,7 +60,7 @@ export const Toolbar: React.FC<ToolbarProps> = (
 
     return (
         <div className={boxClasses}>
-            <ToolbarLogo icon={"layers"} onClick={() => history.push('/')}/>
+            <ToolbarLogo icon={"layers"}/>
             <ToolbarCoin coin={coin} exchange={exchange}/>
             {!mobile && coin && (
                 <ToolbarSpace box={true} border={true}>

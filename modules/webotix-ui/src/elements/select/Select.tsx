@@ -50,7 +50,7 @@ export function Select<T>(props: SelectProps<T>) {
 
     useEffect(() => {
         api.updateOptions(options);
-    }, [options]);
+    }, [options, api]);
 
     const {
         active,

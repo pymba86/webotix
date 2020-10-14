@@ -8,14 +8,29 @@ import info.bitrich.xchangestream.core.StreamingExchange;
 import io.reactivex.disposables.Disposable;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.Currency;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.Order;
 import org.knowm.xchange.dto.account.Balance;
 import org.knowm.xchange.dto.account.Wallet;
+import org.knowm.xchange.dto.marketdata.OrderBook;
+import org.knowm.xchange.dto.trade.LimitOrder;
+import org.knowm.xchange.dto.trade.OpenOrders;
 import org.knowm.xchange.exceptions.*;
 import org.knowm.xchange.service.account.AccountService;
 import org.knowm.xchange.service.marketdata.MarketDataService;
 import org.knowm.xchange.service.trade.TradeService;
+import org.knowm.xchange.service.trade.params.TradeHistoryParamCurrencyPair;
+import org.knowm.xchange.service.trade.params.TradeHistoryParamLimit;
+import org.knowm.xchange.service.trade.params.TradeHistoryParamPaging;
+import org.knowm.xchange.service.trade.params.TradeHistoryParams;
+import org.knowm.xchange.service.trade.params.orders.DefaultOpenOrdersParamCurrencyPair;
+import org.knowm.xchange.service.trade.params.orders.OpenOrdersParamCurrencyPair;
+import org.knowm.xchange.service.trade.params.orders.OpenOrdersParams;
 import ru.webotix.datasource.wiring.BackgroundProcessingConfiguration;
-import ru.webotix.exchange.*;
+import ru.webotix.exchange.AccountServiceFactory;
+import ru.webotix.exchange.ExchangeConfiguration;
+import ru.webotix.exchange.Exchanges;
+import ru.webotix.exchange.TradeServiceFactory;
 import ru.webotix.exchange.api.ExchangeService;
 import ru.webotix.exchange.api.RateController;
 import ru.webotix.market.data.api.*;
@@ -425,11 +440,23 @@ public class MarketDataSubscriptionController extends AbstractPollingController 
             manageExchangeExceptions(subscription.key(),
                     () -> {
                         switch (subscription.type()) {
-                            case Order:
-                                // TODO В настоящее время не поддерживается опросом
-                                break;
                             case Ticker:
                                 pollAndEmitTicker(spec);
+                                break;
+                            case OrderBook:
+                                pollAndEmitOrderBook(spec);
+                                break;
+                            case Trades:
+                                pollAndEmitTrades(subscription);
+                                break;
+                            case OpenOrders:
+                                pollAndEmitOpenOrders(subscription);
+                                break;
+                            case UserTrade:
+                                pollAndEmitUserTradeHistory(subscription);
+                                break;
+                            case Order:
+                                // TODO В настоящее время не поддерживается опросом
                                 break;
                             default:
                                 throw new IllegalStateException("Market data type "
@@ -442,6 +469,121 @@ public class MarketDataSubscriptionController extends AbstractPollingController 
         private void pollAndEmitTicker(TickerSpec spec) throws IOException {
             publisher.emit(TickerEvent.create(
                     spec, marketDataService.getTicker(spec.currencyPair())));
+        }
+
+        private void pollAndEmitUserTradeHistory(MarketDataSubscription subscription)
+                throws IOException {
+            TradeHistoryParams tradeHistoryParams = tradeHistoryParams(subscription);
+            tradeService
+                    .getTradeHistory(tradeHistoryParams)
+                    .getUserTrades()
+                    .forEach(trade -> publisher.emit(UserTradeEvent.create(subscription.spec(), trade)));
+        }
+
+        private TradeHistoryParams tradeHistoryParams(MarketDataSubscription subscription) {
+            TradeHistoryParams params;
+
+            if (subscription.spec().exchange().equals(Exchanges.BITMEX)
+                    || subscription.spec().exchange().equals(Exchanges.GDAX)) {
+                params =
+                        new TradeHistoryParamCurrencyPair() {
+
+                            private CurrencyPair pair;
+
+                            @Override
+                            public void setCurrencyPair(CurrencyPair pair) {
+                                this.pair = pair;
+                            }
+
+                            @Override
+                            public CurrencyPair getCurrencyPair() {
+                                return pair;
+                            }
+                        };
+            } else {
+                params = tradeService.createTradeHistoryParams();
+            }
+
+            if (params instanceof TradeHistoryParamCurrencyPair) {
+                ((TradeHistoryParamCurrencyPair) params)
+                        .setCurrencyPair(subscription.spec().currencyPair());
+            } else {
+                throw new UnsupportedOperationException(
+                        "Don't know how to read user trades on this exchange: "
+                                + subscription.spec().exchange());
+            }
+            if (params instanceof TradeHistoryParamLimit) {
+                ((TradeHistoryParamLimit) params).setLimit(MAX_TRADES);
+            }
+            if (params instanceof TradeHistoryParamPaging) {
+                ((TradeHistoryParamPaging) params).setPageLength(MAX_TRADES);
+                ((TradeHistoryParamPaging) params).setPageNumber(0);
+            }
+            return params;
+        }
+
+        private void pollAndEmitTrades(MarketDataSubscription subscription) throws IOException {
+            marketDataService
+                    .getTrades(subscription.spec().currencyPair())
+                    .getTrades()
+                    .forEach(
+                            t -> mostRecentTrades.compute(
+                                    subscription.spec(),
+                                    (k, previousTiming) -> {
+                                        Instant thisTradeTiming = t.getTimestamp().toInstant();
+                                        Instant newMostRecent = previousTiming;
+                                        if (previousTiming == null) {
+                                            newMostRecent = thisTradeTiming;
+                                        } else if (thisTradeTiming.isAfter(previousTiming)) {
+                                            newMostRecent = thisTradeTiming;
+                                            publisher.emit(TradeEvent.create(subscription.spec(), t));
+                                        }
+                                        return newMostRecent;
+                                    }));
+        }
+
+        private OpenOrdersParams openOrdersParams(MarketDataSubscription subscription) {
+            OpenOrdersParams params = null;
+            try {
+                params = tradeService.createOpenOrdersParams();
+            } catch (NotYetImplementedForExchangeException e) {
+                // Fiiiiine Bitmex
+            }
+            if (params == null) {
+                // Bitfinex & Bitmex
+                params = new DefaultOpenOrdersParamCurrencyPair(subscription.spec().currencyPair());
+            } else if (params instanceof OpenOrdersParamCurrencyPair) {
+                ((OpenOrdersParamCurrencyPair) params)
+                        .setCurrencyPair(subscription.spec().currencyPair());
+            } else {
+                throw new UnsupportedOperationException(
+                        "Don't know how to read open orders on this exchange: "
+                                + subscription.spec().exchange());
+            }
+            return params;
+        }
+
+        private void pollAndEmitOpenOrders(MarketDataSubscription subscription) throws IOException {
+            OpenOrdersParams openOrdersParams = openOrdersParams(subscription);
+
+            Date originatingTimestamp = new Date();
+            OpenOrders fetched = tradeService.getOpenOrders(openOrdersParams);
+
+            publisher.emit(OpenOrdersEvent.create(subscription.spec(), fetched, originatingTimestamp));
+        }
+
+        private void pollAndEmitOrderBook(TickerSpec spec) throws IOException {
+            OrderBook orderBook =
+                    marketDataService.getOrderBook(spec.currencyPair(), exchangeOrderBookArgs(spec));
+            publisher.emit(OrderBookEvent.create(spec, orderBook));
+        }
+
+        private Object[] exchangeOrderBookArgs(TickerSpec spec) {
+            if (spec.exchange().equals(Exchanges.BITMEX)) {
+                return new Object[]{};
+            } else {
+                return new Object[]{ORDERBOOK_DEPTH, ORDERBOOK_DEPTH};
+            }
         }
 
         /**
@@ -644,15 +786,36 @@ public class MarketDataSubscriptionController extends AbstractPollingController 
             log.info("Connected to exchange: {}", exchangeName);
         }
 
-        private Disposable connectSubscription(MarketDataSubscription subscription) {
-            switch (subscription.type()) {
+        private Disposable connectSubscription(MarketDataSubscription sub) {
+            switch (sub.type()) {
+                case OrderBook:
+                    return streamingExchange
+                            .getStreamingMarketDataService()
+                            .getOrderBook(sub.spec().currencyPair())
+                            .map(t -> OrderBookEvent.create(sub.spec(), t))
+                            .subscribe(
+                                    publisher::emit, e -> log.error("Error in order book stream for " + sub, e));
                 case Ticker:
-                    log.debug("Subscribing to {}", subscription.spec());
+                    log.debug("Subscribing to {}", sub.spec());
                     return streamingExchange.getStreamingMarketDataService()
-                            .getTicker(subscription.spec().currencyPair())
-                            .map(t -> TickerEvent.create(subscription.spec(), t))
+                            .getTicker(sub.spec().currencyPair())
+                            .map(t -> TickerEvent.create(sub.spec(), t))
                             .subscribe(publisher::emit,
-                                    e -> log.error("Error in ticker stream for " + subscription, e));
+                                    e -> log.error("Error in ticker stream for " + sub, e));
+                case UserTrade:
+                    return streamingExchange
+                            .getStreamingTradeService()
+                            .getUserTrades(sub.spec().currencyPair())
+                            .map(t -> UserTradeEvent.create(sub.spec(), t))
+                            .subscribe(publisher::emit, e -> log.error("Error in trade stream for " + sub, e));
+                case Order:
+                    return streamingExchange
+                            .getStreamingTradeService()
+                            .getOrderChanges(sub.spec().currencyPair())
+                            .map(t ->
+                                    OrderChangeEvent.create(
+                                            sub.spec(), t, new Date()))
+                            .subscribe(publisher::emit, e -> log.error("Error in order stream for " + sub, e));
                 default:
                     throw new NotAvailableFromExchangeException();
             }

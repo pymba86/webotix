@@ -17,36 +17,12 @@ $amount-prefix: 'ui-amount';
     padding-right: 4px;
   }
 
-  &-up {
-    background-color: #2aa599;
-
-    &.#{$amount-prefix}-sell,
-    &.#{$amount-prefix}-buy {
-      color: #000;
-    }
-  }
-
-  &-down {
-    background-color: #ef5451;
-
-    &.#{$amount-prefix}-sell,
-    &.#{$amount-prefix}-buy {
-      color: #000;
-    }
-  }
-
-  &-noflash {
-    padding-left: 4px;
-    padding-right: 4px;
-  }
-
   &-bare {
     margin: 0;
     font-size: 12px;
     cursor: copy;
     color: #aaa;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0 4px;
 
     &:hover {
       color: #3BB3E4;
@@ -60,6 +36,17 @@ $amount-prefix: 'ui-amount';
   &-sell {
     color: #ef5451;
   }
+
+  &-up {
+    background-color: #2aa599;
+    color: #000;
+  }
+
+  &-down {
+    background-color: #ef5451;
+    color: #000;
+  }
+
 
   &-heading {
     color: $white;

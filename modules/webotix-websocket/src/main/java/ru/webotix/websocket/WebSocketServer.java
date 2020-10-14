@@ -15,9 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.webotix.exchange.api.ExchangeEventRegistry;
 import ru.webotix.job.status.api.JobStatus;
-import ru.webotix.market.data.api.MarketDataSubscription;
-import ru.webotix.market.data.api.MarketDataType;
-import ru.webotix.market.data.api.TickerSpec;
+import ru.webotix.market.data.api.*;
 import ru.webotix.notification.api.Notification;
 import ru.webotix.utils.SafelyClose;
 import ru.webotix.utils.SafelyDispose;
@@ -25,15 +23,22 @@ import ru.webotix.utils.SafelyDispose;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Metered
 @Timed
 @ExceptionMetered
 @ServerEndpoint(WebSocketModule.ENTRY_POINT)
 public final class WebSocketServer {
+
+    private static final int READY_TIMEOUT = 5000;
 
     private static final Logger log = LoggerFactory.getLogger(WebSocketServer.class);
 
@@ -81,8 +86,36 @@ public final class WebSocketServer {
                 case READY:
                     markReady();
                     break;
+                case CHANGE_TICKERS:
+                    mutateSubscriptions(MarketDataType.Ticker,
+                            Objects.requireNonNull(request.tickers()));
+                    break;
+                case CHANGE_OPEN_ORDERS:
+                    mutateSubscriptions(MarketDataType.OpenOrders,
+                            Objects.requireNonNull(request.tickers()));
+                    break;
+                case CHANGE_ORDER_BOOK:
+                    mutateSubscriptions(MarketDataType.OrderBook,
+                            Objects.requireNonNull(request.tickers()));
+                    break;
+                case CHANGE_TRADES:
+                    mutateSubscriptions(MarketDataType.Trades,
+                            Objects.requireNonNull(request.tickers()));
+                    break;
+                case CHANGE_USER_TRADES:
+                    mutateSubscriptions(MarketDataType.UserTrade,
+                            Objects.requireNonNull(request.tickers()));
+                    break;
                 case CHANGE_BALANCE:
-                    mutateSubscriptions(MarketDataType.Balance, request.tickers());
+                    mutateSubscriptions(MarketDataType.Balance,
+                            Objects.requireNonNull(request.tickers()));
+                    break;
+                case CHANGE_ORDER_STATUS_CHANGE:
+                    mutateSubscriptions(MarketDataType.Order,
+                            Objects.requireNonNull(request.tickers()));
+                    break;
+                case UPDATE_SUBSCRIPTIONS:
+                    updateSubscriptions();
                     break;
                 default:
                     throw new IllegalArgumentException("Invalid command: " + request.command());
@@ -90,7 +123,104 @@ public final class WebSocketServer {
 
         } catch (Exception e) {
             log.error("Error processing message: " + message, e);
+            send("Error processing message", WebSocketNatureMessage.ERROR);
         }
+    }
+
+    private boolean isReady() {
+        boolean result = (System.currentTimeMillis() - lastReadyTime.get()) < READY_TIMEOUT;
+        if (!result) log.debug("Suppressing outgoing message as client is not ready");
+        return result;
+    }
+
+    private synchronized void updateSubscriptions() {
+        Set<MarketDataSubscription> target = marketDataSubscriptions.get();
+
+        log.debug("Updating subscriptions to {}", target);
+
+        SafelyDispose.of(disposable);
+
+        if (subscription == null) {
+            subscription = exchangeEventRegistry.subscribe(target);
+        } else {
+            subscription = subscription.replace(target);
+        }
+
+        disposable = new Disposable() {
+
+            private final List<Disposable> tickers =
+                    StreamSupport.stream(subscription.getTickersSplit().spliterator(), false)
+                            .map(f -> f.filter(e -> isReady())
+                                    .throttleLast(1, TimeUnit.SECONDS)
+                                    .subscribe(e -> send(e, WebSocketNatureMessage.TICKER)))
+                            .collect(Collectors.toList());
+
+            private final Disposable orderBook =
+                    subscription
+                            .getOrderBooks()
+                            .filter(o -> isReady())
+                            .throttleLast(1, TimeUnit.SECONDS)
+                            .subscribe(e -> send(e, WebSocketNatureMessage.ORDERBOOK));
+
+            private final Disposable trades =
+                    subscription
+                            .getTrades()
+                            .filter(o -> isReady())
+                            .map(WebSocketServer.this::serialiseTradeEvent)
+                            .subscribe(e -> send(e, WebSocketNatureMessage.TRADE));
+
+            private final Disposable orders =
+                    subscription
+                            .getOrderChanges()
+                            .filter(o -> isReady())
+                            .subscribe(e -> send(e, WebSocketNatureMessage.ORDER_STATUS_CHANGE));
+
+            private final Disposable userTrades =
+                    subscription
+                            .getUserTrades()
+                            .filter(o -> isReady())
+                            .map(WebSocketServer.this::serialiseUserTradeEvent)
+                            .subscribe(e -> send(e, WebSocketNatureMessage.USER_TRADE));
+
+            private final Disposable balance =
+                    subscription
+                            .getBalances()
+                            .filter(o -> isReady())
+                            .subscribe(e -> send(e, WebSocketNatureMessage.BALANCE));
+
+            private final Disposable openOrders =
+                    subscription
+                            .getOrderSnapshots()
+                            .filter(o -> isReady())
+                            .subscribe(e -> send(e, WebSocketNatureMessage.OPEN_ORDERS));
+
+            @Override
+            public void dispose() {
+                SafelyDispose.of(openOrders, orderBook, trades, orders, userTrades, balance);
+                SafelyDispose.of(tickers);
+            }
+
+            @Override
+            public boolean isDisposed() {
+                return openOrders.isDisposed()
+                        && orderBook.isDisposed()
+                        && tickers.stream().allMatch(Disposable::isDisposed)
+                        && trades.isDisposed()
+                        && orders.isDisposed()
+                        && userTrades.isDisposed()
+                        && balance.isDisposed();
+            }
+        };
+    }
+
+    private Object serialiseTradeEvent(TradeEvent e) {
+        return SerializableTradeEvent.create(
+                e.spec(), SerializableTrade.create(e.spec().exchange(), e.trade()));
+    }
+
+    private Object serialiseUserTradeEvent(UserTradeEvent e) {
+        return SerializableTradeEvent.create(
+                e.spec(), SerializableTrade.create(e.spec().exchange(), e.trade()));
     }
 
     private WebSocketInMessage decodeRequest(String message) {

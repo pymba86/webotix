@@ -31,7 +31,7 @@ export const CoinsContainer: React.FC = () => {
     const data: FullCoinData[] = useMemo(
         () => coins.map(coin => {
             const ticker = tickers.get(coin.key);
-
+            console.log(ticker);
             return {
                 ...coin,
                 exchangeMeta: exchanges.find(e => e.code === coin.exchange),
@@ -41,7 +41,7 @@ export const CoinsContainer: React.FC = () => {
             }
         }),
         [coins, exchanges, tickers]
-    )
+    );
 
     return (
         <RenderIf condition={visible}>
@@ -59,4 +59,4 @@ export const CoinsContainer: React.FC = () => {
             </Section>
         </RenderIf>
     )
-}
+};

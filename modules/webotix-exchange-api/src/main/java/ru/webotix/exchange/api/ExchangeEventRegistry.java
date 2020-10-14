@@ -2,9 +2,7 @@ package ru.webotix.exchange.api;
 
 import com.google.common.collect.ImmutableSet;
 import io.reactivex.Flowable;
-import ru.webotix.market.data.api.BalanceEvent;
-import ru.webotix.market.data.api.MarketDataSubscription;
-import ru.webotix.market.data.api.TickerEvent;
+import ru.webotix.market.data.api.*;
 
 import java.util.Set;
 
@@ -49,6 +47,18 @@ public interface ExchangeEventRegistry {
          * @return Подписка на события относящиеся к балансу
          */
         Flowable<BalanceEvent> getBalances();
+
+        Iterable<Flowable<TickerEvent>> getTickersSplit();
+
+        Flowable<OrderBookEvent> getOrderBooks();
+
+        Flowable<TradeEvent> getTrades();
+
+        Flowable<OpenOrdersEvent> getOrderSnapshots();
+
+        Flowable<OrderChangeEvent> getOrderChanges();
+
+        Flowable<UserTradeEvent> getUserTrades();
 
         public ExchangeEventSubscription replace(Set<MarketDataSubscription> targetSubscriptions);
 

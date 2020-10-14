@@ -3,7 +3,7 @@ import {LogRequest} from "../log/LogContext";
 import {Coin, ServerCoin} from "../market";
 import {Balance, Order, OrderBook, Ticker, Trade, UserTrade} from "./types";
 import * as messages from "./messages"
-import {augmentCoin, coin, coin as createCoin} from "../market/utils";
+import {augmentCoin, coin as createCoin} from "../market/utils";
 
 type MessageHandler = (message: string) => void;
 type NotificationHandler = (entry: LogRequest) => void;

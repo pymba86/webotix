@@ -97,8 +97,10 @@ export const Socket: React.FC = ({children}) => {
 
             const sameCoin = (left?: Coin, right?: Coin) => left && right && left.key === right.key;
 
-            socketClient.onTicker(((coin, ticker) => addToBatch(BatchScope.GLBOAL,
-                () => setTickers(tickers => tickers.set(coin.key, ticker)))));
+            socketClient.onTicker(((coin, ticker) => {
+                addToBatch(BatchScope.GLBOAL,
+                    () => setTickers(tickers => tickers.set(coin.key, ticker)))
+            }));
 
             socketClient.onBalance(((exchange, currency, balance) => {
 
@@ -248,7 +250,8 @@ export const Socket: React.FC = ({children}) => {
             createPlaceholder: openOrdersUpdateApi.createPlaceholder,
             createOrder: openOrdersUpdateApi.orderUpdated
         }),
-        [connected, openOrders, tickers, userTrades, selectedCoinTicker, balances]
+        [connected, openOrders, tickers, userTrades, trades,
+            selectedCoinTicker, balances, openOrdersUpdateApi, orderBook]
     );
 
 

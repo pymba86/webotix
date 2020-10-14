@@ -84,7 +84,7 @@ export const FrameworkContainer: React.FC = () => {
             },
             setLastFocusedFieldPopulate: (fn: LastFocusedFieldPopulate) => setLastFocusedFieldPopulate([fn])
         }),
-        [alertsCoin, paperTrading]
+        [alertsCoin, paperTrading, lastFocusedFieldPopulate]
     );
 
     const layoutsAsObject = uiConfig.layouts;

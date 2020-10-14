@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from 'classnames';
 import {Icon} from "../../elements/icon";
+import {Link} from "react-router-dom";
 
 export interface ToolbarLogoProps {
     prefixCls?: string;
@@ -19,10 +20,10 @@ export const ToolbarLogo: React.FC<ToolbarLogoProps> = (
 
     return (
         <div className={classNames(`${prefixCls}-container`, className)}>
-            <a className={classNames(`${prefixCls}-icon`)}
+            <Link to={"/"} className={classNames(`${prefixCls}-icon`)}
                onClick={onClick}>
                 <Icon type={icon}/>
-            </a>
+            </Link>
         </div>
     )
 };

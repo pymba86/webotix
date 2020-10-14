@@ -9,19 +9,19 @@ import {coinFromTicker, tickerFromCoin} from "../market/utils";
 import {LogContext} from "../log/LogContext";
 
 function compareCoins(a: ServerCoin, b: ServerCoin) {
-    if (a.exchange < b.exchange) return -1
-    if (a.exchange > b.exchange) return 1
-    if (a.base < b.base) return -1
-    if (a.base > b.base) return 1
-    if (a.counter < b.counter) return -1
-    if (a.counter > b.counter) return 1
+    if (a.exchange < b.exchange) return -1;
+    if (a.exchange > b.exchange) return 1;
+    if (a.base < b.base) return -1;
+    if (a.base > b.base) return 1;
+    if (a.counter < b.counter) return -1;
+    if (a.counter > b.counter) return 1;
     return 0
 }
 
 function insertCoin(arr: Coin[], coin: Coin): Coin[] {
     for (let i = 0, len = arr.length; i < len; i++) {
         if (compareCoins(coin, arr[i]) < 0) {
-            arr.splice(i, 0, coin)
+            arr.splice(i, 0, coin);
             return arr
         }
     }
@@ -47,7 +47,7 @@ export const Server: React.FC = ({children}) => {
                 .then(() => trace("Fetched metadata for " + coin.shortName))
                 .catch((error: Error) => errorPopup("Could not fetch coin metadata: " + error.message));
         }, [setCoinMetadata, errorPopup, trace]
-    )
+    );
 
     const fetchJobs = useMemo(
         () => () => {
@@ -65,7 +65,7 @@ export const Server: React.FC = ({children}) => {
                 .then(() => fetchMetadata(coin))
                 .catch((error: Error) => errorPopup("Could not add subscription: " + error.message));
         }, [setSubscriptions, errorPopup, fetchMetadata]
-    )
+    );
 
     const removeSubscription = useMemo(
         () => (coin: Coin) => {
@@ -73,7 +73,7 @@ export const Server: React.FC = ({children}) => {
                 .then(() => setSubscriptions(current => current.filter(c => c.key !== coin.key)))
                 .catch((error: Error) => errorPopup("Could not remove subscription: " + error.message));
         }, [setSubscriptions, errorPopup]
-    )
+    );
 
     useInterval(
         () => {
@@ -92,7 +92,7 @@ export const Server: React.FC = ({children}) => {
                 coins.forEach(coin => fetchMetadata(coin));
             })
             .catch((error: Error) => errorPopup("Could not fetch coin list: " + error.message));
-    }, [setSubscriptions, fetchMetadata, errorPopup, trace])
+    }, [setSubscriptions, fetchMetadata, errorPopup, trace]);
 
     const api: ServerApi = useMemo(
         () => ({
@@ -103,7 +103,7 @@ export const Server: React.FC = ({children}) => {
             removeSubscription,
             addSubscription
         }),
-        [jobs, subscriptions, addSubscription]
+        [jobs, subscriptions, addSubscription, coinMetadata, removeSubscription]
     );
 
     return (

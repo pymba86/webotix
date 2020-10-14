@@ -89,7 +89,7 @@ export const Amount: React.FC<AmountProps> = ({
             if (timeout.current)
                 clearTimeout(timeout.current);
         }
-    }, [initialValue, noflash, value]);
+    }, [noflash, value]);
 
     const handleClick = useCallback(() => {
         if (onClick && value) {

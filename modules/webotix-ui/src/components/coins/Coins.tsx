@@ -30,11 +30,11 @@ export interface CoinsProps {
 
 const textStyle = {
     textAlign: "left"
-}
+};
 
 const numberStyle = {
     textAlign: "right"
-}
+};
 
 const exchangeColumn = {
     id: "exchange",
@@ -49,7 +49,7 @@ const exchangeColumn = {
     style: textStyle,
     resizable: true,
     minWidth: 40
-}
+};
 
 const nameColumn = {
     id: "name",
@@ -64,7 +64,7 @@ const nameColumn = {
     style: textStyle,
     resizable: true,
     minWidth: 50
-}
+};
 
 const priceColumn = {
     id: "price",
@@ -78,7 +78,7 @@ const priceColumn = {
     resizable: true,
     minWidth: 56,
     sortable: false
-}
+};
 
 const changeColumn = {
     id: "change",
@@ -95,7 +95,7 @@ const changeColumn = {
     style: numberStyle,
     resizable: true,
     minWidth: 40
-}
+};
 
 const closeColumn = (onRemove: CoinCallback) => ({
     id: "close",
@@ -110,7 +110,7 @@ const closeColumn = (onRemove: CoinCallback) => ({
     width: 32,
     sortable: false,
     resizable: false
-})
+});
 
 const alertColumn = (onClickAlerts: CoinCallback) => ({
     id: "alert",
@@ -125,7 +125,7 @@ const alertColumn = (onClickAlerts: CoinCallback) => ({
     width: 32,
     sortable: false,
     resizable: false
-})
+});
 
 export const Coins: React.FC<CoinsProps> = ({
                                                 data,
@@ -149,4 +149,4 @@ export const Coins: React.FC<CoinsProps> = ({
         noDataText="Add a coin by clicking +, above"
         defaultPageSize={1000}
     />
-)
+);

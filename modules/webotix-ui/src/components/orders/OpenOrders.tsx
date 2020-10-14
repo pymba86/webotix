@@ -18,11 +18,11 @@ export interface OpenOrdersProps {
 
 const textStyle = {
     textAlign: "left"
-}
+};
 
 const numberStyle = {
     textAlign: "right"
-}
+};
 
 const orderTypeColumn = {
     id: "orderType",
@@ -36,7 +36,7 @@ const orderTypeColumn = {
     style: textStyle,
     resizable: true,
     width: 32
-}
+};
 
 const runningAtColumn = {
     id: "runningAt",
@@ -51,7 +51,7 @@ const runningAtColumn = {
     style: textStyle,
     resizable: true,
     width: 32
-}
+};
 
 const createdDateColumn = {
     id: "createdDate",
@@ -67,7 +67,7 @@ const createdDateColumn = {
     style: textStyle,
     resizable: true,
     minWidth: 80
-}
+};
 
 const limitPriceColumn = (coin: Coin) => ({
     Header: "Limit",
@@ -83,7 +83,7 @@ const limitPriceColumn = (coin: Coin) => ({
     sortable: false,
     resizable: true,
     minWidth: 50
-})
+});
 
 const stopPriceColumn = (coin: Coin) => ({
     id: "stopPrice",
@@ -97,7 +97,7 @@ const stopPriceColumn = (coin: Coin) => ({
     sortable: false,
     resizable: true,
     minWidth: 50
-})
+});
 
 const amountColumn = (coin: Coin) => ({
     Header: "Amount",
@@ -110,7 +110,7 @@ const amountColumn = (coin: Coin) => ({
     sortable: false,
     resizable: true,
     minWidth: 50
-})
+});
 
 const filledColumn = (coin: Coin) => ({
     Header: "Filled",
@@ -123,7 +123,7 @@ const filledColumn = (coin: Coin) => ({
     sortable: false,
     resizable: true,
     minWidth: 50
-})
+});
 
 const cancelColumn = (onCancelExchange: CancelOrderHandler, onCancelServer: CancelOrderHandler) => ({
     id: "close",
@@ -146,7 +146,7 @@ const cancelColumn = (onCancelExchange: CancelOrderHandler, onCancelServer: Canc
     width: 32,
     sortable: false,
     resizable: false
-})
+});
 
 export const OpenOrders: React.FC<OpenOrdersProps> = ({
                                                           orders, coin,
@@ -175,4 +175,4 @@ export const OpenOrders: React.FC<OpenOrdersProps> = ({
         noDataText="No open orders"
         defaultPageSize={1000}
     />
-)
+);

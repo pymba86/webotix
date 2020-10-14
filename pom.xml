@@ -40,7 +40,7 @@
         <asm.version>7.1</asm.version>
         <xchange.version>5.0.1</xchange.version>
         <reactivex.version>2.2.12</reactivex.version>
-        <xchange.stream.version>4.4.0</xchange.stream.version>
+        <xchange.stream.version>4.4.2</xchange.stream.version>
         <dropwizard.websockets.version>1.3.14</dropwizard.websockets.version>
         <morf.version>0.1.3</morf.version>
         <mysql.version>8.0.17</mysql.version>
@@ -163,6 +163,12 @@
         <dependency>
             <groupId>info.bitrich.xchange-stream</groupId>
             <artifactId>xchange-stream-core</artifactId>
+            <version>${xchange.stream.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>info.bitrich.xchange-stream</groupId>
+            <artifactId>xchange-stream-binance</artifactId>
             <version>${xchange.stream.version}</version>
         </dependency>
 
