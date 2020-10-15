@@ -18,13 +18,11 @@ interface ToolbarContainerProps {
     width: number;
     mobile: boolean;
     hiddenPanels: Panel[];
-    coin?: Coin;
 }
 
 export const ToolbarContainer: React.FC<ToolbarContainerProps> = (
     {
         mobile,
-        coin,
         hiddenPanels,
         width,
         onTogglePanelVisible,
@@ -40,9 +38,12 @@ export const ToolbarContainer: React.FC<ToolbarContainerProps> = (
     const allMetadata = serverApi.coinMetadata;
     const ticker = socketApi.selectedCoinTicker;
 
+    const coin = socketApi.selectedCoin;
+
     const coinMetadata = useMemo(() => {
         return coin ? allMetadata.get(coin.key) : null;
     }, [coin, allMetadata]);
+
 
     if (!socketApi.connected) {
         document.title = "Not connected";

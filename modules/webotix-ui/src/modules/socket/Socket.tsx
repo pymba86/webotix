@@ -241,6 +241,7 @@ export const Socket: React.FC = ({children}) => {
             tickers,
             balances,
             userTrades,
+            selectedCoin,
             openOrders,
             selectedCoinTicker,
             orderBook,
@@ -250,7 +251,7 @@ export const Socket: React.FC = ({children}) => {
             createPlaceholder: openOrdersUpdateApi.createPlaceholder,
             createOrder: openOrdersUpdateApi.orderUpdated
         }),
-        [connected, openOrders, tickers, userTrades, trades,
+        [connected, openOrders, tickers, userTrades, trades, selectedCoin,
             selectedCoinTicker, balances, openOrdersUpdateApi, orderBook]
     );
 

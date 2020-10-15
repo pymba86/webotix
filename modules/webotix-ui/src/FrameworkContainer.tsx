@@ -10,7 +10,7 @@ import {Coin} from "./modules/market";
 const windowToBreakpoint = (width: number): Breakpoint =>
     width < breakpoints.lg ? (width < breakpoints.md ? "sm" : "md") : "lg";
 
-type LastFocusedFieldPopulate = (value: number) => void;
+export type LastFocusedFieldPopulate = (value: number) => void;
 
 export interface FrameworkApi {
 
@@ -47,7 +47,7 @@ export interface FrameworkApiProps {
     frameworkApi: FrameworkApi;
 }
 
-function withFramework<T extends FrameworkApiProps>(Component: React.ComponentType<T>) {
+export function withFramework<T extends FrameworkApiProps>(Component: React.ComponentType<T>) {
     return (props: T) => (
         <FrameworkContext.Consumer>
             {frameworkApi => <Component {...props} frameworkApi={frameworkApi}/>}

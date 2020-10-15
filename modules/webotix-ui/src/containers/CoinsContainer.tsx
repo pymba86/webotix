@@ -31,7 +31,6 @@ export const CoinsContainer: React.FC = () => {
     const data: FullCoinData[] = useMemo(
         () => coins.map(coin => {
             const ticker = tickers.get(coin.key);
-            console.log(ticker);
             return {
                 ...coin,
                 exchangeMeta: exchanges.find(e => e.code === coin.exchange),

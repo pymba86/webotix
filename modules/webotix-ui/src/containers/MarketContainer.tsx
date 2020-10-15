@@ -3,6 +3,8 @@ import {useVisibility} from "../components/visibility/Visibility";
 import {RenderIf} from "../components/render/RenderIf";
 import {Section, SectionTab} from "../elements/section";
 import {getValueFromLS, saveToLS} from "../modules/common/localStorage";
+import {MarketTradesContainer} from "./MarketTradesContainer";
+import {OrderBookContainer} from "./OrderBookContainer";
 
 enum Mode {
     BOOK = "book",
@@ -22,6 +24,7 @@ export const MarketContainer: React.FC = () => {
         <RenderIf condition={visible}>
             <Section id={"marketData"}
                      heading={"Market"}
+                     nopadding={true}
                      buttons={() => (
                          <React.Fragment>
                              <SectionTab
@@ -43,7 +46,11 @@ export const MarketContainer: React.FC = () => {
                              </SectionTab>
                          </React.Fragment>
                      )}>
-                market
+                {mode === Mode.BOOK ? (
+                    <OrderBookContainer animate={animate}/>
+                ) : (
+                    <MarketTradesContainer/>
+                )}
             </Section>
         </RenderIf>
     )

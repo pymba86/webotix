@@ -1,6 +1,7 @@
 import React from "react";
 import {Balance, Order, OrderBook, Ticker, Trade, UserTrade} from "./types";
 import {Map} from "immutable"
+import {Coin} from "../market";
 
 export interface SocketApi {
 
@@ -10,6 +11,7 @@ export interface SocketApi {
     balances: Map<String, Balance>;
     openOrders: Array<Order>;
     selectedCoinTicker?: Ticker;
+    selectedCoin?: Coin;
     trades: Array<Trade>;
     orderBook?: OrderBook;
 

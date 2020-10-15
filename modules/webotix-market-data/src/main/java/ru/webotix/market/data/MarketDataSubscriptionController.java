@@ -9,11 +9,10 @@ import io.reactivex.disposables.Disposable;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.currency.CurrencyPair;
-import org.knowm.xchange.dto.Order;
 import org.knowm.xchange.dto.account.Balance;
 import org.knowm.xchange.dto.account.Wallet;
 import org.knowm.xchange.dto.marketdata.OrderBook;
-import org.knowm.xchange.dto.trade.LimitOrder;
+import org.knowm.xchange.dto.marketdata.Trade;
 import org.knowm.xchange.dto.trade.OpenOrders;
 import org.knowm.xchange.exceptions.*;
 import org.knowm.xchange.service.account.AccountService;
@@ -56,6 +55,8 @@ import java.util.stream.StreamSupport;
 import static java.time.LocalDateTime.now;
 import static java.time.temporal.ChronoUnit.MINUTES;
 import static jersey.repackaged.com.google.common.base.MoreObjects.firstNonNull;
+import static org.knowm.xchange.dto.Order.OrderType.ASK;
+import static org.knowm.xchange.dto.Order.OrderType.BID;
 
 @Singleton
 public class MarketDataSubscriptionController extends AbstractPollingController {
@@ -797,11 +798,19 @@ public class MarketDataSubscriptionController extends AbstractPollingController 
                                     publisher::emit, e -> log.error("Error in order book stream for " + sub, e));
                 case Ticker:
                     log.debug("Subscribing to {}", sub.spec());
-                    return streamingExchange.getStreamingMarketDataService()
+                    return streamingExchange
+                            .getStreamingMarketDataService()
                             .getTicker(sub.spec().currencyPair())
                             .map(t -> TickerEvent.create(sub.spec(), t))
                             .subscribe(publisher::emit,
                                     e -> log.error("Error in ticker stream for " + sub, e));
+                case Trades:
+                    return streamingExchange
+                            .getStreamingMarketDataService()
+                            .getTrades(sub.spec().currencyPair())
+                            .map(t -> convertBinanceOrderType(sub, t))
+                            .map(t -> TradeEvent.create(sub.spec(), t))
+                            .subscribe(publisher::emit, e -> log.error("Error in trade stream for " + sub, e));
                 case UserTrade:
                     return streamingExchange
                             .getStreamingTradeService()
@@ -839,6 +848,12 @@ public class MarketDataSubscriptionController extends AbstractPollingController 
             }
         }
 
-
+        private Trade convertBinanceOrderType(MarketDataSubscription sub, Trade t) {
+            if (sub.spec().exchange().equals(Exchanges.BINANCE)) {
+                return Trade.Builder.from(t).type(t.getType() == BID ? ASK : BID).build();
+            } else {
+                return t;
+            }
+        }
     }
 }

@@ -3,16 +3,17 @@ import {MarketApi, MarketContext} from "./MarketContext";
 import {Coin, Exchange} from "./types";
 import {LogContext} from "../log/LogContext";
 import exchangeService from "./exchangeService";
+import {SocketContext} from "../socket/SocketContext";
 
-export interface MarketProps {
-    coin?: Coin | null;
-}
 
-export const Market: React.FC<MarketProps> = ({coin, children}) => {
+export const Market: React.FC = ({ children}) => {
 
     const logApi = useContext(LogContext);
+    const socketApi = useContext(SocketContext);
 
     const [exchanges, setExchanges] = useState<Array<Exchange>>([]);
+
+    const coin = socketApi.selectedCoin;
 
     const selectedExchange = useMemo(() => {
         return !coin ? undefined : exchanges.find(e => e.code === coin.exchange)

@@ -32,53 +32,53 @@ export const ToolbarTicker: React.FC<ToolbarTickerProps> = (
         return (
             <div className={boxClasses}>
 
-                <Amount scale={1}
-                        coin={coin}
-                        heading={true}
-                        name={"Bid"}
-                        icon={"chevron-up"}
-                        onClick={onClickNumber}
-                        value={ticker ? ticker.bid : undefined}
+                <Amount
+                    coin={coin}
+                    heading={true}
+                    name={"Bid"}
+                    icon={"chevron-up"}
+                    onClick={onClickNumber}
+                    value={ticker ? ticker.bid : undefined}
                 />
 
-                <Amount scale={1}
-                        coin={coin}
-                        heading={true}
-                        name={"Last"}
-                        icon={"activity"}
-                        onClick={onClickNumber}
-                        value={ticker ? ticker.last : undefined}
+                <Amount
+                    coin={coin}
+                    heading={true}
+                    name={"Last"}
+                    icon={"activity"}
+                    onClick={onClickNumber}
+                    value={ticker ? ticker.last : undefined}
                 />
 
-                <Amount scale={1}
-                        coin={coin}
-                        heading={true}
-                        name={"Ask"}
-                        icon={"chevron-down"}
-                        onClick={onClickNumber}
-                        value={ticker ? ticker.ask : undefined}
+                <Amount
+                    coin={coin}
+                    heading={true}
+                    name={"Ask"}
+                    icon={"chevron-down"}
+                    onClick={onClickNumber}
+                    value={ticker ? ticker.ask : undefined}
                 />
-                <Amount scale={1}
-                        coin={coin}
-                        heading={true}
-                        name={"Open"}
-                        onClick={onClickNumber}
-                        value={ticker ? ticker.open : undefined}
+                <Amount
+                    coin={coin}
+                    heading={true}
+                    name={"Open"}
+                    onClick={onClickNumber}
+                    value={ticker ? ticker.open : undefined}
                 />
-                <Amount scale={1}
-                        coin={coin}
-                        heading={true}
-                        name={"24h Low"}
-                        onClick={onClickNumber}
-                        value={ticker ? ticker.low : undefined}
+                <Amount
+                    coin={coin}
+                    heading={true}
+                    name={"24h Low"}
+                    onClick={onClickNumber}
+                    value={ticker ? ticker.low : undefined}
                 />
 
-                <Amount scale={1}
-                        coin={coin}
-                        heading={true}
-                        name={"24h High"}
-                        onClick={onClickNumber}
-                        value={ticker ? ticker.high : undefined}
+                <Amount
+                    coin={coin}
+                    heading={true}
+                    name={"24h High"}
+                    onClick={onClickNumber}
+                    value={ticker ? ticker.high : undefined}
                 />
 
             </div>

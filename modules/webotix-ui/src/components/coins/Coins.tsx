@@ -70,7 +70,7 @@ const priceColumn = {
     id: "price",
     Header: "Price",
     Cell: ({original}: { original: FullCoinData }) => (
-        <Amount coin={original} scale={1}
+        <Amount coin={original}
                 value={original.ticker ? original.ticker.last : undefined}/>
     ),
     headerStyle: numberStyle,
@@ -102,7 +102,7 @@ const closeColumn = (onRemove: CoinCallback) => ({
     Header: null,
     Cell: ({original}: { original: FullCoinData }) => (
         <TableLink title="Remove coin" onClick={() => onRemove(original)}>
-            <Icon type="close"/>
+            <Icon type="x"/>
         </TableLink>
     ),
     headerStyle: textStyle,

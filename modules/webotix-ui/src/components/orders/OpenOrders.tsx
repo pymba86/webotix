@@ -75,7 +75,7 @@ const limitPriceColumn = (coin: Coin) => ({
         !!original.stopPrice && !original.limitPrice ? (
             "MARKET"
         ) : (
-            <Amount scale={1} color={original.type === "BID" ? "buy" : "sell"}
+            <Amount color={original.type === "BID" ? "buy" : "sell"}
                     noflash coin={coin} value={original.limitPrice}/>
         ),
     headerStyle: numberStyle,
@@ -89,7 +89,7 @@ const stopPriceColumn = (coin: Coin) => ({
     id: "stopPrice",
     Header: "Trigger",
     Cell: ({original}: { original: DisplayOrder }) => (
-        <Amount scale={1} color={original.type === "BID" ? "buy" : "sell"} noflash coin={coin}
+        <Amount color={original.type === "BID" ? "buy" : "sell"} noflash coin={coin}
                 value={original.stopPrice}/>
     ),
     headerStyle: numberStyle,
@@ -102,7 +102,7 @@ const stopPriceColumn = (coin: Coin) => ({
 const amountColumn = (coin: Coin) => ({
     Header: "Amount",
     Cell: ({original}: { original: DisplayOrder }) => (
-        <Amount scale={1} color={original.type === "BID" ? "buy" : "sell"} noflash coin={coin}
+        <Amount  color={original.type === "BID" ? "buy" : "sell"} noflash coin={coin}
                 value={original.originalAmount}/>
     ),
     headerStyle: numberStyle,
@@ -115,7 +115,7 @@ const amountColumn = (coin: Coin) => ({
 const filledColumn = (coin: Coin) => ({
     Header: "Filled",
     Cell: ({original}: { original: DisplayOrder }) => (
-        <Amount scale={1} color={original.type === "BID" ? "buy" : "sell"} noflash coin={coin}
+        <Amount  color={original.type === "BID" ? "buy" : "sell"} noflash coin={coin}
                 value={original.cumulativeAmount}/>
     ),
     headerStyle: numberStyle,

@@ -4,12 +4,13 @@ import classNames from 'classnames';
 import {Amount} from "../../elements/amount";
 import {Map} from "immutable";
 import {Balance, Ticker} from "../../modules/socket";
+import {CoinMetadata} from "../../modules/server";
 
 export interface BalanceInfoProps {
     prefixCls?: string;
     className?: string;
     coin?: Coin;
-    balances?: Map<String, Balance>;
+    balances: Map<String, Balance>;
     ticker?: Ticker;
 }
 
@@ -26,19 +27,45 @@ export const BalanceInfo: React.FC<BalanceInfoProps> = (
         coin
     }) => {
 
-    const classes = classNames(prefixCls,
-        `${prefixCls}-container`, className);
-
     if (coin) {
 
+        const noBalances = !balances || !coin;
+
+        const counterScale = (meta: CoinMetadata) =>
+            (meta.minimumAmount ? scaleOfValue(meta.minimumAmount) : 8);
+
+        const baseBalance = noBalances ? null : balances.get(coin.base);
+        const baseCounter = noBalances ? null : balances.get(coin.counter);
+
         return (
-            <div className={classes}>
-                <Amount heading={true} scale={0} name={"Balance value"} coin={coin} value={1000}/>
-                <Amount heading={true} scale={0} name={"Can sell"} coin={coin} value={200}/>
-                <Amount heading={true} scale={0} name={"Sale value"} coin={coin} value={55}/>
-                <Amount heading={true} scale={0} name={"USD balance"} coin={coin} value={213}/>
-                <Amount heading={true} scale={0} name={"USD available"} coin={coin} value={65}/>
-                <Amount heading={true} scale={0} name={"Can buy"} coin={coin} value={656}/>
+            <div className={classNames(prefixCls, className)}>
+
+                <Amount heading={true}
+                        name={"Balance value"} coin={coin}
+                        value={baseBalance ? baseBalance.total : undefined}/>
+
+                <Amount heading={true}
+                        name={"Can sell"} coin={coin}
+                        value={baseBalance ? baseBalance.available : undefined}/>
+
+                <Amount heading={true}
+                        name={"Sale value"} coin={coin}
+                        value={baseBalance && ticker ?
+                            +Number(baseBalance.total * ticker.bid).toFixed(8)
+                            : undefined}/>
+
+                <Amount heading={true}
+                        name={coin.counter + " balance"} coin={coin}
+                        value={baseCounter ? baseCounter.total : undefined}/>
+
+                <Amount heading={true}
+                        name={coin.counter + " available"} coin={coin}
+                        value={baseCounter ? baseCounter.available : undefined}/>
+
+                <Amount heading={true}
+                        deriveScale={counterScale}
+                        name={"Can buy"} coin={coin}
+                        value={baseCounter && ticker ? baseCounter.available / ticker.ask : undefined}/>
             </div>
         )
     } else {
