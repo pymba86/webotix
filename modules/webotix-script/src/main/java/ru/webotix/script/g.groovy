@@ -1,0 +1,1 @@
+import io.reactivex.disposables.Disposable; int count = 0; Disposable interval;  def start() { interval = events.setInterval({ -> notifications.info('12'); if (count++ >= 5) { control.done(); }}, 1000); return RUNNING }; def stop() { events.clearInterval(interval) };

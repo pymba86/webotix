@@ -12,6 +12,7 @@ import ru.webotix.job.status.JobStatusModule;
 import ru.webotix.market.data.MarketDataModule;
 import ru.webotix.notification.NotificationModule;
 import ru.webotix.processors.ProcessorModule;
+import ru.webotix.script.ScriptJobModule;
 import ru.webotix.subscription.SubscriptionModule;
 import ru.webotix.telegram.TelegramModule;
 import ru.webotix.websocket.WebSocketModule;
@@ -56,6 +57,8 @@ public class WebotixModule extends AbstractModule
 
         // Регистрируем процессы заданий
         install(new ProcessorModule());
+
+        install(new ScriptJobModule());
 
         // Управление подписками на тикеты
         install(new SubscriptionModule());

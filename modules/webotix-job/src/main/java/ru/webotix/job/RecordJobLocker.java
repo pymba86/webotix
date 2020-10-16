@@ -54,9 +54,10 @@ public class RecordJobLocker implements JobLocker, Managed {
 
 
     @Override
-    public void start() throws Exception {
+    public void start()  {
         interval = Observable
                 .interval(configuration.getGuardianLoopSeconds(), TimeUnit.SECONDS)
+                .doOnError(throwable -> log.error("Interval error: " + throwable.getMessage()))
                 .subscribe(x -> transactionally.run(() -> cleanup(now())));
     }
 

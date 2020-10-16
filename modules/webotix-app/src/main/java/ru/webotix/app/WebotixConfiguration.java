@@ -10,6 +10,7 @@ import ru.webotix.datasource.database.DatabaseConfiguration;
 import ru.webotix.datasource.wiring.BackgroundProcessingConfiguration;
 import ru.webotix.exchange.ExchangeConfiguration;
 import ru.webotix.job.JobRunConfiguration;
+import ru.webotix.script.ScriptConfiguration;
 import ru.webotix.telegram.TelegramConfiguration;
 
 import javax.validation.Valid;
@@ -18,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WebotixConfiguration extends Configuration
-        implements BackgroundProcessingConfiguration {
+        implements BackgroundProcessingConfiguration, ScriptConfiguration {
 
     @Min(1L)
     @JsonProperty
@@ -36,6 +37,9 @@ public class WebotixConfiguration extends Configuration
     @JsonProperty("jerseyClient")
     private JerseyClientConfiguration jerseyClient;
 
+    @JsonProperty
+    private String scriptSigningKey;
+
     @Valid
     @JsonProperty
     private Map<String, ExchangeConfiguration> exchanges = new HashMap<>();
@@ -43,6 +47,15 @@ public class WebotixConfiguration extends Configuration
     @Override
     public int getLoopSeconds() {
         return loopSeconds;
+    }
+
+    @Override
+    public String getScriptSigningKey() {
+        return scriptSigningKey;
+    }
+
+    public void setScriptSigningKey(String scriptSigningKey) {
+        this.scriptSigningKey = scriptSigningKey;
     }
 
     public void setLoopSeconds(int loopSeconds) {
@@ -83,7 +96,12 @@ public class WebotixConfiguration extends Configuration
 
     public void bind(Binder binder) {
 
+        // Конфигурация для частоты опросов в внутрениих процессах
         binder.bind(BackgroundProcessingConfiguration.class)
+                .toInstance(this);
+
+        // Конфигурация скриптового движка
+        binder.bind(ScriptConfiguration.class)
                 .toInstance(this);
 
         // Конфигурация базы данных
@@ -99,7 +117,8 @@ public class WebotixConfiguration extends Configuration
                 .toProvider(Providers.of(telegram));
 
         // Конфигурация бирж
-        binder.bind(new TypeLiteral<Map<String, ExchangeConfiguration>>() {})
+        binder.bind(new TypeLiteral<Map<String, ExchangeConfiguration>>() {
+        })
                 .toProvider(Providers.of(exchanges));
 
         // Конфигурация менеджера задач

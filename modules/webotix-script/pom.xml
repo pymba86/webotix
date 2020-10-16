@@ -2,7 +2,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>webotix-app</artifactId>
+    <artifactId>webotix-script</artifactId>
     <packaging>jar</packaging>
 
     <parent>
@@ -15,53 +15,19 @@
     <dependencies>
 
         <dependency>
-            <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-client</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-assets</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.liveperson</groupId>
-            <artifactId>dropwizard-websockets</artifactId>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-jsr223</artifactId>
+            <version>3.0.6</version>
         </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-datasource</artifactId>
+            <artifactId>webotix-notification-api</artifactId>
         </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-websocket</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-common</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-utils</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-notification</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-subscription</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-script</artifactId>
+            <artifactId>webotix-exchange-api</artifactId>
         </dependency>
 
         <dependency>
@@ -71,17 +37,22 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-telegram</artifactId>
+            <artifactId>webotix-job</artifactId>
         </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-exchange</artifactId>
+            <artifactId>webotix-job-api</artifactId>
         </dependency>
 
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-job-status</artifactId>
+            <artifactId>webotix-job-status-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-utils</artifactId>
         </dependency>
 
         <dependency>
@@ -122,11 +93,6 @@
         <dependency>
             <groupId>io.reactivex.rxjava2</groupId>
             <artifactId>rxjava</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-processors</artifactId>
         </dependency>
 
         <dependency>

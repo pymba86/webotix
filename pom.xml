@@ -27,6 +27,7 @@
         <module>modules/webotix-processors</module>
         <module>modules/webotix-subscription</module>
         <module>modules/webotix-app</module>
+        <module>modules/webotix-script</module>
         <module>modules/webotix-ui</module>
     </modules>
 
@@ -67,6 +68,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>webotix-subscription</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-script</artifactId>
             <version>${project.version}</version>
         </dependency>
 
