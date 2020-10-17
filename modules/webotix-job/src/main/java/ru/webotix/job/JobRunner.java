@@ -2,6 +2,7 @@ package ru.webotix.job;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
@@ -185,7 +186,7 @@ class JobRunner {
                         "Job lifecycle status indicates re-use of lifetime manager: " + job);
             }
 
-            status = JobStatus.RUNNING;
+            status = JobStatus.STARTING;
 
             log.info("{} starting...", job);
 
@@ -310,6 +311,28 @@ class JobRunner {
                 result = Status.FAILURE_TRANSIENT;
             }
             return result;
+        }
+
+        @Subscribe
+        public synchronized void onKeepAlive(KeepAliveEvent keepAlive) {
+            log.debug("{} checking lock...", job);
+            if (!status.equals(JobStatus.RUNNING)) return;
+            log.debug("{} updating lock...", job);
+            if (!transactionally.call(() -> jobLocker.updateLock(job.id(), uuid))) {
+                log.debug("{} stopping due to loss of lock...", job);
+                if (stopAndUnregister()) log.debug("{} stopped due to loss of lock", job);
+            }
+        }
+
+        @Subscribe
+        public synchronized void stop(StopEvent stop) {
+            log.debug("{} stopping due to shutdown", job);
+            if (!stopAndUnregister()) {
+                log.warn("Stop of job which is already shutting down. Status={}, job={}", status, job);
+                return;
+            }
+            transactionally.allowingNested().run(() -> jobLocker.releaseLock(job.id(), uuid));
+            log.debug("{} stopped due to shutdown", job);
         }
     }
 }

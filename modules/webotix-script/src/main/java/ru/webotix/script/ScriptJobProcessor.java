@@ -206,38 +206,38 @@ class ScriptJobProcessor implements ScriptJob.Processor {
 
         private final AtomicBoolean failing = new AtomicBoolean(false);
 
-        public Disposable setTick(MethodClosure callback, JSObject tickerSpec) {
+        public Disposable setTick(Closure<Void> callback, TickerSpec tickerSpec) {
             return onTick(
                     event -> processEvent(() -> callback.call(event)),
-                    convertTickerSpec(tickerSpec),
+                    tickerSpec,
                     callback.toString());
         }
 
-        public Disposable setBalance(MethodClosure callback, JSObject tickerSpec) {
+        public Disposable setBalance(MethodClosure callback, TickerSpec tickerSpec) {
             return onBalance(
                     event -> processEvent(() -> callback.call(event)),
-                    convertTickerSpec(tickerSpec),
+                    tickerSpec,
                     callback.toString());
         }
 
-        public Disposable setOpenOrders(MethodClosure callback, JSObject tickerSpec) {
+        public Disposable setOpenOrders(MethodClosure callback, TickerSpec tickerSpec) {
             return onOpenOrders(
                     event -> processEvent(() -> callback.call(event)),
-                    convertTickerSpec(tickerSpec),
+                    tickerSpec,
                     callback.toString());
         }
 
-        public Disposable setOrderBook(MethodClosure callback, JSObject tickerSpec) {
+        public Disposable setOrderBook(MethodClosure callback, TickerSpec tickerSpec) {
             return onOrderBook(
                     event -> processEvent(() -> callback.call(event)),
-                    convertTickerSpec(tickerSpec),
+                    tickerSpec,
                     callback.toString());
         }
 
-        public Disposable setUserTrades(MethodClosure callback, JSObject tickerSpec) {
+        public Disposable setUserTrades(MethodClosure callback, TickerSpec tickerSpec) {
             return onUserTrades(
                     event -> processEvent(() -> callback.call(event)),
-                    convertTickerSpec(tickerSpec),
+                    tickerSpec,
                     callback.toString());
         }
 
@@ -366,14 +366,6 @@ class ScriptJobProcessor implements ScriptJob.Processor {
                 return description;
             }
         };
-    }
-
-    private TickerSpec convertTickerSpec(JSObject tickerSpec) {
-        return TickerSpec.builder()
-                .exchange((String) tickerSpec.getMember("exchange"))
-                .base((String) tickerSpec.getMember("base"))
-                .counter((String) tickerSpec.getMember("counter"))
-                .build();
     }
 
     public static final class DisposableSubscription implements Disposable {

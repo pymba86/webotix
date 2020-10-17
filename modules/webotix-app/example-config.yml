@@ -1,6 +1,6 @@
 scriptSigningKey: "123456"
 database:
-  connectionString: h2:file:./webotix;DB_CLOSE_DELAY=-1;DEFAULT_LOCK_TIMEOUT=60000
+  connectionString: h2:file:./webotix;DB_CLOSE_DELAY=-1;DEFAULT_LOCK_TIMEOUT=60000;DB_CLOSE_ON_EXIT=FALSE
 telegram:
   botToken: 1383736175:AAEaML3a4hM1UUdHXaOi1uvAQWemsdlCcco
   chatId: 327871252
