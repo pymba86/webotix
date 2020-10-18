@@ -18,6 +18,7 @@ import {BalanceContainer} from "./containers/BalanceContainer";
 import {TradeContainer} from "./containers/TradeContainer";
 import {ToolbarContainer} from "./containers/ToolbarContainer";
 import {SettingLayouts} from "./components/settings/SettingLayouts";
+import {ScriptContainer} from "./containers/ScriptContainer";
 
 interface FrameworkProps {
 
@@ -136,6 +137,13 @@ export class Framework extends React.Component<FrameworkProps> {
                 <LayoutBox key="tradeSelector" data-grid={this.props.layoutsAsObj.tradeSelector}>
                     <Panel id="tradeSelector">
                         <TradeContainer/>
+                    </Panel>
+                </LayoutBox>
+            ),
+            scripts: () => (
+                <LayoutBox key="scripts" data-grid={this.props.layoutsAsObj.scripts}>
+                    <Panel id="scripts">
+                        <ScriptContainer/>
                     </Panel>
                 </LayoutBox>
             ),

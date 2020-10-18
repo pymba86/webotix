@@ -120,6 +120,8 @@ class ScriptJobProcessor implements ScriptJob.Processor {
 
         bindings.put("notifications", notificationService);
 
+        bindings.put("ticker", job.ticker());
+
         bindings.put("events", new Events());
         bindings.put("control", new Control());
         bindings.put("console", new Console());

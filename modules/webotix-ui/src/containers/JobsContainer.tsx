@@ -36,7 +36,7 @@ export const JobsContainer: React.FC = () => {
                 </React.Fragment>
             )
         }
-    }
+    };
 
     return (
         <Section

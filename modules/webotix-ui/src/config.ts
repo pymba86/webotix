@@ -5,7 +5,7 @@ import {useMemo, useReducer} from "react";
 
 const VERSION = 1;
 
-export type OfAllKeyPanel = 'jobs' | 'notifications' | 'balance'
+export type OfAllKeyPanel = 'jobs' | 'notifications' | 'balance' | 'scripts'
     | 'coins' | 'openOrders' | 'marketData' | 'chart' | 'tradeSelector';
 
 export type OfAllPanels<T> = Record<OfAllKeyPanel, T>;
@@ -164,38 +164,53 @@ const basePanels: AllKeyedPanels = Immutable({
         h: 0,
         w: 0
     },
+    scripts: {
+        title: "Scripts",
+        icon: "file-text",
+        key: "scripts",
+        visible: true,
+        detached: false,
+        stackPosition: 0,
+        x: 0,
+        y: 0,
+        h: 0,
+        w: 0
+    },
 });
 
 const baseLayouts: AllKeyedLayouts = Immutable({
     lg: {
-        coins: {i: "coins", x: 0, y: 100, w: 8, h: 22},
-        jobs: {i: "jobs", x: 26, y: 300, w: 14, h: 9},
-        notifications: {i: "notifications", x: 0, y: 200, w: 8, h: 9},
-        openOrders: {i: "openOrders", x: 26, y: 200, w: 14, h: 11},
-        chart: { i: "chart", x: 8, y: 100, w: 18, h: 18 },
-        marketData: { i: "marketData", x: 26, y: 100, w: 14, h: 11 },
-        tradeSelector: { i: "tradeSelector", x: 8, y: 300, w: 18, h: 9 },
-        balance: { i: "balance", x: 8, y: 200, w: 18, h: 4 },
+        coins: {i: "coins", x: 0, y: 0, w: 8, h: 9},
+        jobs: {i: "jobs", x: 26, y: 24, w: 14, h: 7},
+        notifications: {i: "notifications", x: 0, y: 9, w: 8, h: 22},
+        openOrders: {i: "openOrders", x: 26, y: 9, w: 14, h: 8},
+        chart: {i: "chart", x: 8, y: 0, w: 18, h: 17},
+        marketData: {i: "marketData", x: 26, y: 0, w: 14, h: 9},
+        tradeSelector: {i: "tradeSelector", x: 26, y: 17, w: 14, h: 7},
+        scripts: {i: "scripts", x: 8, y: 21, w: 18, h: 10},
+        balance: {i: "balance", x: 8, y: 7, w: 18, h: 4},
     },
     md: {
-        coins: {i: "jobs", x: 20, y: 300, w: 12, h: 5},
-        chart: { i: "chart", x: 0, y: 100, w: 20, h: 13 },
-        jobs: {i: "coins", x: 20, y: 100, w: 12, h: 11},
-        notifications: {i: "notifications", x: 20, y: 400, w: 12, h: 7},
-        tradeSelector: { i: "tradeSelector", x: 0, y: 400, w: 20, h: 9 },
-        marketData: { i: "marketData", x: 20, y: 200, w: 12, h: 8 },
-        balance: { i: "balance", x: 0, y: 300, w: 20, h: 4 },
-        openOrders: {i: "openOrders", x: 0, y: 200, w: 20, h: 5}
+        coins: {i: "coins", x: 20, y: 0, w: 12, h: 11},
+        chart: {i: "chart", x: 0, y: 0, w: 20, h: 13},
+        jobs: {i: "jobs", x: 20, y: 19, w: 12, h: 8},
+        notifications: {i: "notifications", x: 20, y: 27, w: 12, h: 13},
+        tradeSelector: {i: "tradeSelector", x: 0, y: 22, w: 20, h: 7},
+        scripts: {i: "scripts", x: 0, y: 29, w: 20, h: 11},
+        marketData: {i: "marketData", x: 20, y: 11, w: 12, h: 8},
+        balance: {i: "balance", x: 0, y: 18, w: 20, h: 4},
+        openOrders: {i: "openOrders", x: 0, y: 13, w: 20, h: 5}
     },
     sm: {
-        coins: {i: "coins", x: 0, y: 100, w: 4, h: 12},
-        chart: { i: "chart", x: 0, y: 200, w: 4, h: 12 },
-        jobs: {i: "jobs", x: 0, y: 700, w: 4, h: 6},
-        notifications: {i: "notifications", x: 0, y: 800, w: 4, h: 6},
-        tradeSelector: { i: "tradeSelector", x: 0, y: 500, w: 4, h: 9 },
-        balance: { i: "balance", x: 0, y: 400, w: 4, h: 4 },
-        marketData: { i: "marketData", x: 0, y: 600, w: 4, h: 6 },
-        openOrders: {i: "openOrders", x: 0, y: 300, w: 4, h: 6}
+        coins: {i: "coins", x: 0, y: 0, w: 4, h: 12},
+        chart: {i: "chart", x: 0, y: 12, w: 4, h: 12},
+        jobs: {i: "jobs", x: 0, y: 58, w: 4, h: 6},
+        notifications: {i: "notifications", x: 0, y: 64, w: 4, h: 6},
+        tradeSelector: {i: "tradeSelector", x: 0, y: 34, w: 4, h: 9},
+        scripts: {i: "scripts", x: 0, y: 43, w: 4, h: 9},
+        balance: {i: "balance", x: 0, y: 30, w: 4, h: 4},
+        marketData: {i: "marketData", x: 0, y: 52, w: 4, h: 6},
+        openOrders: {i: "openOrders", x: 0, y: 24, w: 4, h: 6}
     }
 });
 

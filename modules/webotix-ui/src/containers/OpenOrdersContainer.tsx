@@ -1,7 +1,7 @@
 import React, {useContext, useMemo} from "react";
 import {Coin} from "../modules/market";
 import {SocketContext} from "../modules/socket/SocketContext";
-import {DisplayOrder, OrderStatus, OrderType, RunningAtType} from "../modules/socket";
+import {DisplayOrder, RunningAtType} from "../modules/socket";
 import {OpenOrders} from "../components/orders";
 
 export interface OpenOrdersContainerProps {
@@ -16,7 +16,8 @@ export const OpenOrdersContainer: React.FC<OpenOrdersContainerProps> = ({coin}) 
 
     const allOrders = useMemo<DisplayOrder[]>(
         () =>
-            openOrders.filter(o => !o.deleted).map(o => ({...o, runningAt: RunningAtType.EXCHANGE, jobId: ''})),
+            openOrders.filter(o => !o.deleted)
+                .map(o => ({...o, runningAt: RunningAtType.EXCHANGE, jobId: ''})),
         [openOrders]
     );
 

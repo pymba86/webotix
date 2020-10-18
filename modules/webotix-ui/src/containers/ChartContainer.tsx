@@ -9,7 +9,7 @@ interface IntervalProps {
     code: string;
 }
 
-const CHART_INTERVAL_KEY = "Chart.interval"
+const CHART_INTERVAL_KEY = "Chart.interval";
 
 export const ChartContainer: React.FC = () => {
 
@@ -47,4 +47,4 @@ export const ChartContainer: React.FC = () => {
             </Section>
         </RenderIf>
     )
-}
+};

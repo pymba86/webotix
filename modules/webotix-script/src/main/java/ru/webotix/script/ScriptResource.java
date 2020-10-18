@@ -9,6 +9,7 @@ import com.gruelbox.tools.dropwizard.guice.resources.WebResource;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.github.resilience4j.core.StringUtils;
 import ru.webotix.job.JobResource;
+import ru.webotix.market.data.api.TickerSpec;
 import ru.webotix.utils.Hasher;
 
 import javax.ws.rs.*;
@@ -43,11 +44,15 @@ public class ScriptResource implements WebResource {
     @Path("/scripts/{id}")
     @UnitOfWork
     public Response putScript(@PathParam("id") String id, Script script) {
-        if (!id.equals(script.id()))
+
+        if (!id.equals(script.id())) {
             return Response.status(400)
                     .entity(ImmutableMap.of("error", "id doesn't match endpoint"))
                     .build();
+        }
+
         scriptAccess.saveOrUpdate(script);
+
         return Response.ok().build();
     }
 
@@ -77,6 +82,7 @@ public class ScriptResource implements WebResource {
                 ScriptJob.builder()
                         .id(job.id)
                         .name(job.name)
+                        .ticker(job.ticker)
                         .script(job.script)
                         .scriptHash(
                                 StringUtils.isNotEmpty(config.getScriptSigningKey())
@@ -95,6 +101,9 @@ public class ScriptResource implements WebResource {
 
         @JsonProperty
         private String script;
+
+        @JsonProperty
+        private TickerSpec ticker;
 
         public String getId() {
             return id;
@@ -118,6 +127,14 @@ public class ScriptResource implements WebResource {
 
         public void setScript(String script) {
             this.script = script;
+        }
+
+        public TickerSpec getTicker() {
+            return ticker;
+        }
+
+        public void setTicker(TickerSpec ticker) {
+            this.ticker = ticker;
         }
     }
 }

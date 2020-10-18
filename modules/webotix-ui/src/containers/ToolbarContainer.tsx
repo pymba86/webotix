@@ -3,7 +3,6 @@ import {OfAllKeyPanel, Panel} from "../config";
 import {Toolbar} from "../components/toolbar";
 import {FrameworkContext} from "../FrameworkContainer";
 import {SocketContext} from "../modules/socket/SocketContext";
-import {Coin} from "../modules/market";
 import {MarketContext} from "../modules/market/MarketContext";
 import {ServerContext} from "../modules/server/ServerContext";
 import {formatNumber} from "../modules/common/number";

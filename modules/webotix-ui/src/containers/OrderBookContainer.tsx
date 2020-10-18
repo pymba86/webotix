@@ -1,7 +1,5 @@
 import React, {useContext, useEffect, useRef} from "react";
 import {SocketContext} from "../modules/socket/SocketContext";
-import {TradeHistory} from "../components/trade";
-import {Coin} from "../modules/market";
 
 export interface OrderBookContainerProps {
     animate: boolean;

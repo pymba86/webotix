@@ -111,7 +111,6 @@ export const Toolbar: React.FC<ToolbarProps> = (
                     />
                 ))}
             <ToolbarSocket connected={connected}/>
-            <ToolbarLink icon={"code"} onClick={onLogout}/>
             <ToolbarLink icon={"layout"} onClick={onShowViewSettings}/>
             <ToolbarLink icon={"lock"} onClick={onLogout}/>
         </div>

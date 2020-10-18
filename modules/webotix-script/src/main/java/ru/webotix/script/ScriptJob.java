@@ -11,6 +11,7 @@ import ru.webotix.job.api.Job;
 import ru.webotix.job.api.JobBuilder;
 import ru.webotix.job.api.JobControl;
 import ru.webotix.job.api.JobProcessor;
+import ru.webotix.market.data.api.TickerSpec;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -42,6 +43,8 @@ public abstract class ScriptJob implements Job {
 
         public abstract Builder state(Map<String, String> state);
 
+        public abstract Builder ticker(TickerSpec ticker);
+
         @Override
         public abstract ScriptJob build();
     }
@@ -66,6 +69,9 @@ public abstract class ScriptJob implements Job {
 
     @JsonProperty
     public abstract Map<String, String> state();
+
+    @JsonProperty
+    public abstract TickerSpec ticker();
 
     @Override
     public String toString() {

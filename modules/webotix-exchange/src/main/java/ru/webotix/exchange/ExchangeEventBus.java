@@ -77,7 +77,8 @@ public class ExchangeEventBus implements ExchangeEventRegistry {
                     .map(spec -> marketDataSubscriptionManager
                             .getTickers()
                             .filter(e -> e.spec().equals(spec))
-                            .onBackpressureLatest()).collect(Collectors.toList());
+                            .onBackpressureLatest())
+                    .collect(Collectors.toList());
         }
 
         @Override

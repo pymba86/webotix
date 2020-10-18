@@ -20,4 +20,4 @@ export const BalanceContainer: React.FC = () => {
         </Section>
 
     )
-}
+};

@@ -11,7 +11,7 @@ enum Mode {
     HISTORY = "history"
 }
 
-const LOCAL_STORAGE_KEY = "MarketContainer.animate"
+const LOCAL_STORAGE_KEY = "MarketContainer.animate";
 
 export const MarketContainer: React.FC = () => {
 
@@ -54,4 +54,4 @@ export const MarketContainer: React.FC = () => {
             </Section>
         </RenderIf>
     )
-}
+};

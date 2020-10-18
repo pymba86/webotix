@@ -11,7 +11,6 @@ import exchangeService from "../modules/market/exchangeService";
 import {augmentCoin} from "../modules/market/utils";
 import {ServerContext} from "../modules/server/ServerContext";
 
-
 export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
 
     const marketApi = useContext(MarketContext);
