@@ -272,7 +272,7 @@ class JobRunner {
 
         private boolean stopAndUnregister() {
             if (status.equals(JobStatus.RUNNING)) {
-                status = JobStatus.STARTING;
+                status = JobStatus.STOPPING;
                 safeStop();
                 eventBus.unregister(this);
                 status = JobStatus.STOPPED;

@@ -1,5 +1,8 @@
+import {ServerCoin} from "../market";
+
 export enum JobType {
-    ALERT = "Alert"
+    ALERT = "Alert",
+    SCRIPT = "ScriptJob"
 }
 
 export interface Job {
@@ -20,6 +23,13 @@ export interface Notification {
 
 export interface AlertJob extends Job {
     notification: Notification;
+}
+
+export interface ScriptJob {
+    id: string;
+    name: string;
+    script: string;
+    ticker: ServerCoin;
 }
 
 export interface CoinMetadata {

@@ -4,26 +4,26 @@ import {CSSTransition} from 'react-transition-group';
 import {FormItemProps} from "./types";
 
 export const FormItem: React.FC<FormItemProps> = ({
-                                                      prefixCls = 'ui-form',
+                                                      prefixCls = 'ui-form-item',
                                                       labelAlign = 'top', status,
                                                       message, invalid, label, children,
                                                       className, labelClassName, required
                                                   }: FormItemProps) => {
 
     const itemClassName = classNames(
+        prefixCls,
         {
-            [`${prefixCls}-item`]: true,
-            [`${prefixCls}-item-top`]: labelAlign === 'top',
-            [`${prefixCls}-item-required`]: required,
+            [`${prefixCls}-top`]: labelAlign === 'top',
+            [`${prefixCls}-required`]: required,
         },
         className,
     );
 
     const labelClsName = classNames(
         {
-            [`${prefixCls}-item-label`]: true,
-            [`${prefixCls}-item-label-required`]: required,
-            [`${prefixCls}-item-label-${labelAlign}`]: true,
+            [`${prefixCls}-label`]: true,
+            [`${prefixCls}-label-required`]: required,
+            [`${prefixCls}-label-${labelAlign}`]: true,
         },
         labelClassName,
     );
@@ -33,12 +33,12 @@ export const FormItem: React.FC<FormItemProps> = ({
             in={!!(message && invalid)}
             timeout={216}
             unmountOnExit
-            classNames={`${prefixCls}-item-message`}
+            classNames={`${prefixCls}-message`}
         >
             <div
                 className={classNames(
-                    `${prefixCls}-item-message`,
-                    `${prefixCls}-item-message-${status}`,
+                    `${prefixCls}-message`,
+                    `${prefixCls}-message-${status}`,
                 )}
             >
                 {message}
@@ -51,7 +51,7 @@ export const FormItem: React.FC<FormItemProps> = ({
             <div className={labelClsName}>
                 {label}
             </div>
-            <div className={`${prefixCls}-item-control`}>
+            <div className={`${prefixCls}-control`}>
                 {children}
                 {messageNode}
             </div>

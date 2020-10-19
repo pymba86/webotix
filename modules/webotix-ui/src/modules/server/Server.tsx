@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useMemo, useState} from "react";
 import {ServerApi, ServerContext} from "./ServerContext"
-import {CoinMetadata, Job} from "./types";
+import {CoinMetadata, Job, JobType, ScriptJob} from "./types";
 import jobService from "./jobService";
 import {useInterval} from "../common/hooks";
 import {Coin, ServerCoin} from "../market";
@@ -58,6 +58,16 @@ export const Server: React.FC = ({children}) => {
         [errorLog]
     );
 
+    const submitScriptJob = useMemo(
+        () => (job: ScriptJob) => {
+            jobService.submitScriptJob(job)
+                .catch((error: Error) => errorPopup("Could not submit job: " + error.message))
+                .then(() => setJobs(
+                    current => ([...current, {jobType: JobType.SCRIPT, ...job}])))
+        },
+        [errorPopup]
+    );
+
     const addSubscription = useMemo(
         () => (coin: Coin) => {
             return exchangeService.addSubscription(tickerFromCoin(coin))
@@ -101,9 +111,10 @@ export const Server: React.FC = ({children}) => {
             coinMetadata,
             subscriptions,
             removeSubscription,
-            addSubscription
+            addSubscription,
+            submitScriptJob
         }),
-        [jobs, subscriptions, addSubscription, coinMetadata, removeSubscription]
+        [jobs, subscriptions, submitScriptJob, addSubscription, coinMetadata, removeSubscription]
     );
 
     return (

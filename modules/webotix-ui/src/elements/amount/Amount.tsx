@@ -111,7 +111,7 @@ export const Amount: React.FC<AmountProps> = ({
             frameworkApi
                 .populateLastFocusedField(Number(formatNumber(value, scale, "")));
         }
-    }, [onClick, value, frameworkApi]);
+    }, [onClick, value, scale, frameworkApi]);
 
     if (heading) {
         return (

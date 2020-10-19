@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {useCodeJar} from "./useCodeJar";
 import Prism from "prismjs";
 import {withLineNumbers} from "codejar/linenumbers";
@@ -21,34 +21,24 @@ const highlight = (editor: HTMLElement) => {
 export interface ScriptEditorProps {
     prefixCls?: string;
     className?: string;
+    code?: string;
+    onUpdate: (code: string) => void;
 }
 
 export const ScriptEditor: React.FC<ScriptEditorProps> = (
     {
         prefixCls = 'ui-script-editor',
-        className
+        className,
+        code = "",
+        onUpdate
     }) => {
-
-    const [code, setCode] = useState('package ru.webotix.script;\n' +
-        '\n' +
-        'import io.reactivex.Disposable;\n' +
-        '\n' +
-        'def start() {\n' +
-        '    event.setInterval({event -> {\n' +
-        '        notifications.info("Hello world")\n' +
-        '    }});\n' +
-        '}\n' +
-        '\n' +
-        'def stop() {\n' +
-        '    event.clearInterval()\n' +
-        '}');
 
     const editorRef = useCodeJar({
         code,
         options: {
             tab: ' '.repeat(4)
         },
-        onUpdate: setCode,
+        onUpdate,
         highlight: withLineNumbers(highlight, {
             class: `${prefixCls}-linenumber`,
             wrapClass: `${prefixCls}-wrap`

@@ -1,22 +1,53 @@
-import React, {useContext, useEffect} from "react";
+import React, {useState} from "react";
 import {RouteComponentProps} from "react-router";
 import {Button} from "../elements/button";
 import {Modal} from "../elements/modal";
 import {Form} from "../elements/form";
-import {Select} from "../elements/select";
-import {MarketContext} from "../modules/market/MarketContext";
-import {Coin, Exchange, PartialServerCoin} from "../modules/market";
-import {LogContext} from "../modules/log/LogContext";
-import exchangeService from "../modules/market/exchangeService";
-import {augmentCoin} from "../modules/market/utils";
-import {ServerContext} from "../modules/server/ServerContext";
 import {Input} from "../elements/input";
+import scriptService from "../modules/script/scriptService";
+import {RootState} from "../store/reducers";
+import * as scriptActions from "store/scripts/actions"
+import {connect, ConnectedProps} from "react-redux";
+import {Script} from "../modules/script/types";
+import { v4 as uuidv4 } from "uuid"
 
-export const AddScriptContainer: React.FC<RouteComponentProps> = ({history}) => {
+const mapState = (state: RootState) => ({
+    selectedScript: state.scripts.selectedScript
+});
 
+const mapDispatch = {
+    addScript: (script: Script) => scriptActions.addScript(script)
+};
+
+const connector = connect(mapState, mapDispatch);
+
+type StateProps = ConnectedProps<typeof connector>;
+
+type AddScriptProps = StateProps & RouteComponentProps;
+
+const AddScript: React.FC<AddScriptProps> = ({history, addScript}) => {
+
+    const [name, setName] = useState<string>();
+
+    const onSubmit = () => {
+        if (name) {
+            const script: Script = {
+                id: uuidv4(),
+                name: name,
+                script: ""
+            };
+            scriptService.saveScript(script)
+                .then(() => {
+                    addScript(script);
+                    history.push("/");
+                });
+        }
+    };
 
     const footerMarkup = (
-        <Button variant={"primary"}>
+        <Button variant={"primary"}
+                disabled={!name || name.length === 0}
+                onClick={onSubmit}>
             Add
         </Button>
     );
@@ -24,14 +55,17 @@ export const AddScriptContainer: React.FC<RouteComponentProps> = ({history}) => 
     return (
         <Modal visible={true} closable={true}
                footer={footerMarkup}
-               header={"Add coin"}
+               header={"Add script"}
                onClose={() => history.push("/")}>
 
             <Form>
-                <Form.Item label={"Script"} required={true}>
-                    <Input placeholder={"Enter name"}/>
+                <Form.Item label={"Name"} required={true}>
+                    <Input placeholder={"Enter script name"}
+                           onChange={setName}/>
                 </Form.Item>
             </Form>
         </Modal>
     )
 };
+
+export const AddScriptContainer = connector(AddScript);

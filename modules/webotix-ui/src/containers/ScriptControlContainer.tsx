@@ -1,49 +1,51 @@
 import React, {useContext, useEffect} from "react";
 import {RouteComponentProps} from "react-router";
-import {Button} from "../elements/button";
 import {Modal} from "../elements/modal";
-import {Form} from "../elements/form";
 import {Select} from "../elements/select";
-import {MarketContext} from "../modules/market/MarketContext";
-import {Coin, Exchange, PartialServerCoin} from "../modules/market";
 import {LogContext} from "../modules/log/LogContext";
-import exchangeService from "../modules/market/exchangeService";
-import {augmentCoin} from "../modules/market/utils";
-import {ServerContext} from "../modules/server/ServerContext";
+import {Script} from "../modules/script/types";
+import scriptService from "../modules/script/scriptService";
+import {RootState} from "../store/reducers";
+import * as scriptActions from "store/scripts/actions"
+import {connect, ConnectedProps} from "react-redux";
 
-export const ScriptControlContainer: React.FC<RouteComponentProps> = ({history}) => {
+const mapState = (state: RootState) => ({
+    selectedScript: state.scripts.selectedScript
+});
 
-    const marketApi = useContext(MarketContext);
+const mapDispatch = {
+    selectScript: (script: Script) => scriptActions.selectScript(script)
+};
+
+const connector = connect(mapState, mapDispatch);
+
+type StateProps = ConnectedProps<typeof connector>;
+
+type ScriptControlProps = StateProps & RouteComponentProps;
+
+const ScriptControl: React.FC<ScriptControlProps> = ({history, selectScript}) => {
+
     const logApi = useContext(LogContext);
-    const serverApi = useContext(ServerContext);
 
-    const [exchange, setExchange] = React.useState<Exchange | undefined>(undefined);
-
-    const [pair, setPair] = React.useState<Coin | undefined>(undefined);
-
-    const [pairs, setPairs] = React.useState<Array<Coin>>([]);
-
-    const refreshExchanges = marketApi.actions.refreshExchanges;
+    const [scripts, setScripts] = React.useState<Script[]>([]);
+    const [loading, setLoading] = React.useState<boolean>(true);
 
     useEffect(() => {
-        refreshExchanges();
-    }, [refreshExchanges]);
 
-    const onChangeExchange = (exchange: Exchange) => {
+        logApi.trace("Fetching scripts");
 
-        setExchange(exchange);
-
-        setPair(undefined);
-        setPairs([]);
-
-        logApi.trace("Fetching pairs for exchange: " + exchange.name);
-
-        exchangeService.fetchPairs(exchange.code)
-            .then((pairs: Array<PartialServerCoin>) => {
-                setPairs(pairs.map(p => augmentCoin(p, exchange.code)));
-                logApi.trace(pairs.length + " pairs fetched");
+        scriptService.fetchScripts()
+            .then((scripts: Array<Script>) => {
+                setScripts(scripts);
+                logApi.trace(scripts.length + " scripts fetched");
+                setLoading(false);
             })
             .catch(error => logApi.errorPopup(error.message));
+    }, []);
+
+    const onChangeScript = (script: Script) => {
+        selectScript(script);
+        history.push("/");
     };
 
     return (
@@ -53,13 +55,14 @@ export const ScriptControlContainer: React.FC<RouteComponentProps> = ({history})
                onClose={() => history.push("/")}>
 
             <Select placeholder={"Select script"}
-                    value={exchange}
-                    loading={marketApi.data.exchanges.length === 0}
-                    options={marketApi.data.exchanges}
-                    onChange={onChangeExchange}
-                    getOptionKey={exchange => exchange.code}
-                    getOptionLabel={exchange => exchange.name}
+                    loading={loading}
+                    options={scripts}
+                    onChange={onChangeScript}
+                    getOptionKey={script => script.id}
+                    getOptionLabel={script => script.name}
             />
         </Modal>
     )
 };
+
+export const ScriptControlContainer = connector(ScriptControl);
