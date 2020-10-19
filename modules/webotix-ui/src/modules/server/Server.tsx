@@ -60,7 +60,7 @@ export const Server: React.FC = ({children}) => {
 
     const addSubscription = useMemo(
         () => (coin: Coin) => {
-            exchangeService.addSubscription(tickerFromCoin(coin))
+            return exchangeService.addSubscription(tickerFromCoin(coin))
                 .then(() => setSubscriptions(current => insertCoin(current, coin)))
                 .then(() => fetchMetadata(coin))
                 .catch((error: Error) => errorPopup("Could not add subscription: " + error.message));
@@ -69,7 +69,7 @@ export const Server: React.FC = ({children}) => {
 
     const removeSubscription = useMemo(
         () => (coin: Coin) => {
-            exchangeService.removeSubscription(tickerFromCoin(coin))
+            return exchangeService.removeSubscription(tickerFromCoin(coin))
                 .then(() => setSubscriptions(current => current.filter(c => c.key !== coin.key)))
                 .catch((error: Error) => errorPopup("Could not remove subscription: " + error.message));
         }, [setSubscriptions, errorPopup]

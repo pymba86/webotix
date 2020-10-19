@@ -19,6 +19,8 @@ import {TradeContainer} from "./containers/TradeContainer";
 import {ToolbarContainer} from "./containers/ToolbarContainer";
 import {SettingLayouts} from "./components/settings/SettingLayouts";
 import {ScriptContainer} from "./containers/ScriptContainer";
+import {ScriptControlContainer} from "./containers/ScriptControlContainer";
+import {AddScriptContainer} from "./containers/AddScriptContainer";
 
 interface FrameworkProps {
 
@@ -193,6 +195,8 @@ export class Framework extends React.Component<FrameworkProps> {
                 </ErrorBoundary>
                 <ErrorBoundary>
                     <Route exact={true} path={"/addCoin"} component={AddCoinContainer}/>
+                    <Route exact={true} path={"/addScript"} component={AddScriptContainer}/>
+                    <Route exact={true} path={"/scripts"} component={ScriptControlContainer}/>
                 </ErrorBoundary>
                 <ErrorBoundary>
                     <SettingsMarkup/>

@@ -7,9 +7,9 @@ export interface ServerApi {
 
     coinMetadata: Map<String, CoinMetadata>;
 
-    addSubscription(coin: Coin): void;
+    addSubscription(coin: Coin): Promise<void>;
 
-    removeSubscription(coin: Coin): void;
+    removeSubscription(coin: Coin): Promise<void>;
 
     jobs: Job[];
     jobsLoading: boolean;
@@ -21,9 +21,9 @@ export const ServerContext = React.createContext<ServerApi>({
     subscriptions: [],
     coinMetadata: new Map(),
     addSubscription(coin: Coin) {
-        console.warn("addSubscription not implemented");
+        return Promise.reject("addSubscription not implemented");
     },
     removeSubscription(coin: Coin) {
-        console.warn("removeSubscription not implemented")
+        return Promise.reject("removeSubscription not implemented")
     }
 });

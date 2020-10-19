@@ -11,7 +11,7 @@ import exchangeService from "../modules/market/exchangeService";
 import {augmentCoin} from "../modules/market/utils";
 import {ServerContext} from "../modules/server/ServerContext";
 
-export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
+export const ScriptControlContainer: React.FC<RouteComponentProps> = ({history}) => {
 
     const marketApi = useContext(MarketContext);
     const logApi = useContext(LogContext);
@@ -46,53 +46,20 @@ export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
             .catch(error => logApi.errorPopup(error.message));
     };
 
-    const onChangePair = (pair: Coin) => {
-        setPair(pair);
-    };
-
-    const onSubmit = () => {
-        if (pair) {
-            serverApi.addSubscription(pair)
-                .then(() => history.push("/coin/" + pair.key));
-        }
-    };
-
-    const footerMarkup = (
-        <Button disabled={!pair}
-                variant={"primary"}
-                onClick={onSubmit}>
-            Add
-        </Button>
-    );
-
     return (
-        <Modal visible={true} closable={true}
-               footer={footerMarkup}
-               header={"Add coin"}
+        <Modal visible={true}
+               closable={true}
+               header={"Scripts"}
                onClose={() => history.push("/")}>
 
-            <Form>
-                <Form.Item label={"Exchange"} required={true}>
-                    <Select placeholder={"Select exchange"}
-                            value={exchange}
-                            loading={marketApi.data.exchanges.length === 0}
-                            options={marketApi.data.exchanges}
-                            onChange={onChangeExchange}
-                            getOptionKey={exchange => exchange.code}
-                            getOptionLabel={exchange => exchange.name}
-                    />
-                </Form.Item>
-                <Form.Item label={"Pair"} required={true}>
-                    <Select placeholder={"Select pair"}
-                            value={pair}
-                            loading={exchange && pairs.length === 0}
-                            options={pairs}
-                            onChange={onChangePair}
-                            getOptionKey={pair => pair.key}
-                            getOptionLabel={pair => pair.shortName}
-                    />
-                </Form.Item>
-            </Form>
+            <Select placeholder={"Select script"}
+                    value={exchange}
+                    loading={marketApi.data.exchanges.length === 0}
+                    options={marketApi.data.exchanges}
+                    onChange={onChangeExchange}
+                    getOptionKey={exchange => exchange.code}
+                    getOptionLabel={exchange => exchange.name}
+            />
         </Modal>
     )
 };

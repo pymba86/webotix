@@ -55,6 +55,8 @@ export const ScriptEditor: React.FC<ScriptEditorProps> = (
         })
     });
 
-    return (<div className={classNames(prefixCls, className)}
-                 ref={editorRef}/>);
+    return (
+        <div className={classNames(prefixCls, className)}
+             ref={editorRef}/>
+    );
 };

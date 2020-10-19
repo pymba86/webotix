@@ -17,15 +17,53 @@ $job-prefix: 'ui-script';
     height: 100%;
 
     &-wrap {
-      height: 100%;
+      height: calc(100% - 22px);
     }
 
     &-linenumber {
       background-color: rgba(255, 255, 255, 0.05) !important;
-      padding-right: 10px;
+      padding-right: 6px !important;
+      padding-left: 6px !important;
+      width: 38px !important;
       text-align: right;
     }
-
-
   }
+
+  &-manager {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  &-toolbar {
+    display: flex;
+    height: 22px;
+    background: rgba(255, 255, 255, 0.06);
+    box-sizing: border-box;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 8px;
+    line-height: normal;
+    white-space: nowrap;
+    justify-content: space-between;
+
+    &-actions {
+      :last-child {
+        margin-right: 0.15em;
+      }
+    }
+
+    &-action {
+      cursor: pointer;
+      margin-right: 8px;
+      font-weight: bold;
+
+      &-disabled {
+        opacity: 0.5;
+        text-decoration: none;
+        pointer-events: none;
+      }
+    }
+  }
+
 }
