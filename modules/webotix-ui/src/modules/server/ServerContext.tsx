@@ -4,8 +4,9 @@ import {Coin} from "../market";
 
 export interface ServerApi {
     subscriptions: Coin[];
-
     coinMetadata: Map<String, CoinMetadata>;
+    jobs: Job[];
+    jobsLoading: boolean;
 
     addSubscription(coin: Coin): Promise<void>;
 
@@ -13,8 +14,9 @@ export interface ServerApi {
 
     submitScriptJob(job: ScriptJob): void;
 
-    jobs: Job[];
-    jobsLoading: boolean;
+    deleteJob(id: string): void;
+
+    submitJob(job: Job): void
 }
 
 export const ServerContext = React.createContext<ServerApi>({
@@ -29,5 +31,9 @@ export const ServerContext = React.createContext<ServerApi>({
         return Promise.reject("removeSubscription not implemented")
     },
     submitScriptJob(job: ScriptJob): void {
+    },
+    deleteJob(id: string) {
+    },
+    submitJob(job: Job) {
     }
 });

@@ -17,7 +17,11 @@
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-jsr223</artifactId>
-            <version>3.0.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ta4j</groupId>
+            <artifactId>ta4j-core</artifactId>
         </dependency>
 
         <dependency>

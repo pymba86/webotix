@@ -83,4 +83,12 @@ public class JobResource implements WebResource {
             return Response.status(404).build();
         }
     }
+
+    @DELETE
+    @Path("{id}")
+    @Timed
+    @UnitOfWork
+    public void deleteJob(@PathParam("id") String id) {
+        jobAccess.delete(id);
+    }
 }

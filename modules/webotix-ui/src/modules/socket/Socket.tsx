@@ -16,7 +16,7 @@ const MAX_PUBLIC_TRADES = 48;
 const UPDATE_FREQUENCY = 1000;
 
 enum BatchScope {
-    GLBOAL,
+    GLOBAL,
     COIN
 }
 
@@ -90,15 +90,15 @@ export const Socket: React.FC = ({children}) => {
     useEffect(() => {
 
             socketClient.onError(
-                message => addToBatch(BatchScope.GLBOAL, () => logError(message)));
+                message => addToBatch(BatchScope.GLOBAL, () => logError(message)));
 
             socketClient.onNotification(
-                (entry => addToBatch(BatchScope.GLBOAL, () => logNotification(entry))));
+                (entry => addToBatch(BatchScope.GLOBAL, () => logNotification(entry))));
 
             const sameCoin = (left?: Coin, right?: Coin) => left && right && left.key === right.key;
 
             socketClient.onTicker(((coin, ticker) => {
-                addToBatch(BatchScope.GLBOAL,
+                addToBatch(BatchScope.GLOBAL,
                     () => setTickers(tickers => tickers.set(coin.key, ticker)))
             }));
 

@@ -10,7 +10,8 @@ import scriptService from "../../modules/script/scriptService";
 import {ServerContext} from "../../modules/server/ServerContext";
 import {SocketContext} from "../../modules/socket/SocketContext";
 import {ServerCoin} from "../../modules/market";
-import { v4 as uuidv4 } from "uuid";
+import {v4 as uuidv4} from "uuid";
+import {JobType} from "../../modules/server";
 
 export interface ScriptManagerProps {
     prefixCls?: string;
@@ -80,6 +81,7 @@ const Manager: React.FC<Props> = (
     const onPlay = (coin: ServerCoin) => {
         if (selectedScript && selectedCoin) {
             serverApi.submitScriptJob({
+                jobType: JobType.SCRIPT,
                 id: uuidv4(),
                 name: selectedScript.name,
                 script: code,

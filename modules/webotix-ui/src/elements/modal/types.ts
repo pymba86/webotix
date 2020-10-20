@@ -8,6 +8,8 @@ export interface ModalProps {
     header?: React.ReactNode;
     footer?: React.ReactNode;
     onClose?: () => void;
+    big?: boolean;
+    scrolling?: boolean;
 }
 
 export interface ModalState {

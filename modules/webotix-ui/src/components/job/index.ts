@@ -1,1 +1,1 @@
-export * from './JobShort';
+export * from './Jobs';

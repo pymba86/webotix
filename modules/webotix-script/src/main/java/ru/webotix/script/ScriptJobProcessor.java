@@ -8,8 +8,6 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import groovy.lang.Closure;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.plugins.RxJavaPlugins;
-import jdk.nashorn.api.scripting.JSObject;
 import org.codehaus.groovy.runtime.MethodClosure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

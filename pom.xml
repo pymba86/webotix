@@ -48,284 +48,298 @@
         <dropwizard-guice-box.version>0.0.8</dropwizard-guice-box.version>
         <reflections.version>0.9.11</reflections.version>
         <jooq.version>3.12.1</jooq.version>
+        <ta4j.version>0.13</ta4j.version>
+        <groovy.version>3.0.6</groovy.version>
     </properties>
 
     <dependencyManagement>
-    <dependencies>
+        <dependencies>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-base</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-base</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-subscription</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-subscription</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-script</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-script</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-market-data-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-market-data-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-market-data</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-market-data</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-websocket</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-websocket</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-exchange-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-exchange-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-telegram</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-telegram</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-datasource</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-datasource</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-notification</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-notification</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-notification-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-notification-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-job-status-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-job-status-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-job-status</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-job-status</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-processors</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-processors</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-exchange</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-exchange</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-utils</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-utils</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-job-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-job-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>webotix-job</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-job</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>info.bitrich.xchange-stream</groupId>
-            <artifactId>xchange-stream-core</artifactId>
-            <version>${xchange.stream.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>info.bitrich.xchange-stream</groupId>
+                <artifactId>xchange-stream-core</artifactId>
+                <version>${xchange.stream.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>info.bitrich.xchange-stream</groupId>
-            <artifactId>xchange-stream-binance</artifactId>
-            <version>${xchange.stream.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>info.bitrich.xchange-stream</groupId>
+                <artifactId>xchange-stream-binance</artifactId>
+                <version>${xchange.stream.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>io.dropwizard</groupId>
-            <artifactId>dropwizard-bom</artifactId>
-            <version>${dropwizard.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
+            <dependency>
+                <groupId>io.dropwizard</groupId>
+                <artifactId>dropwizard-bom</artifactId>
+                <version>${dropwizard.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
-        <dependency>
-            <groupId>com.google.auto.value</groupId>
-            <artifactId>auto-value</artifactId>
-            <version>${autovalue.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>com.google.auto.value</groupId>
+                <artifactId>auto-value</artifactId>
+                <version>${autovalue.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>com.google.auto.value</groupId>
-            <artifactId>auto-value-annotations</artifactId>
-            <version>${autovalue.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>com.google.auto.value</groupId>
+                <artifactId>auto-value-annotations</artifactId>
+                <version>${autovalue.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
-            <version>${guice.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>com.google.inject</groupId>
+                <artifactId>guice</artifactId>
+                <version>${guice.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>com.google.inject.extensions</groupId>
-            <artifactId>guice-multibindings</artifactId>
-            <version>${guice.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>com.google.inject.extensions</groupId>
+                <artifactId>guice-multibindings</artifactId>
+                <version>${guice.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>com.google.inject.extensions</groupId>
-            <artifactId>guice-assistedinject</artifactId>
-            <version>${guice.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>com.google.inject.extensions</groupId>
+                <artifactId>guice-assistedinject</artifactId>
+                <version>${guice.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>com.google.inject.extensions</groupId>
-            <artifactId>guice-servlet</artifactId>
-            <version>${guice.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>com.google.inject.extensions</groupId>
+                <artifactId>guice-servlet</artifactId>
+                <version>${guice.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-core</artifactId>
-            <version>${xchange.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>org.knowm.xchange</groupId>
+                <artifactId>xchange-core</artifactId>
+                <version>${xchange.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>org.knowm.xchange</groupId>
-            <artifactId>xchange-binance</artifactId>
-            <version>${xchange.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>org.knowm.xchange</groupId>
+                <artifactId>xchange-binance</artifactId>
+                <version>${xchange.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>io.reactivex.rxjava2</groupId>
-            <artifactId>rxjava</artifactId>
-            <version>${reactivex.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>io.reactivex.rxjava2</groupId>
+                <artifactId>rxjava</artifactId>
+                <version>${reactivex.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>com.liveperson</groupId>
-            <artifactId>dropwizard-websockets</artifactId>
-            <version>${dropwizard.websockets.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>com.liveperson</groupId>
+                <artifactId>dropwizard-websockets</artifactId>
+                <version>${dropwizard.websockets.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>org.alfasoftware</groupId>
-            <artifactId>morf-core</artifactId>
-            <version>${morf.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+            <dependency>
+                <groupId>org.alfasoftware</groupId>
+                <artifactId>morf-core</artifactId>
+                <version>${morf.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
 
-        <dependency>
-            <groupId>org.alfasoftware</groupId>
-            <artifactId>morf-h2</artifactId>
-            <version>${morf.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+            <dependency>
+                <groupId>org.alfasoftware</groupId>
+                <artifactId>morf-h2</artifactId>
+                <version>${morf.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
 
-        <dependency>
-            <groupId>org.alfasoftware</groupId>
-            <artifactId>morf-mysql</artifactId>
-            <version>${morf.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+            <dependency>
+                <groupId>org.alfasoftware</groupId>
+                <artifactId>morf-mysql</artifactId>
+                <version>${morf.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
 
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq</artifactId>
-            <version>${jooq.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq</artifactId>
+                <version>${jooq.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>com.gruelbox</groupId>
-            <artifactId>dropwizard-guice-box</artifactId>
-            <version>${dropwizard-guice-box.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>com.gruelbox</groupId>
+                <artifactId>dropwizard-guice-box</artifactId>
+                <version>${dropwizard-guice-box.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>com.gruelbox</groupId>
-            <artifactId>dropwizard-guice-box-hibernate</artifactId>
-            <version>${dropwizard-guice-box.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>com.gruelbox</groupId>
+                <artifactId>dropwizard-guice-box-hibernate</artifactId>
+                <version>${dropwizard-guice-box.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>${reflections.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>org.reflections</groupId>
+                <artifactId>reflections</artifactId>
+                <version>${reflections.version}</version>
+            </dependency>
 
-    </dependencies>
+            <dependency>
+                <groupId>org.ta4j</groupId>
+                <artifactId>ta4j-core</artifactId>
+                <version>${ta4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-jsr223</artifactId>
+                <version>${groovy.version}</version>
+            </dependency>
+
+        </dependencies>
     </dependencyManagement>
 
     <build>

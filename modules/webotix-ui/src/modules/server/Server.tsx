@@ -63,7 +63,25 @@ export const Server: React.FC = ({children}) => {
             jobService.submitScriptJob(job)
                 .catch((error: Error) => errorPopup("Could not submit job: " + error.message))
                 .then(() => setJobs(
-                    current => ([...current, {jobType: JobType.SCRIPT, ...job}])))
+                    current => ([...current, {...job}])))
+        },
+        [errorPopup]
+    );
+
+    const submitJob = useMemo(
+        () => (job: Job) => {
+            jobService.submitJob(job)
+                .catch((error: Error) => errorPopup("Could not submit job: " + error.message))
+                .then(() => setJobs(current => [...current, job]))
+        },
+        [errorPopup]
+    );
+
+    const deleteJob = useMemo(
+        () => (id: string) => {
+            jobService.deleteJob(id)
+                .catch((error: Error) => errorPopup("Could not delete job: " + error.message))
+                .then(() => setJobs(current => current.filter(j => j.id !== id)))
         },
         [errorPopup]
     );
@@ -112,9 +130,14 @@ export const Server: React.FC = ({children}) => {
             subscriptions,
             removeSubscription,
             addSubscription,
-            submitScriptJob
+            submitScriptJob,
+            submitJob,
+            deleteJob
         }),
-        [jobs, subscriptions, submitScriptJob, addSubscription, coinMetadata, removeSubscription]
+        [
+            jobs, subscriptions, submitJob, deleteJob,
+            submitScriptJob, addSubscription, coinMetadata, removeSubscription
+        ]
     );
 
     return (

@@ -1,7 +1,7 @@
 import React, {useContext, useState} from "react";
 import {Section, SectionTab} from "../elements/section";
 import {ServerContext} from "../modules/server/ServerContext";
-import {JobShort} from "../components/job";
+import {Jobs} from "../components/job";
 
 enum Mode {
     ONLY_COMPLEX = "complexonly",
@@ -18,30 +18,11 @@ export const JobsContainer: React.FC = () => {
 
     const rawJobs = loading ? [] : serverApi.jobs;
 
-    const complexOnly = mode === Mode.ONLY_COMPLEX;
-
-    const JobsContent: React.FC = ({children}) => {
-        if (loading) {
-            return <div>Загрузка...</div>
-        } else if (rawJobs.length === 0) {
-            if (complexOnly) {
-                return <div>No complex jobs. </div>
-            } else {
-                return <div>No active jobs</div>
-            }
-        } else {
-            return (
-                <React.Fragment>
-                    {children}
-                </React.Fragment>
-            )
-        }
-    };
-
     return (
         <Section
             id={"jobs"}
             heading={'Running jobs'}
+            nopadding={true}
             buttons={() => (
                 <React.Fragment>
                     <SectionTab
@@ -56,12 +37,7 @@ export const JobsContainer: React.FC = () => {
                     </SectionTab>
                 </React.Fragment>
             )}>
-            <JobsContent>
-                {rawJobs.map(job => (
-                    <JobShort key={job.id} job={job} onRemove={() => {
-                    }}/>
-                ))}
-            </JobsContent>
+                <Jobs data={rawJobs} onRemove={(id: string) => serverApi.deleteJob(id)}/>
         </Section>
     )
 };

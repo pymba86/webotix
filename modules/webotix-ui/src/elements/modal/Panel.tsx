@@ -50,6 +50,8 @@ export class ModalPanel extends React.Component<ModalProps, ModalState> {
             header,
             footer,
             children,
+            big,
+            scrolling
         } = this.props;
 
         return (
@@ -64,7 +66,9 @@ export class ModalPanel extends React.Component<ModalProps, ModalState> {
                     classNames={`${prefixCls}-panel`}
                     onExited={this.handleExited}>
 
-                    <div className={classNames(`${prefixCls}-panel`, className)}
+                    <div className={classNames(`${prefixCls}-panel`, {
+                        [`${prefixCls}-panel-big`]: big
+                    }, className)}
                          tabIndex={-1}
                          ref={this.bodyRef}>
                         {header && (
@@ -76,7 +80,9 @@ export class ModalPanel extends React.Component<ModalProps, ModalState> {
                                 </div>}
                             </div>
                         )}
-                        <div className={`${prefixCls}-body`}>{children}</div>
+                        <div className={classNames(`${prefixCls}-body`, {
+                            [`${prefixCls}-body-scroll`]: scrolling
+                        })}>{children}</div>
                         {footer && (
                             <div className={`${prefixCls}-footer`}>
                                 {footer}

@@ -26,6 +26,10 @@ $modal-prefix: 'ui-modal';
     border-radius: $border-radius;
     box-shadow: $modal-box-shadow;
 
+    &-big {
+      width: 855px;
+    }
+
     &-enter {
       opacity: 0;
       transform: translate3d(0, $modal-transfrom-y, 0);
@@ -106,6 +110,11 @@ $modal-prefix: 'ui-modal';
 
     &-content {
       margin-top: 8px;
+    }
+
+    &-scroll {
+      max-height: calc(80vh - 10em);
+      overflow: auto;
     }
 
     &-btn {

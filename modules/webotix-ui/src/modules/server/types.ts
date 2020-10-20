@@ -25,7 +25,7 @@ export interface AlertJob extends Job {
     notification: Notification;
 }
 
-export interface ScriptJob {
+export interface ScriptJob extends Job {
     id: string;
     name: string;
     script: string;
