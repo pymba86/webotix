@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useMemo, useState} from "react";
 import {MarketApi, MarketContext} from "./MarketContext";
-import {Coin, Exchange} from "./types";
+import {Exchange} from "./types";
 import {LogContext} from "../log/LogContext";
 import exchangeService from "./exchangeService";
 import {SocketContext} from "../socket/SocketContext";

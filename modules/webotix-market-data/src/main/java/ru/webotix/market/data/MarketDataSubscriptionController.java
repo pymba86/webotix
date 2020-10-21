@@ -323,6 +323,7 @@ public class MarketDataSubscriptionController extends AbstractPollingController 
                     .map(Currency::getInstance)
                     .map(Balance::zero)
                     .forEach(balance -> result.put(balance.getCurrency().getCurrencyCode(), balance));
+
             wallet().getBalances().values().stream()
                     .filter(balance -> currencyCodes.contains(balance.getCurrency().getCurrencyCode()))
                     .forEach(balance -> result.put(balance.getCurrency().getCurrencyCode(), balance));

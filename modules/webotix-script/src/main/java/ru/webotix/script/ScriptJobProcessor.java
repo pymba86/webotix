@@ -8,11 +8,12 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import groovy.lang.Closure;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import org.codehaus.groovy.runtime.MethodClosure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.webotix.datasource.database.Transactionally;
 import ru.webotix.exchange.api.ExchangeEventRegistry;
+import ru.webotix.exchange.api.ExchangeService;
+import ru.webotix.job.JobSubmitter;
 import ru.webotix.job.api.JobControl;
 import ru.webotix.job.status.api.Status;
 import ru.webotix.market.data.api.*;
@@ -28,8 +29,6 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static ru.webotix.job.status.api.Status.FAILURE_PERMANENT;
-import static ru.webotix.job.status.api.Status.SUCCESS;
 
 class ScriptJobProcessor implements ScriptJob.Processor {
 
@@ -43,6 +42,8 @@ class ScriptJobProcessor implements ScriptJob.Processor {
 
     private final ExchangeEventRegistry exchangeEventRegistry;
     private final NotificationService notificationService;
+    private final ExchangeService exchangeService;
+    private final JobSubmitter jobSubmitter;
     private final Transactionally transactionally;
     private final Hasher hasher;
     private final ScriptConfiguration configuration;
@@ -56,13 +57,17 @@ class ScriptJobProcessor implements ScriptJob.Processor {
             @Assisted JobControl jobControl,
             ExchangeEventRegistry exchangeEventRegistry,
             NotificationService notificationService,
+            ExchangeService exchangeService,
             Transactionally transactionally,
+            JobSubmitter jobSubmitter,
             Hasher hasher,
             ScriptConfiguration configuration) {
         this.job = job;
         this.jobControl = jobControl;
         this.exchangeEventRegistry = exchangeEventRegistry;
         this.notificationService = notificationService;
+        this.exchangeService = exchangeService;
+        this.jobSubmitter = jobSubmitter;
         this.transactionally = transactionally;
         this.hasher = hasher;
         this.configuration = configuration;
@@ -74,7 +79,7 @@ class ScriptJobProcessor implements ScriptJob.Processor {
         String hash = hasher.hashWithString(job.script(), configuration.getScriptSigningKey());
         if (!hash.equals(job.scriptHash())) {
             notifyAndLogError(SCRIPT_JOB_PREFIX + job.name() + "' has invalid hash. Failed permanently");
-            return FAILURE_PERMANENT;
+            return Status.FAILURE_PERMANENT;
         }
         try {
             initialiseEngine();
@@ -82,14 +87,14 @@ class ScriptJobProcessor implements ScriptJob.Processor {
             notificationService.error(
                     SCRIPT_JOB_PREFIX + job.name() + PERMANENTLY_FAILED + e.getMessage(), e);
             log.error("Failed script:\n{}", job.script());
-            return FAILURE_PERMANENT;
+            return Status.FAILURE_PERMANENT;
         }
         try {
             Invocable invocable = (Invocable) engine;
             Status status = (Status) invocable.invokeFunction("start");
 
             if (Objects.isNull(status)) {
-                return FAILURE_PERMANENT;
+                return Status.FAILURE_PERMANENT;
             } else {
                 return status;
             }
@@ -98,12 +103,12 @@ class ScriptJobProcessor implements ScriptJob.Processor {
             notificationService.error(
                     SCRIPT_JOB_PREFIX + job.name() + PERMANENTLY_FAILED + e.getMessage(), e);
             log.error("Failed script:\n{}", job.script());
-            return FAILURE_PERMANENT;
+            return Status.FAILURE_PERMANENT;
         } catch (Exception e) {
             notifyAndLogError(
                     SCRIPT_JOB_PREFIX + job.name() + "' failed and will retry: " + e.getMessage(), e);
 
-            return FAILURE_PERMANENT;
+            return Status.FAILURE_PERMANENT;
         }
     }
 
@@ -112,13 +117,15 @@ class ScriptJobProcessor implements ScriptJob.Processor {
 
         Bindings bindings = engine.createBindings();
 
-        bindings.put("SUCCESS", SUCCESS);
-        bindings.put("FAILURE_PERMANENT", FAILURE_PERMANENT);
+        bindings.put("SUCCESS", Status.SUCCESS);
+        bindings.put("FAILURE_PERMANENT", Status.FAILURE_PERMANENT);
         bindings.put("RUNNING", Status.RUNNING);
 
         bindings.put("notifications", notificationService);
+        bindings.put("exchanges", exchangeService);
+        bindings.put("jobs", jobSubmitter);
 
-        bindings.put("ticker", job.ticker());
+        bindings.put("job", job);
 
         bindings.put("events", new Events());
         bindings.put("control", new Control());
@@ -192,7 +199,7 @@ class ScriptJobProcessor implements ScriptJob.Processor {
 
         public void done() {
             done = true;
-            jobControl.finish(SUCCESS);
+            jobControl.finish(Status.SUCCESS);
             throw new ExitException();
         }
 
@@ -213,29 +220,36 @@ class ScriptJobProcessor implements ScriptJob.Processor {
                     callback.toString());
         }
 
-        public Disposable setBalance(MethodClosure callback, TickerSpec tickerSpec) {
+        public Disposable setBalance(Closure<Void> callback, TickerSpec tickerSpec) {
             return onBalance(
                     event -> processEvent(() -> callback.call(event)),
                     tickerSpec,
                     callback.toString());
         }
 
-        public Disposable setOpenOrders(MethodClosure callback, TickerSpec tickerSpec) {
+        public Disposable setOpenOrders(Closure<Void> callback, TickerSpec tickerSpec) {
             return onOpenOrders(
                     event -> processEvent(() -> callback.call(event)),
                     tickerSpec,
                     callback.toString());
         }
 
-        public Disposable setOrderBook(MethodClosure callback, TickerSpec tickerSpec) {
+        public Disposable setOrderBook(Closure<Void> callback, TickerSpec tickerSpec) {
             return onOrderBook(
                     event -> processEvent(() -> callback.call(event)),
                     tickerSpec,
                     callback.toString());
         }
 
-        public Disposable setUserTrades(MethodClosure callback, TickerSpec tickerSpec) {
+        public Disposable setUserTrades(Closure<Void> callback, TickerSpec tickerSpec) {
             return onUserTrades(
+                    event -> processEvent(() -> callback.call(event)),
+                    tickerSpec,
+                    callback.toString());
+        }
+
+        public Disposable setTrades(Closure<Void> callback, TickerSpec tickerSpec) {
+            return onTrades(
                     event -> processEvent(() -> callback.call(event)),
                     tickerSpec,
                     callback.toString());
@@ -274,10 +288,10 @@ class ScriptJobProcessor implements ScriptJob.Processor {
                 successfulPoll();
             } catch (PermanentFailureException e) {
                 notifyAndLogError(SCRIPT_JOB_PREFIX + job.name() + PERMANENTLY_FAILED + e.getMessage(), e);
-                jobControl.finish(FAILURE_PERMANENT);
+                jobControl.finish(Status.FAILURE_PERMANENT);
             } catch (Exception e) {
                 failingPoll(e);
-                jobControl.finish(FAILURE_PERMANENT);
+                jobControl.finish(Status.FAILURE_PERMANENT);
             }
         }
 
@@ -463,6 +477,20 @@ class ScriptJobProcessor implements ScriptJob.Processor {
                         MarketDataSubscription.create(tickerSpec, MarketDataType.UserTrade));
 
         Disposable disposable = subscription.getUserTrades().subscribe(handler);
+
+        return new DisposableSubscription(subscription, disposable, description);
+    }
+
+    public final DisposableSubscription onTrades(
+            io.reactivex.functions.Consumer<TradeEvent> handler,
+            TickerSpec tickerSpec,
+            String description) {
+
+        ExchangeEventRegistry.ExchangeEventSubscription subscription =
+                exchangeEventRegistry.subscribe(
+                        MarketDataSubscription.create(tickerSpec, MarketDataType.Trades));
+
+        Disposable disposable = subscription.getTrades().subscribe(handler);
 
         return new DisposableSubscription(subscription, disposable, description);
     }
