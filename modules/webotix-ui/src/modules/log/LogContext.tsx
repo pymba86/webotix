@@ -66,7 +66,7 @@ export const LogManager: React.FC = ({children}) => {
                 const entry = last.current;
 
                 setLogs(state => {
-                    return [entry, ...state]
+                    return [entry, ...state].slice(0, 50)
                 })
             }
         },

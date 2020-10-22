@@ -83,6 +83,7 @@ export const Logs: React.FC = () => {
                 columns={columns}
                 showPagination={false}
                 resizable={false}
+                defaultPageSize={50}
                 className="-striped"
                 minRows={0}
                 noDataText="No new notifications"
