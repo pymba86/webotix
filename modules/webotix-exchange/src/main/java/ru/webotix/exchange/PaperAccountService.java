@@ -6,11 +6,10 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Collections2;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.Currency;
-import org.knowm.xchange.dto.account.AccountInfo;
-import org.knowm.xchange.dto.account.Balance;
-import org.knowm.xchange.dto.account.FundingRecord;
-import org.knowm.xchange.dto.account.Wallet;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.account.*;
 import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
@@ -20,9 +19,7 @@ import org.knowm.xchange.service.trade.params.WithdrawFundsParams;
 import ru.webotix.exchange.api.ExchangeService;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicReference;
@@ -35,11 +32,21 @@ public class PaperAccountService implements AccountService {
 
     private final ConcurrentMap<Currency, AtomicReference<Balance>> balances;
 
-    PaperAccountService(Set<Currency> currencies) {
-        this.balances = new ConcurrentHashMap<>(currencies.stream().collect(Collectors.toMap(
-                Function.identity(),
-                k -> new AtomicReference<>(new Balance(k, INITIAL_BALANCE))
-        )));
+    private final Exchange exchange;
+
+    PaperAccountService(Exchange exchange) {
+
+        this.balances = new ConcurrentHashMap<>(
+                exchange.getExchangeMetaData()
+                        .getCurrencies()
+                        .keySet()
+                        .stream()
+                        .collect(Collectors.toMap(
+                                Function.identity(),
+                                k -> new AtomicReference<>(new Balance(k, INITIAL_BALANCE))
+                        )));
+
+        this.exchange = exchange;
     }
 
     @Override
@@ -49,6 +56,18 @@ public class PaperAccountService implements AccountService {
                 balances.values(), AtomicReference::get);
 
         return new AccountInfo(Wallet.Builder.from(balanceList).build());
+    }
+
+    @Override
+    public Map<CurrencyPair, Fee> getDynamicTradingFees() {
+
+        List<CurrencyPair> pairs = exchange.getExchangeSymbols();
+
+        return new HashMap<>(pairs.stream()
+                .collect(Collectors.toMap(
+                        Function.identity(),
+                        k -> new Fee(BigDecimal.ZERO, BigDecimal.ZERO)
+                )));
     }
 
     @Override
@@ -201,10 +220,7 @@ public class PaperAccountService implements AccountService {
                 .build(new CacheLoader<String, PaperAccountService>() {
                     @Override
                     public PaperAccountService load(String exchange) {
-                        return new PaperAccountService(exchangeService.get(exchange)
-                                .getExchangeMetaData()
-                                .getCurrencies()
-                                .keySet());
+                        return new PaperAccountService(exchangeService.get(exchange));
                     }
                 });
 
