@@ -15,6 +15,7 @@ import ru.webotix.exchange.AccountServiceFactory;
 import ru.webotix.exchange.TradeServiceFactory;
 import ru.webotix.exchange.api.ExchangeEventRegistry;
 import ru.webotix.exchange.api.ExchangeService;
+import ru.webotix.job.JobAccess;
 import ru.webotix.job.JobSubmitter;
 import ru.webotix.job.api.JobControl;
 import ru.webotix.job.status.api.Status;
@@ -47,6 +48,8 @@ class ScriptJobProcessor implements ScriptJob.Processor {
     private final ExchangeService exchangeService;
     private final TradeServiceFactory tradeServiceFactory;
     private final AccountServiceFactory accountServiceFactory;
+    private final MarketDataSubscriptionManager subscriptionManager;
+    private final JobAccess jobAccess;
     private final JobSubmitter jobSubmitter;
     private final Transactionally transactionally;
     private final Hasher hasher;
@@ -64,17 +67,21 @@ class ScriptJobProcessor implements ScriptJob.Processor {
             ExchangeService exchangeService,
             TradeServiceFactory tradeServiceFactory,
             AccountServiceFactory accountServiceFactory,
+            MarketDataSubscriptionManager subscriptionManager,
             Transactionally transactionally,
             JobSubmitter jobSubmitter,
+            JobAccess jobAccess,
             Hasher hasher,
             ScriptConfiguration configuration) {
         this.job = job;
         this.jobControl = jobControl;
+        this.jobAccess = jobAccess;
         this.exchangeEventRegistry = exchangeEventRegistry;
         this.notificationService = notificationService;
         this.tradeServiceFactory = tradeServiceFactory;
         this.accountServiceFactory = accountServiceFactory;
         this.exchangeService = exchangeService;
+        this.subscriptionManager = subscriptionManager;
         this.jobSubmitter = jobSubmitter;
         this.transactionally = transactionally;
         this.hasher = hasher;
@@ -133,6 +140,12 @@ class ScriptJobProcessor implements ScriptJob.Processor {
 
         bindings.put("job", job);
 
+        bindings.put("subscriptionManager", subscriptionManager);
+
+        bindings.put("jobSubmitter", jobSubmitter);
+
+        bindings.put("jobAccess", jobAccess);
+
         bindings.put("notificationService", notificationService);
 
         bindings.put("exchangeService", exchangeService);
@@ -145,8 +158,6 @@ class ScriptJobProcessor implements ScriptJob.Processor {
 
         bindings.put("tradeService", tradeServiceFactory
                 .getForExchange(ticker.exchange()));
-
-        bindings.put("jobService", jobSubmitter);
 
         bindings.put("eventService", new Events());
 
