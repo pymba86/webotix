@@ -1,0 +1,18 @@
+@import '../../styles/functions.scss';
+@import '../../styles/theme.scss';
+@import '../../styles/mixins.scss';
+
+$chart-prefix: 'ui-chart';
+
+.#{$chart-prefix} {
+
+  &-outer {
+    overflow: hidden;
+    height: 100%;
+  }
+
+  &-inner {
+    margin: -1px -8px 0;
+    height: calc(100% + 8px);
+  }
+}

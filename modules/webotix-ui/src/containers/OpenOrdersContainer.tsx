@@ -27,7 +27,7 @@ export const OpenOrdersContainer: React.FC<OpenOrdersContainerProps> = ({coin}) 
 
     return (
         <OpenOrders
-            orders={orders}
+            orders={allOrders}
             onCancelExchange={(id: string) => console.log(id)}
             onCancelServer={(id: string) => console.log(id)}
             coin={coin}

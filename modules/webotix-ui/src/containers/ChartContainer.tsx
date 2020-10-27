@@ -1,8 +1,10 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import {useVisibility} from "../components/visibility/Visibility";
 import {RenderIf} from "../components/render/RenderIf";
 import {Section, SectionTab} from "../elements/section";
 import {getValueFromLS} from "../modules/common/localStorage";
+import {SocketContext} from "../modules/socket/SocketContext";
+import {TradingViewChartContent} from "../components/chart";
 
 interface IntervalProps {
     name: string;
@@ -13,7 +15,11 @@ const CHART_INTERVAL_KEY = "Chart.interval";
 
 export const ChartContainer: React.FC = () => {
 
+    const socketApi = useContext(SocketContext);
+
     const visible = useVisibility();
+
+    const selectedCoin = socketApi.selectedCoin;
 
     const [interval, setInterval] = useState(
         getValueFromLS(CHART_INTERVAL_KEY) || "240"
@@ -43,7 +49,8 @@ export const ChartContainer: React.FC = () => {
                              <Interval code="15" name="15m"/>
                          </React.Fragment>
                      )}>
-                chart
+                {selectedCoin ? <TradingViewChartContent
+                    coin={selectedCoin} interval={interval}/> : <div>Coin not selected</div>}
             </Section>
         </RenderIf>
     )
