@@ -65,6 +65,7 @@ function action(method: string, content?: string): RequestInit {
         redirect: "follow",
         headers: xsrfToken
             ? {
+                [X_XSRF_TOKEN]: xsrfToken,
                 "Content-type": "application/json"
             }
             : {

@@ -7,6 +7,7 @@ import {Coin, ServerCoin} from "../market";
 import exchangeService from "../market/exchangeService";
 import {coinFromTicker, tickerFromCoin} from "../market/utils";
 import {LogContext} from "../log/LogContext";
+import {AuthContext} from "../auth/AuthContext";
 
 function compareCoins(a: ServerCoin, b: ServerCoin) {
     if (a.exchange < b.exchange) return -1;
@@ -35,6 +36,7 @@ export const Server: React.FC = ({children}) => {
     const [coinMetadata, setCoinMetadata] = useState<Map<String, CoinMetadata>>(new Map());
 
     const logApi = useContext(LogContext);
+    const authApi = useContext(AuthContext);
 
     const errorPopup = logApi.errorPopup;
     const errorLog = logApi.localError;
@@ -42,7 +44,8 @@ export const Server: React.FC = ({children}) => {
 
     const fetchMetadata = useMemo(
         () => (coin: Coin) => {
-            exchangeService.fetchMetadata(coin)
+            authApi.authenticatedRequest(
+                () => exchangeService.fetchMetadata(coin))
                 .then((meta: CoinMetadata) => setCoinMetadata(current => current.set(coin.key, meta)))
                 .then(() => trace("Fetched metadata for " + coin.shortName))
                 .catch((error: Error) => errorPopup("Could not fetch coin metadata: " + error.message));
@@ -51,7 +54,8 @@ export const Server: React.FC = ({children}) => {
 
     const fetchJobs = useMemo(
         () => () => {
-            jobService.fetchJobs()
+            authApi.authenticatedRequest(
+                () => jobService.fetchJobs())
                 .then((jobs: Job[]) => setJobs(jobs))
                 .catch((error: Error) => errorLog("Could not fetch jobs: " + error.message));
         },
@@ -60,7 +64,8 @@ export const Server: React.FC = ({children}) => {
 
     const submitScriptJob = useMemo(
         () => (job: ScriptJob) => {
-            jobService.submitScriptJob(job)
+            authApi.authenticatedRequest(
+                () => jobService.submitScriptJob(job))
                 .catch((error: Error) => errorPopup("Could not submit job: " + error.message))
                 .then(() => setJobs(
                     current => ([...current, {...job}])))
@@ -70,7 +75,8 @@ export const Server: React.FC = ({children}) => {
 
     const submitJob = useMemo(
         () => (job: Job) => {
-            jobService.submitJob(job)
+            authApi.authenticatedRequest(
+                () => jobService.submitJob(job))
                 .catch((error: Error) => errorPopup("Could not submit job: " + error.message))
                 .then(() => setJobs(current => [...current, job]))
         },
@@ -79,7 +85,8 @@ export const Server: React.FC = ({children}) => {
 
     const deleteJob = useMemo(
         () => (id: string) => {
-            jobService.deleteJob(id)
+            authApi.authenticatedRequest(
+                () => jobService.deleteJob(id))
                 .catch((error: Error) => errorPopup("Could not delete job: " + error.message))
                 .then(() => setJobs(current => current.filter(j => j.id !== id)))
         },
@@ -88,7 +95,8 @@ export const Server: React.FC = ({children}) => {
 
     const addSubscription = useMemo(
         () => (coin: Coin) => {
-            return exchangeService.addSubscription(tickerFromCoin(coin))
+            return authApi.authenticatedRequest(
+                () => exchangeService.addSubscription(tickerFromCoin(coin)))
                 .then(() => setSubscriptions(current => insertCoin(current, coin)))
                 .then(() => fetchMetadata(coin))
                 .catch((error: Error) => errorPopup("Could not add subscription: " + error.message));
@@ -97,7 +105,8 @@ export const Server: React.FC = ({children}) => {
 
     const removeSubscription = useMemo(
         () => (coin: Coin) => {
-            return exchangeService.removeSubscription(tickerFromCoin(coin))
+            return authApi.authenticatedRequest(
+                () => exchangeService.removeSubscription(tickerFromCoin(coin)))
                 .then(() => setSubscriptions(current => current.filter(c => c.key !== coin.key)))
                 .catch((error: Error) => errorPopup("Could not remove subscription: " + error.message));
         }, [setSubscriptions, errorPopup]
@@ -107,12 +116,13 @@ export const Server: React.FC = ({children}) => {
         () => {
             fetchJobs();
         },
-        5000,
-        [fetchJobs]
+        authApi.authorised ? 5000 : null,
+        [fetchJobs, authApi]
     );
 
     useEffect(() => {
-        exchangeService.fetchSubscriptions()
+        authApi.authenticatedRequest(
+            () => exchangeService.fetchSubscriptions())
             .then((data: ServerCoin[]) => {
                 const coins = data.map((t: ServerCoin) => coinFromTicker(t));
                 setSubscriptions(coins.sort(compareCoins));

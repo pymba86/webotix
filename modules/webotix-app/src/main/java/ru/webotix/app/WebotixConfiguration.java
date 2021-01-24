@@ -6,6 +6,8 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.util.Providers;
 import io.dropwizard.Configuration;
 import io.dropwizard.client.JerseyClientConfiguration;
+import io.dropwizard.server.AbstractServerFactory;
+import ru.webotix.auth.AuthConfiguration;
 import ru.webotix.datasource.database.DatabaseConfiguration;
 import ru.webotix.datasource.wiring.BackgroundProcessingConfiguration;
 import ru.webotix.exchange.ExchangeConfiguration;
@@ -32,6 +34,10 @@ public class WebotixConfiguration extends Configuration
     @Valid
     @JsonProperty
     private TelegramConfiguration telegram;
+
+    @Valid
+    @JsonProperty
+    private AuthConfiguration auth;
 
     @Valid
     @JsonProperty("jerseyClient")
@@ -94,6 +100,19 @@ public class WebotixConfiguration extends Configuration
         this.telegram = telegram;
     }
 
+    public AuthConfiguration getAuth() {
+        return auth;
+    }
+
+    public void setAuth(AuthConfiguration auth) {
+        this.auth = auth;
+    }
+
+    public String getRootPath() {
+        AbstractServerFactory serverFactory = (AbstractServerFactory) getServerFactory();
+        return serverFactory.getJerseyRootPath().orElse("/") + "*";
+    }
+
     public void bind(Binder binder) {
 
         // Конфигурация для частоты опросов в внутрениих процессах
@@ -111,6 +130,9 @@ public class WebotixConfiguration extends Configuration
         // Конфигурация веб клиента
         binder.bind(JerseyClientConfiguration.class)
                 .toProvider(Providers.of(jerseyClient));
+
+        binder.bind(AuthConfiguration.class)
+                .toProvider(Providers.of(auth));
 
         // Конфигурация телеграм
         binder.bind(TelegramConfiguration.class)

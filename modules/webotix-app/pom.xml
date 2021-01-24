@@ -51,6 +51,11 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-auth</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>webotix-notification</artifactId>
         </dependency>
 
@@ -133,7 +138,6 @@
             <groupId>info.bitrich.xchange-stream</groupId>
             <artifactId>xchange-stream-core</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>

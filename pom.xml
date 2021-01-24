@@ -50,6 +50,8 @@
         <jooq.version>3.12.1</jooq.version>
         <ta4j.version>0.13</ta4j.version>
         <groovy.version>3.0.6</groovy.version>
+        <apache.commons.version>4.4</apache.commons.version>
+        <jose4j.version>0.7.4</jose4j.version>
     </properties>
 
     <dependencyManagement>
@@ -154,6 +156,12 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>webotix-utils</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-auth</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -337,6 +345,18 @@
                 <groupId>org.codehaus.groovy</groupId>
                 <artifactId>groovy-jsr223</artifactId>
                 <version>${groovy.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${apache.commons.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.bitbucket.b_c</groupId>
+                <artifactId>jose4j</artifactId>
+                <version>${jose4j.version}</version>
             </dependency>
 
         </dependencies>

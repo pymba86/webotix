@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo} from "react"
+import React, {useState, useEffect, useMemo, useContext} from "react"
 import {Breakpoint, breakpoints, DragPanel, OfAllKeyPanel, Panel, useUiConfig} from "./config";
 import {Framework} from "./Framework";
 import {Layout, Layouts} from "react-grid-layout";
@@ -6,6 +6,7 @@ import {DraggableData} from "react-rnd";
 import Immutable, {ImmutableObject} from "seamless-immutable"
 import {CoinCallback} from "./components/coins";
 import {Coin} from "./modules/market";
+import {AuthApi, AuthContext} from "./modules/auth/AuthContext";
 
 const windowToBreakpoint = (width: number): Breakpoint =>
     width < breakpoints.lg ? (width < breakpoints.md ? "sm" : "md") : "lg";
@@ -67,6 +68,8 @@ export const FrameworkContainer: React.FC = () => {
 
 
     const [uiConfig, uiConfigApi] = useUiConfig();
+
+    const authApi: AuthApi = useContext(AuthContext);
 
     const api: FrameworkApi = useMemo(
         () => ({
@@ -130,8 +133,7 @@ export const FrameworkContainer: React.FC = () => {
                 onTogglePanelAttached={uiConfigApi.togglePanelAttached}
                 onTogglePanelVisible={uiConfigApi.togglePanelVisible}
                 onInteractPanel={(key: OfAllKeyPanel) => uiConfigApi.panelToFront(key)}
-                onLogout={() => {
-                }}
+                onLogout={authApi.logout}
             />
         </FrameworkContext.Provider>
     )

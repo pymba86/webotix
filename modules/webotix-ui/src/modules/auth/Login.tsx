@@ -1,23 +1,32 @@
-import React from "react";
+import React, {FormEvent, useState} from "react";
 import {Modal} from "../../elements/modal";
 import {Button} from "../../elements/button";
 import {Form} from "../../elements/form";
 import {Input} from "../../elements/input";
+import LoginDetails from "./LoginDetails";
 
 export interface LoginProps {
-    error: string;
+    error?: string;
 
-    onLogin(details: string): void;
+    onLogin(details: LoginDetails): void
 }
 
-export const Login: React.FC<LoginProps> = () => {
+export const Login: React.FC<LoginProps> = (props: LoginProps) => {
+
+    const [username, setUserName] = useState("")
+    const [password, setPassword] = useState("")
 
     const headerMarkup = (
         <div>Login</div>
     );
 
     const footerMarkup = (
-        <div><Button variant={"primary"}>Login</Button></div>
+        <div>
+            <Button variant={"primary"}
+                    onClick={() => props.onLogin({username, password})}>
+                Login
+            </Button>
+        </div>
     );
 
     return (
@@ -28,14 +37,22 @@ export const Login: React.FC<LoginProps> = () => {
 
             <Form>
                 <Form.Item label={"Username"} required={true}
-                           message={"Please input your name"} invalid={false}
-                           status={"error"}>
-                    <Input placeholder={"Enter name"}/>
+                           message={"Please input your name"}
+                           invalid={false}
+                           status={"default"}>
+                    <Input
+                        placeholder={"Enter name"}
+                        value={username}
+                        onChange={setUserName}
+                    />
                 </Form.Item>
                 <Form.Item label={"Password"} required={true}
                            message={"Please input your name"} invalid={false}
                            status={"error"}>
-                    <Input type={"password"} placeholder={"Enter password"}/>
+                    <Input type={"password"}
+                           placeholder={"Enter password"}
+                           value={password}
+                           onChange={setPassword}/>
                 </Form.Item>
             </Form>
 

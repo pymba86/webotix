@@ -83,6 +83,10 @@
             <groupId>info.bitrich.xchange-stream</groupId>
             <artifactId>xchange-stream-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-auth</artifactId>
+        </dependency>
 
     </dependencies>
 

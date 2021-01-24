@@ -1,4 +1,12 @@
 scriptSigningKey: "123456"
+auth:
+  httpsOnly: false
+  jwt:
+    username: admin
+    password: HASH(qK+WLbw5urUSKEulOC6MEPUQbGscfcl3UWjQjLuJPJA=)
+    passwordSalt: NaZCjLLzFNrqhHyiBuAwgw==
+    secret: 234q9803b21KJHSAD)9832yhSdSUH9222fg234gefdsa11
+    expirationMinutes: 1440
 database:
   connectionString: h2:file:./webotix;DB_CLOSE_DELAY=-1;DEFAULT_LOCK_TIMEOUT=60000;DB_CLOSE_ON_EXIT=FALSE
 telegram:

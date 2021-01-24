@@ -1,8 +1,12 @@
 package ru.webotix.app;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import com.gruelbox.tools.dropwizard.guice.Configured;
 import com.gruelbox.tools.dropwizard.guice.hibernate.GuiceHibernateModule;
+import ru.webotix.auth.AuthModule;
 import ru.webotix.base.SubmissionType;
 import ru.webotix.datasource.database.DatabaseModule;
 import ru.webotix.datasource.wiring.WiringModule;
@@ -43,6 +47,8 @@ public class WebotixModule extends AbstractModule
         // Делаем элементы конфигурации доступными для дочерних модулей
         configuration.bind(binder());
 
+        install(new AuthModule(configuration.getAuth()));
+
         // Открываем веб сокеты
         install(new WebSocketModule());
 
@@ -77,5 +83,12 @@ public class WebotixModule extends AbstractModule
 
         // Управление доступом к рыночным данных
         install(new MarketDataModule());
+    }
+
+    @Provides
+    @Named(AuthModule.BIND_ROOT_PATH)
+    @Singleton
+    String rootPath() {
+        return configuration.getRootPath();
     }
 }

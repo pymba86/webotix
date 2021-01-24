@@ -10,6 +10,7 @@ import {compose, createStore, applyMiddleware} from "redux";
 import thunk from "redux-thunk";
 
 import {reducers} from "./store/reducers";
+import {Authorizer} from "./modules/auth/Authoriser";
 
 const store = createStore(
     reducers,
@@ -23,13 +24,15 @@ function App() {
         <BrowserRouter>
             <LogManager>
                 <ReduxProvider store={store}>
-                    <Server>
-                        <Socket>
-                            <Market>
-                                <FrameworkContainer/>
-                            </Market>
-                        </Socket>
-                    </Server>
+                    <Authorizer>
+                            <Server>
+                                <Socket>
+                                    <Market>
+                                        <FrameworkContainer/>
+                                    </Market>
+                                </Socket>
+                            </Server>
+                    </Authorizer>
                 </ReduxProvider>
             </LogManager>
         </BrowserRouter>

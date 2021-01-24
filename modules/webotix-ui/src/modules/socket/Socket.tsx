@@ -11,6 +11,7 @@ import * as socketClient from "./client"
 import {useInterval} from "../common/hooks";
 import ReactDOM from "react-dom";
 import {Coin} from "../market";
+import {AuthContext} from "../auth/AuthContext";
 
 const MAX_PUBLIC_TRADES = 48;
 const UPDATE_FREQUENCY = 1000;
@@ -60,6 +61,7 @@ export const Socket: React.FC = ({children}) => {
 
     const serverApi = useContext(ServerContext);
     const logApi = useContext(LogContext);
+    const authApi = useContext(AuthContext);
 
     const location = useLocation();
 
@@ -188,13 +190,15 @@ export const Socket: React.FC = ({children}) => {
         ]);
 
     useEffect(() => {
-        socketClient.connect();
+        if (authApi.authorised) {
+            socketClient.connect()
+        }
 
         return () => {
             console.log("Authorization lost");
             socketClient.disconnect();
         }
-    }, []);
+    }, [authApi.authorised]);
 
     useEffect(() => {
         socketClient.onConnectionStateChange(state => {

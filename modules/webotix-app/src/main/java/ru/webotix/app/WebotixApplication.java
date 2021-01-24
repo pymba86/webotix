@@ -36,4 +36,11 @@ public class WebotixApplication extends WebApplication<WebotixConfiguration> {
     protected Module createApplicationModule() {
         return webotixModule;
     }
+
+    @Override
+    protected void addDefaultCommands(Bootstrap<WebotixConfiguration> bootstrap) {
+        super.addDefaultCommands(bootstrap);
+
+        bootstrap.addCommand(new HashCommand());
+    }
 }
