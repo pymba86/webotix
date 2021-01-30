@@ -8,5 +8,6 @@ public class ProcessorModule extends AbstractModule {
     protected void configure() {
         install(new AlertJobProcessor.Module());
         install(new UpdateStatusJobProcessor.Module());
+        install(new LimitOrderJobProcessor.Module());
     }
 }

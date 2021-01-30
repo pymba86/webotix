@@ -21,7 +21,17 @@
 
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-market-data-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>webotix-base</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>webotix-exchange</artifactId>
         </dependency>
 
         <dependency>
