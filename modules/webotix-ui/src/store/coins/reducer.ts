@@ -15,13 +15,16 @@ export function coinsReducer(
     switch (action.type) {
         case types.SET_REFERENCE_PRICE:
             return {
+                ...state,
                 referencePrices: {
+                    ...state.referencePrices,
                     [action.payload.coin.key]: action.payload.price
                 }
             };
         case types.SET_REFERENCE_PRICES:
             return {
-               referencePrices: action.payload
+                ...state,
+                referencePrices: action.payload
             };
         default:
             return state

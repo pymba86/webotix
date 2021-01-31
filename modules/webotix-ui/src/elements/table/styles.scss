@@ -11,4 +11,12 @@ $table-prefix: 'ui-table';
   &-link {
     cursor: pointer;
   }
+
+  &-color-sell {
+    color: #ef5451;
+  }
+
+  &-color-buy {
+    color: #2aa599;
+  }
 }

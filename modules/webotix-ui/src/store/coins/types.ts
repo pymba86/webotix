@@ -4,14 +4,14 @@ export const SET_REFERENCE_PRICE = "COINS.SET_REFERENCE_PRICE";
 export const SET_REFERENCE_PRICES = "COINS.SET_REFERENCE_PRICES";
 
 export type CoinPriceList = {
-    [key: string]: number;
+    [key: string]: number | undefined;
 }
 
 export interface SetReferencePriceAction {
     type: typeof SET_REFERENCE_PRICE;
     payload: {
         coin: Coin,
-        price: number
+        price?: number
     };
 }
 

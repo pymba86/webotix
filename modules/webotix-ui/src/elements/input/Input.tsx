@@ -85,7 +85,7 @@ export class Input extends React.Component<InputProps> {
             },
             className,
         );
-        const inputType = type === 'password' ? 'password' : 'text';
+
         if ('value' in this.props) {
             attributes.value = fixControlledValue(value);
             delete attributes.defaultValue;
@@ -96,7 +96,7 @@ export class Input extends React.Component<InputProps> {
                 className={inputClassName}
                 ref={wrapperRef}
                 readOnly={disabled}
-                type={inputType}
+                type={type}
                 onChange={this.handleChange}
                 onBlur={this.handleBlur}
                 onFocus={this.handleFocus}

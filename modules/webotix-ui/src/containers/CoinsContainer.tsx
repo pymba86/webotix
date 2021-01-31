@@ -10,8 +10,18 @@ import {SocketContext} from "../modules/socket/SocketContext";
 import {MarketContext} from "../modules/market/MarketContext";
 import {Coins, FullCoinData} from "../components/coins";
 import {FrameworkContext} from "../FrameworkContainer";
+import {RootState} from "../store/reducers";
+import {connect, ConnectedProps} from "react-redux";
 
-export const CoinsContainer: React.FC = () => {
+const mapState = (state: RootState) => ({
+    referencePrices: state.coins.referencePrices
+});
+
+const connector = connect(mapState);
+
+type StateProps = ConnectedProps<typeof connector>;
+
+const CoinsWrapper: React.FC<StateProps> = ({referencePrices}) => {
 
     const serverApi = useContext(ServerContext);
     const socketApi = useContext(SocketContext);
@@ -30,16 +40,21 @@ export const CoinsContainer: React.FC = () => {
 
     const data: FullCoinData[] = useMemo(
         () => coins.map(coin => {
+            const referencePrice = referencePrices[coin.key]
             const ticker = tickers.get(coin.key);
             return {
                 ...coin,
                 exchangeMeta: exchanges.find(e => e.code === coin.exchange),
                 ticker,
                 hasAlert: false,
-                priceChange: "--"
+                priceChange: referencePrice
+                    ? Number(
+                    (((ticker ? ticker.last : referencePrice) - referencePrice) * 100) / referencePrice
+                ).toFixed(2) + "%"
+                    : "--"
             }
         }),
-        [coins, exchanges, tickers]
+        [coins, exchanges, referencePrices, tickers]
     );
 
     return (
@@ -57,8 +72,10 @@ export const CoinsContainer: React.FC = () => {
                            serverApi.removeSubscription(coin)
                                .then(() => history.push("/"));
                        }}
-                       onClickAlerts={frameworkApi.setAlertsCoin}/>
+                       onClickReferencePrice={frameworkApi.setReferencePriceCoin}/>
             </Section>
         </RenderIf>
     )
 };
+
+export const CoinsContainer = connector(CoinsWrapper);

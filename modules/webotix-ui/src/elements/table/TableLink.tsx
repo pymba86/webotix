@@ -1,9 +1,12 @@
 import React, {ButtonHTMLAttributes} from 'react';
 import classNames from "classnames";
 
-export type TableLinkProps = ButtonHTMLAttributes<HTMLAnchorElement> & {
+export type TableLinkColor = 'sell' | 'buy';
+
+export type TableLinkProps = ButtonHTMLAttributes<Omit<HTMLAnchorElement, 'color'>> & {
     prefixCls?: string;
     className?: string;
+    color?: TableLinkColor;
 }
 
 export const TableLink: React.FC<TableLinkProps> = (
@@ -11,6 +14,7 @@ export const TableLink: React.FC<TableLinkProps> = (
         prefixCls = 'ui-table',
         className,
         children,
+        color,
         ...props
     }) => {
 
@@ -18,6 +22,7 @@ export const TableLink: React.FC<TableLinkProps> = (
         prefixCls,
         {
             [`${prefixCls}-link`]: true,
+            [`${prefixCls}-color-${color}`]: color,
         },
         className
     );

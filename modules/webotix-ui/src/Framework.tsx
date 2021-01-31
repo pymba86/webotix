@@ -22,6 +22,7 @@ import {ScriptContainer} from "./containers/ScriptContainer";
 import {ScriptControlContainer} from "./containers/ScriptControlContainer";
 import {AddScriptContainer} from "./containers/AddScriptContainer";
 import {JobContainer} from "./containers/JobContainer";
+import {ReferencePriceContainer} from "./containers/ReferencePriceContainer";
 
 interface FrameworkProps {
 
@@ -202,6 +203,9 @@ export class Framework extends React.Component<FrameworkProps> {
                 </ErrorBoundary>
                 <ErrorBoundary>
                     <SettingsMarkup/>
+                </ErrorBoundary>
+                <ErrorBoundary>
+                    <ReferencePriceContainer/>
                 </ErrorBoundary>
                 <ResponsiveReactGridLayout
                     breakpoints={breakpoints}

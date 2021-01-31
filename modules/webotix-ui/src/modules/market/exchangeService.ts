@@ -1,6 +1,7 @@
 import {del, get, put} from "../common/fetch";
 import {Coin, Exchange, PartialServerCoin, ServerCoin} from "./types";
 import {CoinMetadata} from "../server";
+import {CoinPriceList} from "../../store/coins/types";
 
 class ExchangeService {
 
@@ -18,6 +19,17 @@ class ExchangeService {
 
     async addSubscription(ticker: ServerCoin): Promise<Response> {
         return await put("subscriptions", JSON.stringify(ticker));
+    }
+
+    async fetchReferencePrices(): Promise<CoinPriceList> {
+        return await get("subscriptions/referencePrices")
+    }
+
+    async setReferencePrice(coin: Coin, price: string | undefined): Promise<Response> {
+        return await put(
+            "subscriptions/referencePrices/" + coin.exchange + "/" + coin.base + "-" + coin.counter,
+            price
+        )
     }
 
     async removeSubscription(ticker: ServerCoin): Promise<Response> {

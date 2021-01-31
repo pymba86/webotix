@@ -22,10 +22,12 @@ export interface FullCoinData {
 
 export type CoinCallback = (coin: Coin) => void;
 
+export type CoinNullableCallback = (coin?: Coin) => void;
+
 export interface CoinsProps {
     data: FullCoinData[];
     onRemove: CoinCallback;
-    onClickAlerts: CoinCallback;
+    onClickReferencePrice: CoinCallback;
 }
 
 const textStyle = {
@@ -80,13 +82,14 @@ const priceColumn = {
     sortable: false
 };
 
-const changeColumn = {
+const changeColumn = (onClick: CoinCallback) => ({
     id: "change",
     Header: "Change",
     accessor: "change",
     Cell: ({original}: { original: FullCoinData }) => (
         <TableLink
             color={original.priceChange.slice(0, 1) === "-" ? "sell" : "buy"}
+            onClick={() => onClick(original)}
             title="Set reference price">
             {original.priceChange}
         </TableLink>
@@ -95,7 +98,7 @@ const changeColumn = {
     style: numberStyle,
     resizable: true,
     minWidth: 40
-};
+});
 
 const closeColumn = (onRemove: CoinCallback) => ({
     id: "close",
@@ -112,25 +115,10 @@ const closeColumn = (onRemove: CoinCallback) => ({
     resizable: false
 });
 
-const alertColumn = (onClickAlerts: CoinCallback) => ({
-    id: "alert",
-    Header: <Icon type="bell outline"/>,
-    Cell: ({original}: { original: FullCoinData }) => (
-        <TableLink title="Manage alerts" onClick={() => onClickAlerts(original)}>
-            <Icon type={original.hasAlert ? "bell" : "bell outline"}/>
-        </TableLink>
-    ),
-    headerStyle: textStyle,
-    style: textStyle,
-    width: 32,
-    sortable: false,
-    resizable: false
-});
-
 export const Coins: React.FC<CoinsProps> = ({
                                                 data,
                                                 onRemove,
-                                                onClickAlerts,
+                                                onClickReferencePrice,
                                             }) => (
     <ReactTable
         data={data}
@@ -139,8 +127,7 @@ export const Coins: React.FC<CoinsProps> = ({
             exchangeColumn,
             nameColumn,
             priceColumn,
-            changeColumn,
-            alertColumn(onClickAlerts)
+            changeColumn(onClickReferencePrice)
         ]}
         showPagination={false}
         resizable={false}
