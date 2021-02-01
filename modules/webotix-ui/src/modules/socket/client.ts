@@ -127,6 +127,11 @@ export function connect() {
             return;
         }
         try {
+            content = preProcess(content)
+        } catch (e) {
+            console.log("Failed to pre-process message from server (" + e + ")", evt.data)
+        }
+        try {
             receive(content);
         } catch (e) {
             console.log("Failed to handle message from server (" + e + ")", evt.data);
@@ -134,6 +139,23 @@ export function connect() {
     });
 
     timer = setInterval(() => send({command: messages.READY}), 3000);
+}
+
+function preProcess(obj: any) {
+    switch (obj.nature) {
+        case messages.ORDERBOOK:
+            const ORDERBOOK_SIZE = 20;
+            const orderBook = obj.data.orderBook
+            if (orderBook.asks.length > ORDERBOOK_SIZE) {
+                orderBook.asks = orderBook.asks.slice(0, 20)
+            }
+            if (orderBook.bids.length > ORDERBOOK_SIZE) {
+                orderBook.bids = orderBook.bids.slice(0, 20)
+            }
+            return obj
+        default:
+            return obj
+    }
 }
 
 export function disconnect() {

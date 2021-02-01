@@ -42,11 +42,12 @@ export const ChartContainer: React.FC = () => {
                      heading={"Chart"}
                      buttons={() => (
                          <React.Fragment>
-                             <Interval code="W" name="W"/>
-                             <Interval code="D" name="D"/>
                              <Interval code="240" name="4H"/>
                              <Interval code="60" name="1H"/>
                              <Interval code="15" name="15m"/>
+                             <Interval code="5" name="5m"/>
+                             <Interval code="3" name="3m"/>
+                             <Interval code="1" name="1m"/>
                          </React.Fragment>
                      )}>
                 {selectedCoin ? <TradingViewChartContent
