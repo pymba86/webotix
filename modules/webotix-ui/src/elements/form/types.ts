@@ -15,6 +15,11 @@ export type FormItemProps = React.HTMLAttributes<HTMLElement> & {
     status?: FormItemStatus;
 };
 
+export interface FormGroupProps {
+    prefixCls?: string;
+    className?: string;
+}
+
 export interface FormProps {
     prefixCls?: string;
     className?: string;

@@ -1,7 +1,7 @@
 import React, {ButtonHTMLAttributes} from 'react';
 import classNames from 'classnames';
 
-export type ButtonType = 'primary' | 'success' | 'danger' | 'warning' | 'link';
+export type ButtonType = 'primary' | 'success' | 'danger' | 'warning' | 'link' | 'sell' | 'buy';
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     prefixCls?: string;

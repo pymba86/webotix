@@ -43,20 +43,20 @@ export class TradingViewChartContent extends React.Component<TradingViewChartCon
                 autosize: true,
                 symbol: this.symbol(),
                 interval: this.props.interval,
-                timezone: "UTC",
+                timezone: "Asia/Ashkhabad",
                 theme: "Dark",
                 style: "1",
                 locale: "en",
                 toolbar_bg: "#131722",
                 enable_publishing: false,
-                withdateranges: false,
                 save_image: true,
                 show_popup_button: true,
                 popup_width: "1000",
                 popup_height: "650",
                 container_id: CONTAINER_ID,
                 hide_side_toolbar: false,
-                studies: []
+                studies: [],
+                details: true
             })
         } catch (error) {
             console.error("Failed to initialise TradingView widget", error)

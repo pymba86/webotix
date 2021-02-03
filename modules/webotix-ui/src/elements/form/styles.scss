@@ -26,7 +26,6 @@ $form-prefix: 'ui-form';
 
     &-label {
       display: flex;
-      width: 100px;
       height: $form-label-height;
       padding: $form-label-padding-y $form-label-padding-x $form-label-padding-y 0;
       line-height: 1;
@@ -45,6 +44,7 @@ $form-prefix: 'ui-form';
     &-label-top {
       float: none;
       height: auto;
+      width: auto;
       display: inline-block;
       text-align: left;
       padding: 0 0 $form-label-padding-y;
@@ -95,6 +95,29 @@ $form-prefix: 'ui-form';
           color: $color;
         }
       }
+    }
+  }
+
+  &-group {
+    align-self: flex-end;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+
+    & > button {
+      margin-top: 0;
+      margin-left: 8px;
+      margin-bottom: 0
+    }
+
+    & > div {
+      margin-top: 0 !important;
+      margin-left: 8px;
+      margin-bottom: 0 !important;
+    }
+
+    & > label {
+      margin-left: 8px;
     }
   }
 }

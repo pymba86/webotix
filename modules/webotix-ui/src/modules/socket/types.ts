@@ -50,12 +50,14 @@ export enum RunningAtType {
     EXCHANGE = "EXCHANGE"
 }
 
-export interface DisplayOrder extends Order {
+export interface JobOrder extends BaseOrder {
+    kind: 'job';
     runningAt: RunningAtType;
     jobId: string;
 }
 
 export interface Order extends BaseOrder {
+    kind: 'order';
     id: string;
     timestamp: number;
     status: OrderStatus;
@@ -66,6 +68,8 @@ export interface Order extends BaseOrder {
     deleted: boolean;
     serverTimestamp: number;
 }
+
+export type OrdersType = JobOrder | Order;
 
 export interface Ticker {
     bid: number;

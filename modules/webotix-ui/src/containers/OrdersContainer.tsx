@@ -36,10 +36,7 @@ export const OrdersContainer: React.FC = () => {
                          </React.Fragment>
                      )}>
                 {mode === Mode.OPEN ? (
-                    <OpenOrdersContainer coin={{
-                        base: "123", counter: "123",
-                        exchange: "123", key: "123", name: "213", shortName: "123"
-                    }}/>
+                    <OpenOrdersContainer/>
                 ) : (
                     <TradeHistoryContainer/>
                 )}

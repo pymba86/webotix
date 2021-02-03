@@ -39,6 +39,7 @@ export const ChartContainer: React.FC = () => {
     return (
         <RenderIf condition={visible}>
             <Section id={"chart"}
+                     nopadding={true}
                      heading={"Chart"}
                      buttons={() => (
                          <React.Fragment>

@@ -72,9 +72,11 @@ const Manager: React.FC<Props> = (
 
     const onRemove = () => {
         if (selectedScript) {
-            scriptService.deleteScript(selectedScript.id)
-                .then(() => removeScript(selectedScript.id))
-                .then(() => setCode(""))
+            if (window.confirm(`delete script: ${selectedScript.name}`)) {
+                scriptService.deleteScript(selectedScript.id)
+                    .then(() => removeScript(selectedScript.id))
+                    .then(() => setCode(""))
+            }
         }
     };
 

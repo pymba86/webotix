@@ -1,6 +1,6 @@
 import React from "react";
 import {Coin} from "../../modules/market";
-import {DisplayOrder} from "../../modules/socket";
+import {OrdersType} from "../../modules/socket";
 import ReactTable from "react-table";
 import {Icon} from "../../elements/icon";
 import {formatDate} from "../../modules/common/date";
@@ -11,7 +11,7 @@ export type CancelOrderHandler = (id: string) => void;
 
 export interface OpenOrdersProps {
     coin: Coin;
-    orders: Array<DisplayOrder>;
+    orders: Array<OrdersType>;
     onCancelExchange: CancelOrderHandler;
     onCancelServer: CancelOrderHandler;
 }
@@ -28,7 +28,7 @@ const orderTypeColumn = {
     id: "orderType",
     Header: <Icon type="shuffle"/>,
     accessor: "type",
-    Cell: ({original}: { original: DisplayOrder }) => (
+    Cell: ({original}: { original: OrdersType }) => (
         <Icon type={!!original.stopPrice
             ? "circle" : original.type === "BID" ? "arrow-up" : "arrow-down"}/>
     ),
@@ -41,7 +41,8 @@ const orderTypeColumn = {
 const runningAtColumn = {
     id: "runningAt",
     Header: "At",
-    Cell: ({original}: { original: DisplayOrder }) =>
+    Cell: ({original}: { original: OrdersType }) =>
+        original.kind === 'job' &&
         original.runningAt === "SERVER" ? (
             <Icon type="server"/>
         ) : (
@@ -57,8 +58,8 @@ const createdDateColumn = {
     id: "createdDate",
     accessor: "timestamp",
     Header: "Created",
-    Cell: ({original}: { original: DisplayOrder }) =>
-        original.timestamp
+    Cell: ({original}: { original: OrdersType }) =>
+        original.kind === 'order'
             ? formatDate(original.timestamp)
             : original.runningAt === "SERVER"
             ? "Not on exchange"
@@ -71,7 +72,7 @@ const createdDateColumn = {
 
 const limitPriceColumn = (coin: Coin) => ({
     Header: "Limit",
-    Cell: ({original}: { original: DisplayOrder }) =>
+    Cell: ({original}: { original: OrdersType }) =>
         !!original.stopPrice && !original.limitPrice ? (
             "MARKET"
         ) : (
@@ -88,7 +89,7 @@ const limitPriceColumn = (coin: Coin) => ({
 const stopPriceColumn = (coin: Coin) => ({
     id: "stopPrice",
     Header: "Trigger",
-    Cell: ({original}: { original: DisplayOrder }) => (
+    Cell: ({original}: { original: OrdersType }) => (
         <Amount color={original.type === "BID" ? "buy" : "sell"} noflash coin={coin}
                 value={original.stopPrice}/>
     ),
@@ -101,8 +102,8 @@ const stopPriceColumn = (coin: Coin) => ({
 
 const amountColumn = (coin: Coin) => ({
     Header: "Amount",
-    Cell: ({original}: { original: DisplayOrder }) => (
-        <Amount  color={original.type === "BID" ? "buy" : "sell"} noflash coin={coin}
+    Cell: ({original}: { original: OrdersType }) => (
+        <Amount color={original.type === "BID" ? "buy" : "sell"} noflash coin={coin}
                 value={original.originalAmount}/>
     ),
     headerStyle: numberStyle,
@@ -114,9 +115,9 @@ const amountColumn = (coin: Coin) => ({
 
 const filledColumn = (coin: Coin) => ({
     Header: "Filled",
-    Cell: ({original}: { original: DisplayOrder }) => (
-        <Amount  color={original.type === "BID" ? "buy" : "sell"} noflash coin={coin}
-                value={original.cumulativeAmount}/>
+    Cell: ({original}: { original: OrdersType }) => (
+        <Amount color={original.type === "BID" ? "buy" : "sell"} noflash coin={coin}
+                value={original.kind === 'order' ? original.cumulativeAmount : undefined}/>
     ),
     headerStyle: numberStyle,
     style: numberStyle,
@@ -128,17 +129,19 @@ const filledColumn = (coin: Coin) => ({
 const cancelColumn = (onCancelExchange: CancelOrderHandler, onCancelServer: CancelOrderHandler) => ({
     id: "close",
     Header: () => null,
-    Cell: ({original}: { original: DisplayOrder }) =>
+    Cell: ({original}: { original: OrdersType }) =>
+        original.kind === 'order' &&
         original.status === "CANCELED" ? null : (
             <TableLink
                 onClick={() => {
-                    if (original.runningAt === "SERVER") {
+                    if (original.kind === 'job'
+                        && original.runningAt === "SERVER") {
                         onCancelServer(original.jobId)
-                    } else {
+                    } else if (original.kind === 'order') {
                         onCancelExchange(original.id)
                     }
                 }}>
-                <Icon type="x" />
+                <Icon type="x"/>
             </TableLink>
         ),
     headerStyle: textStyle,

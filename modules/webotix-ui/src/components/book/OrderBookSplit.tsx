@@ -14,8 +14,8 @@ export const OrderBookSplit: React.FC<OrderBookSplitProps> = (
     }) => {
 
     return (
-        <section className={classNames(prefixCls, className)}>
+        <div className={classNames(prefixCls, className)}>
             {children}
-        </section>
+        </div>
     )
 };

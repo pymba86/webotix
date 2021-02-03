@@ -31,6 +31,12 @@ class ExchangeService {
             price
         )
     }
+    async cancelOrder(coin: Coin, id: string): Promise<Response> {
+        return await del(
+            "exchanges/" + coin.exchange
+            + "/markets/" + coin.base + "-" + coin.counter + "/orders/" + id
+        )
+    }
 
     async removeSubscription(ticker: ServerCoin): Promise<Response> {
         return await del("subscriptions", JSON.stringify(ticker));
