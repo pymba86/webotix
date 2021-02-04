@@ -1,5 +1,5 @@
-import {del, get, put} from "../common/fetch";
-import {Coin, Exchange, PartialServerCoin, ServerCoin} from "./types";
+import {del, get, post, put} from "../common/fetch";
+import {CalculateOrder, Coin, Exchange, PartialServerCoin, ServerCoin} from "./types";
 import {CoinMetadata} from "../server";
 import {CoinPriceList} from "../../store/coins/types";
 
@@ -31,11 +31,20 @@ class ExchangeService {
             price
         )
     }
+
     async cancelOrder(coin: Coin, id: string): Promise<Response> {
         return await del(
             "exchanges/" + coin.exchange
             + "/markets/" + coin.base + "-" + coin.counter + "/orders/" + id
         )
+    }
+
+    async calculateOrder(exchange: string, order: any): Promise<CalculateOrder> {
+        return await post("exchanges/" + exchange + "/orders/calc", JSON.stringify(order))
+    }
+
+    async submitOrder(exchange: string, order: any) {
+        return await post("exchanges/" + exchange + "/orders", JSON.stringify(order))
     }
 
     async removeSubscription(ticker: ServerCoin): Promise<Response> {

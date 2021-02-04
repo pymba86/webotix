@@ -31,7 +31,7 @@ export const OpenOrdersContainer: React.FC = () => {
     const allOrders = useMemo<Order[]>(
         () =>
             openOrders.filter(o => !o.deleted)
-                .map(o => ({...o, runningAt: RunningAtType.EXCHANGE, jobId: ''})),
+                .map(o => ({...o, kind: 'order', runningAt: RunningAtType.EXCHANGE, jobId: ''})),
         [openOrders]
     );
 
@@ -77,9 +77,10 @@ export const OpenOrdersContainer: React.FC = () => {
         () => (id: string, coin: Coin) => {
 
             const order = openOrders.find(o => o.id === id);
+
             if (order) {
                 pendingCancelOrder(
-                    id,
+                    order.id,
                     // Deliberately new enough to be relevant now but get immediately overwritten
                     order.serverTimestamp + 1
                 )

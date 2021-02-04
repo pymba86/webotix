@@ -4,6 +4,10 @@ export interface Exchange {
     authenticated: boolean;
 }
 
+export interface CalculateOrder {
+    amount: string;
+}
+
 export interface PartialServerCoin {
     base: string;
     counter: string;

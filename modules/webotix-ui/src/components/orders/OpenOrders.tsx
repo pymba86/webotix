@@ -59,9 +59,9 @@ const createdDateColumn = {
     accessor: "timestamp",
     Header: "Created",
     Cell: ({original}: { original: OrdersType }) =>
-        original.kind === 'order'
+        original.kind === 'order' && original.timestamp
             ? formatDate(original.timestamp)
-            : original.runningAt === "SERVER"
+            : original.kind === 'job' && original.runningAt === "SERVER"
             ? "Not on exchange"
             : "Confirming...",
     headerStyle: textStyle,

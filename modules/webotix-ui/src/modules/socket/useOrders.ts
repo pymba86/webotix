@@ -65,25 +65,24 @@ class CreatePlaceholderAction extends FullUpdateAction {
 }
 
 class UpdateSnapshotAction implements BaseAction {
-
-    private readonly orders: Array<Order>;
-    private readonly timestamp: number;
+    private readonly orders: Array<Order>
+    private readonly timestamp: number
 
     constructor(orders: Array<Order>, timestamp: number) {
-        this.orders = orders;
-        this.timestamp = timestamp;
+        this.orders = orders
+        this.timestamp = timestamp
     }
 
     reduce(state: Array<Order>): Array<Order> {
-        let result = state ? state : [];
-
-        const idsPresent = new Set<string>();
-
+        // Updates for every order mentioned
+        let result = state ? state : []
+        const idsPresent = new Set<string>()
         for (const order of this.orders) {
-            idsPresent.add(order.id);
+            idsPresent.add(order.id)
             result = orderUpdated(result, order, this.timestamp)
         }
 
+        // Any order not mentioned should be removed
         if (state) {
             for (const order of state) {
                 if (order.id === PLACEHOLDER_ID || idsPresent.has(order.id)) {
@@ -92,71 +91,54 @@ class UpdateSnapshotAction implements BaseAction {
                 result = orderUpdated(
                     state,
                     {
-                        ...order,
                         id: order.id,
                         status:
                             order.status === OrderStatus.PENDING_CANCEL
                                 ? OrderStatus.CANCELED : OrderStatus.PENDING_CANCEL
-                    },
+                    } as Order,
                     this.timestamp
                 )
             }
         }
 
-        return result;
+        return result
     }
 }
 
 class StateUpdateAction implements BaseAction {
-    private readonly timestamp: number;
-    private readonly id: string;
-    private readonly status: OrderStatus;
+    private readonly timestamp: number
+    private readonly id: string
+    private readonly status: OrderStatus
 
     constructor(id: string, status: OrderStatus, timestamp: number) {
-        this.id = id;
-        this.status = status;
+        this.id = id
+        this.status = status
         this.timestamp = timestamp
     }
 
     reduce(state: Array<Order>): Array<Order> {
-
-        const order = state.find(o => o.id === this.id);
-
-        if (order) {
-            return orderUpdated(
-                state ? state.filter(o => o.id !== PLACEHOLDER_ID) : state,
-                {...order, status: this.status},
-                this.timestamp
-            )
-        }
-
-        return state;
+        return orderUpdated(
+            state ? state.filter(o => o.id !== PLACEHOLDER_ID) : state,
+            { id: this.id, status: this.status } as Order,
+            this.timestamp
+        )
     }
 }
 
-function orderUpdated(state: Array<Order>, order: Order, timestamp: number): Array<Order> {
+function orderUpdated(state: Array<Order>, order: Order, timestamp: number) {
+    if (order === null) {
+        return []
+    }
 
     const isRemoval =
         order.status === OrderStatus.EXPIRED ||
         order.status === OrderStatus.CANCELED ||
-        order.status === OrderStatus.FILLED;
+        order.status === OrderStatus.FILLED
 
+    // No orders at all yet
     if (!state) {
-        if (isRemoval) {
-            return state;
-        }
-
-        return [{...order, deleted: false, serverTimestamp: timestamp}]
-    }
-
-    const index = state.findIndex(o => o.id === order.id);
-
-    if (index === -1) {
-        if (isRemoval) {
-            return state;
-        }
-
-        return [...state,
+        if (isRemoval) return state
+        return [
             {
                 ...order,
                 deleted: false,
@@ -165,30 +147,52 @@ function orderUpdated(state: Array<Order>, order: Order, timestamp: number): Arr
         ]
     }
 
-    const prevVersion = state[index];
+    // This order never seen before
+    const index = state.findIndex(o => o.id === order.id)
+    if (index === -1) {
+        if (isRemoval) return state
+        return state.concat({
+            ...order,
+            deleted: false,
+            serverTimestamp: timestamp
+        })
+    }
+
+    // If we've previously registered the order as removed, then assume
+    // this update is late and stop
+    const prevVersion = state[index]
     if (prevVersion.deleted) {
-        return state;
+        return state
     }
 
+    // If it's a removal, remove
     if (isRemoval) {
-        return replaceOrderContent(state, index, {deleted: true})
+        return replaceOrderContent(state, index, { deleted: true })
     }
 
-    // в случае если версия получена из более поздней отметки времени,
-    // чем это обновление
+    // If the previous version is derived from a later timestamp than
+    // this update, stop
     if (prevVersion.serverTimestamp > timestamp) {
-        return state;
+        return state
     }
 
-    return replaceOrderContent(state, index, {...order, serverTimestamp: timestamp})
+    // Overwrite existing state with any values provided in the
+    // update
+    return replaceOrderContent(state, index, { ...order, serverTimestamp: timestamp })
 }
 
-function replaceOrderContent(state: Array<Order>, index: number, replacement: Partial<Order>): Array<Order> {
-
-    const orders = Immutable.asMutable(state, {deep: true});
-
-    return orders.splice(
-        index, 1, {...orders[index], ...replacement});
+function replaceOrderContent(state: Array<Order>, index: number, replacement: any) {
+    const orders = Immutable.asMutable(state, { deep: true })
+    const existing = orders[index]
+    // eslint-disable-next-line
+    for (const key of Object.keys(replacement)) {
+        const val = replacement[key]
+        if (val !== undefined && val !== null) {
+            // @ts-ignore
+            existing[key] = val
+        }
+    }
+    return orders
 }
 
 
