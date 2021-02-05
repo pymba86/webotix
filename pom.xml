@@ -29,6 +29,7 @@
         <module>modules/webotix-app</module>
         <module>modules/webotix-script</module>
         <module>modules/webotix-ui</module>
+        <module>modules/webotix-support</module>
     </modules>
 
     <properties>
@@ -52,6 +53,7 @@
         <groovy.version>3.0.6</groovy.version>
         <apache.commons.version>4.4</apache.commons.version>
         <jose4j.version>0.7.4</jose4j.version>
+        <commons.version>2.8.0</commons.version>
     </properties>
 
     <dependencyManagement>
@@ -61,6 +63,18 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>webotix-common</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>webotix-support</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.version}</version>
             </dependency>
 
             <dependency>

@@ -1,5 +1,5 @@
 import * as types from "./types"
-import {Script} from "../../modules/script/types";
+import {Script} from "../../modules/script";
 import {ScriptsActionTypes} from "./types";
 
 export interface ScriptsState {

@@ -8,7 +8,7 @@ import scriptService from "../modules/script/scriptService";
 import {RootState} from "../store/reducers";
 import * as scriptActions from "store/scripts/actions"
 import {connect, ConnectedProps} from "react-redux";
-import {Script} from "../modules/script/types";
+import {Script} from "../modules/script";
 import { v4 as uuidv4 } from "uuid"
 
 const mapState = (state: RootState) => ({

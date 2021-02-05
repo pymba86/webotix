@@ -20,6 +20,7 @@ export interface ToolbarProps {
     updateFocusedField?: (value: number) => void;
     coin?: Coin;
     connected: boolean;
+    version: string;
     ticker?: Ticker;
     onShowPanel: (key: OfAllKeyPanel) => void;
     width: number;
@@ -43,6 +44,7 @@ export const Toolbar: React.FC<ToolbarProps> = (
         hiddenPanels,
         connected,
         onShowPanel,
+        version,
         onLogout,
         width,
         balances,
@@ -113,6 +115,7 @@ export const Toolbar: React.FC<ToolbarProps> = (
             <ToolbarSocket connected={connected}/>
             <ToolbarLink icon={"layout"} onClick={onShowViewSettings}/>
             <ToolbarLink icon={"lock"} onClick={onLogout}/>
+            <span>{version}</span>
         </div>
     )
 };

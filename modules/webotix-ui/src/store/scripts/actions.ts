@@ -1,4 +1,4 @@
-import {Script} from "../../modules/script/types";
+import {Script} from "../../modules/script";
 import {ADD_SCRIPT, DELETE_SCRIPT, ScriptsActionTypes,
     SELECT_SCRIPT, UPDATE_SCRIPT} from "./types";
 

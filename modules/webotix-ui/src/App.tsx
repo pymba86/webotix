@@ -14,7 +14,10 @@ import {Authorizer} from "./modules/auth/Authoriser";
 import {AuthApi, AuthContext} from "./modules/auth/AuthContext";
 import exchangeService from "./modules/market/exchangeService";
 import * as coinsActions from "./store/coins/actions";
+import * as supportActions from "store/support/actions"
 import {CoinPriceList} from "./store/coins/types";
+import supportService from "./modules/support/supportService";
+import {SupportMetadata} from "./modules/support";
 
 const store = createStore(
     reducers,
@@ -36,7 +39,13 @@ const StoreManagement: React.FC<{ auth: AuthApi; logApi: LogApi }> = ({auth, log
                     .then((list: CoinPriceList) => {
                         dispatch(coinsActions.setReferencePrices(list));
                     })
-                    .catch((error: Error) => errorPopup("Could not fetch coin metadata: " + error.message));
+                    .catch((error: Error) => errorPopup("Could not fetch coin list: " + error.message));
+                auth.authenticatedRequest(
+                    () => supportService.fetchMetadata())
+                    .then((metadata: SupportMetadata) => {
+                        dispatch(supportActions.setMetadata(metadata));
+                    })
+                    .catch((error: Error) => errorPopup("Could not fetch application metadata: " + error.message));
             }
         }
         if (auth.authorised) {

@@ -138,6 +138,10 @@
             <groupId>info.bitrich.xchange-stream</groupId>
             <artifactId>xchange-stream-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ru.webotix</groupId>
+            <artifactId>webotix-support</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

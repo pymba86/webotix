@@ -6,6 +6,16 @@ import {SocketContext} from "../modules/socket/SocketContext";
 import {MarketContext} from "../modules/market/MarketContext";
 import {ServerContext} from "../modules/server/ServerContext";
 import {formatNumber} from "../modules/common/number";
+import {RootState} from "../store/reducers";
+import {connect, ConnectedProps} from "react-redux";
+
+const mapState = (state: RootState) => ({
+    version: state.support.metadata.version
+});
+
+const connector = connect(mapState);
+
+type StateProps = ConnectedProps<typeof connector>;
 
 interface ToolbarContainerProps {
     onLogout(): void;
@@ -19,14 +29,17 @@ interface ToolbarContainerProps {
     hiddenPanels: Panel[];
 }
 
-export const ToolbarContainer: React.FC<ToolbarContainerProps> = (
+type Props = StateProps & ToolbarContainerProps;
+
+export const ToolbarWrapper: React.FC<Props> = (
     {
         mobile,
         hiddenPanels,
         width,
         onTogglePanelVisible,
         onLogout,
-        onShowViewSettings
+        onShowViewSettings,
+        version
     }) => {
 
     const frameworkApi = useContext(FrameworkContext);
@@ -60,6 +73,7 @@ export const ToolbarContainer: React.FC<ToolbarContainerProps> = (
                  connected={socketApi.connected}
                  mobile={mobile}
                  width={width}
+                 version={version}
                  onShowPanel={key => onTogglePanelVisible(key)}
                  onShowViewSettings={onShowViewSettings}
                  hiddenPanels={hiddenPanels}
@@ -70,3 +84,5 @@ export const ToolbarContainer: React.FC<ToolbarContainerProps> = (
         />
     )
 };
+
+export const ToolbarContainer = connector(ToolbarWrapper);

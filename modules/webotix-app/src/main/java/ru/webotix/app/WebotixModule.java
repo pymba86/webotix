@@ -18,6 +18,7 @@ import ru.webotix.notification.NotificationModule;
 import ru.webotix.processors.ProcessorModule;
 import ru.webotix.script.ScriptJobModule;
 import ru.webotix.subscription.SubscriptionModule;
+import ru.webotix.support.SupportModule;
 import ru.webotix.telegram.TelegramModule;
 import ru.webotix.websocket.WebSocketModule;
 
@@ -54,6 +55,8 @@ public class WebotixModule extends AbstractModule
 
         // Настройка базы данных
         install(new DatabaseModule());
+
+        install(new SupportModule());
 
         // Настройка схем подключения
         install(new WiringModule());

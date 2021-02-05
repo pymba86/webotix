@@ -1,4 +1,4 @@
-import {Script} from "../../modules/script/types";
+import {Script} from "../../modules/script";
 
 export const SELECT_SCRIPT = "SCRIPTS.SELECT_SCRIPT";
 export const ADD_SCRIPT = "SCRIPTS.ADD_SCRIPT";
