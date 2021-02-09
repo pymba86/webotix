@@ -99,6 +99,16 @@
             <artifactId>dropwizard-guice-box-hibernate</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>ru.webotix</groupId>
+            <artifactId>webotix-docker</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.tuckey</groupId>
+            <artifactId>urlrewritefilter</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

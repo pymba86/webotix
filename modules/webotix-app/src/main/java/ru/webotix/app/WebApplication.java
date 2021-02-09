@@ -10,6 +10,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.websockets.WebsocketBundle;
 import ru.webotix.common.JerseyBaseApplication;
+import ru.webotix.common.UrlRewriteEnvironment;
 import ru.webotix.websocket.WebSocketBundleInit;
 
 public abstract class WebApplication<T extends Configuration>
@@ -17,6 +18,8 @@ public abstract class WebApplication<T extends Configuration>
 
     @Inject
     private WebSocketBundleInit webSocketBundleInit;
+
+    @Inject private UrlRewriteEnvironment urlRewriteEnvironment;
 
     private WebsocketBundle websocketBundle;
 
@@ -38,6 +41,7 @@ public abstract class WebApplication<T extends Configuration>
 
     @Override
     public void run(T webotixConfiguration, Environment environment) {
+        urlRewriteEnvironment.init(environment);
         super.run(webotixConfiguration, environment);
         webSocketBundleInit.init(websocketBundle);
     }

@@ -1,0 +1,3 @@
+ru/webotix/docker/DockerSecretLookup.class
+ru/webotix/docker/DockerSecretSubstitutor.class
+ru/webotix/docker/YamlEscapingStrLookupAdapter.class
