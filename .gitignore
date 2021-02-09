@@ -19,5 +19,5 @@ webotix.trace.db
 **/*.iml
 **/*.versionsBackup
 **/*.releaseBackup
-/release.properties
+release.properties
 /target/orko-parent-0.0.1-SNAPSHOT-shaded.pom
