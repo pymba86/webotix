@@ -8,6 +8,7 @@
 
     <scm>
         <connection>scm:git:https://gitlab.com/PyMba86/webotix.git</connection>
+        <developerConnection>scm:git:git@gitlab.com:PyMba86/webotix.git</developerConnection>
         <url>https://gitlab.com/PyMba86/webotix</url>
         <tag>0.1.0</tag>
     </scm>
