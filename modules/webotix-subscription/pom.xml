@@ -85,8 +85,17 @@
         </dependency>
 
         <dependency>
-            <groupId>info.bitrich.xchange-stream</groupId>
+            <groupId>org.knowm.xchange</groupId>
             <artifactId>xchange-stream-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.alfasoftware</groupId>
+            <artifactId>morf-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.gruelbox</groupId>
+            <artifactId>dropwizard-guice-box-hibernate</artifactId>
         </dependency>
 
     </dependencies>

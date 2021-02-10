@@ -76,12 +76,12 @@
         </dependency>
 
         <dependency>
-            <groupId>info.bitrich.xchange-stream</groupId>
+            <groupId>org.knowm.xchange</groupId>
             <artifactId>xchange-stream-core</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>info.bitrich.xchange-stream</groupId>
+            <groupId>org.knowm.xchange</groupId>
             <artifactId>xchange-stream-binance</artifactId>
         </dependency>
 

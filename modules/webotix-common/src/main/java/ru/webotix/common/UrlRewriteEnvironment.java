@@ -36,7 +36,7 @@ public class UrlRewriteEnvironment implements EnvironmentInitialiser {
                         IOUtils.toInputStream(
                                 "<urlrewrite>\n"
                                         + "    <rule>\n"
-                                        + "        <from>^/?(addCoin|scripts|job|coin).*$</from>\n"
+                                        + "        <from>^/?(addCoin|addScript|scripts|job|coin).*$</from>\n"
                                         + "        <to type=\"forward\">/index.html</to>\n"
                                         + "    </rule>\n"
                                         + "</urlrewrite>",
