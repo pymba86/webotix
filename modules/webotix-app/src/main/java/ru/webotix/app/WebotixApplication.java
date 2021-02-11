@@ -4,6 +4,8 @@ import com.google.inject.Module;
 import com.gruelbox.tools.dropwizard.guice.hibernate.GuiceHibernateModule;
 import com.gruelbox.tools.dropwizard.guice.hibernate.HibernateBundleFactory;
 import io.dropwizard.setup.Bootstrap;
+import io.dropwizard.web.WebBundle;
+import io.dropwizard.web.conf.WebConfiguration;
 
 public class WebotixApplication extends WebApplication<WebotixConfiguration> {
 
@@ -28,6 +30,13 @@ public class WebotixApplication extends WebApplication<WebotixConfiguration> {
         webotixModule = new WebotixModule(new GuiceHibernateModule(hibernateBundleFactory));
 
         super.initialize(bootstrap);
+
+        bootstrap.addBundle(new WebBundle<WebotixConfiguration>() {
+            @Override
+            public WebConfiguration getWebConfiguration(final WebotixConfiguration configuration) {
+                return configuration.getWeb();
+            }
+        });
 
         bootstrap.addBundle(hibernateBundleFactory.bundle());
     }

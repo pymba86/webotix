@@ -34,6 +34,10 @@ jerseyClient:
   timeout: 15000ms
   connectionTimeout: 15000ms
   connectionRequestTimeout: 15000ms
+web:
+  csp:
+    enabled: true
+    policy: "script-src 'self' 'unsafe-inline' https://*.tradingview.com;"
 logging:
   loggers:
     "ru.webotix": ${LOG_LEVEL:-INFO}

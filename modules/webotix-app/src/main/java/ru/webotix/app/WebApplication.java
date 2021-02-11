@@ -34,6 +34,7 @@ public abstract class WebApplication<T extends Configuration>
         websocketBundle = new WebsocketBundle(new Class[]{});
 
         bootstrap.addBundle(websocketBundle);
+
     }
 
     @Override

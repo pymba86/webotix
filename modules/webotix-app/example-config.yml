@@ -30,3 +30,7 @@ server:
     type: http
     port: 8080
   maxThreads: 16
+web:
+  csp:
+    enabled: true
+    policy: "script-src 'self' 'unsafe-inline' https://*.tradingview.com;"

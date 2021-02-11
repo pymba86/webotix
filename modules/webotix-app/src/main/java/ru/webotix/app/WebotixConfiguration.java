@@ -7,6 +7,7 @@ import com.google.inject.util.Providers;
 import io.dropwizard.Configuration;
 import io.dropwizard.client.JerseyClientConfiguration;
 import io.dropwizard.server.AbstractServerFactory;
+import io.dropwizard.web.conf.WebConfiguration;
 import ru.webotix.auth.AuthConfiguration;
 import ru.webotix.datasource.database.DatabaseConfiguration;
 import ru.webotix.datasource.wiring.BackgroundProcessingConfiguration;
@@ -17,6 +18,7 @@ import ru.webotix.telegram.TelegramConfiguration;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +32,11 @@ public class WebotixConfiguration extends Configuration
     @Valid
     @JsonProperty
     private DatabaseConfiguration database = new DatabaseConfiguration();
+
+    @Valid
+    @NotNull
+    @JsonProperty
+    private WebConfiguration web = new WebConfiguration();
 
     @Valid
     @JsonProperty
@@ -113,6 +120,14 @@ public class WebotixConfiguration extends Configuration
         return serverFactory.getJerseyRootPath().orElse("/") + "*";
     }
 
+    public WebConfiguration getWeb() {
+        return web;
+    }
+
+    public void setWeb(WebConfiguration web) {
+        this.web = web;
+    }
+
     public void bind(Binder binder) {
 
         // Конфигурация для частоты опросов в внутрениих процессах
@@ -137,6 +152,10 @@ public class WebotixConfiguration extends Configuration
         // Конфигурация телеграм
         binder.bind(TelegramConfiguration.class)
                 .toProvider(Providers.of(telegram));
+
+        // Конфигурация телеграм
+        binder.bind(WebConfiguration.class)
+                .toProvider(Providers.of(web));
 
         // Конфигурация бирж
         binder.bind(new TypeLiteral<Map<String, ExchangeConfiguration>>() {
