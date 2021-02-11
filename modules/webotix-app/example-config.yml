@@ -18,6 +18,11 @@ exchanges:
     secretKey:
     loadRemoteData: true
     enabled: true
+  bitfinex:
+    apiKey:
+    secretKey:
+    loadRemoteData: true
+    enabled: true
 jerseyClient:
   timeout: 5000ms
   connectionTimeout: 5000ms

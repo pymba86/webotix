@@ -87,6 +87,10 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>webotix-auth</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ru.webotix</groupId>
+            <artifactId>webotix-exchange-api</artifactId>
+        </dependency>
 
     </dependencies>
 

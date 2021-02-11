@@ -20,6 +20,11 @@ exchanges:
     secretKey: '${BINANCE_SECRET:-}${secret-exchanges-binance-secretKey}'
     loadRemoteData: ${BINANCE_REMOTE_META:-true}
     enabled: true
+  bitfinex:
+    apiKey: '${BITFINEX_API_KEY:-}${secret-exchanges-bitfinex-apiKey}'
+    secretKey: '${BITFINEX_SECRET:-}${secret-exchanges-bitfinex-secretKey}'
+    loadRemoteData: ${BITFINEX_REMOTE_META:-true}
+    enabled: true
 server:
   type: simple
   rootPath: /api/

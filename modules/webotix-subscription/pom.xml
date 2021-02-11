@@ -97,6 +97,10 @@
             <groupId>com.gruelbox</groupId>
             <artifactId>dropwizard-guice-box-hibernate</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ru.webotix</groupId>
+            <artifactId>webotix-datasource</artifactId>
+        </dependency>
 
     </dependencies>
 
