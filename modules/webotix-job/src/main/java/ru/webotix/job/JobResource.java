@@ -10,6 +10,8 @@ import com.gruelbox.tools.dropwizard.guice.resources.WebResource;
 import io.dropwizard.hibernate.UnitOfWork;
 import org.apache.commons.lang3.StringUtils;
 import ru.webotix.job.api.Job;
+import ru.webotix.job.api.JobAccess;
+import ru.webotix.job.api.JobSubmitter;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

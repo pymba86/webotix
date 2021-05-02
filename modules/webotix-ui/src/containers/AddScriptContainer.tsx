@@ -1,31 +1,25 @@
 import React, {useState} from "react";
-import {RouteComponentProps} from "react-router";
 import {Button} from "../elements/button";
 import {Modal} from "../elements/modal";
 import {Form} from "../elements/form";
 import {Input} from "../elements/input";
 import scriptService from "../modules/script/scriptService";
-import {RootState} from "../store/reducers";
-import * as scriptActions from "store/scripts/actions"
-import {connect, ConnectedProps} from "react-redux";
 import {Script} from "../modules/script";
-import { v4 as uuidv4 } from "uuid"
+import {v4 as uuidv4} from "uuid"
+import {ScriptsActionTypes} from "../store/scripts/types";
 
-const mapState = (state: RootState) => ({
-    selectedScript: state.scripts.selectedScript
-});
+interface AddScriptProps {
+    addScript: (script: Script) => ScriptsActionTypes;
+    visible: boolean;
+    onClose: () => void;
+}
 
-const mapDispatch = {
-    addScript: (script: Script) => scriptActions.addScript(script)
-};
-
-const connector = connect(mapState, mapDispatch);
-
-type StateProps = ConnectedProps<typeof connector>;
-
-type AddScriptProps = StateProps & RouteComponentProps;
-
-const AddScript: React.FC<AddScriptProps> = ({history, addScript}) => {
+export const AddScriptContainer: React.FC<AddScriptProps> = (
+    {
+        addScript,
+        visible,
+        onClose
+    }) => {
 
     const [name, setName] = useState<string>();
 
@@ -37,10 +31,8 @@ const AddScript: React.FC<AddScriptProps> = ({history, addScript}) => {
                 script: ""
             };
             scriptService.saveScript(script)
-                .then(() => {
-                    addScript(script);
-                    history.push("/");
-                });
+                .then(onClose)
+                .then(() => addScript(script));
         }
     };
 
@@ -53,11 +45,10 @@ const AddScript: React.FC<AddScriptProps> = ({history, addScript}) => {
     );
 
     return (
-        <Modal visible={true} closable={true}
+        <Modal visible={visible} closable={true}
                footer={footerMarkup}
                header={"Add script"}
-               onClose={() => history.push("/")}>
-
+               onClose={onClose}>
             <Form>
                 <Form.Item label={"Name"} required={true}>
                     <Input placeholder={"Enter script name"}
@@ -67,5 +58,3 @@ const AddScript: React.FC<AddScriptProps> = ({history, addScript}) => {
         </Modal>
     )
 };
-
-export const AddScriptContainer = connector(AddScript);

@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.webotix.datasource.database.ConnectionSource;
 import ru.webotix.datasource.database.Transactionally;
+import ru.webotix.job.api.JobLocker;
 import ru.webotix.utils.SafelyDispose;
 
 import static java.time.LocalDateTime.now;

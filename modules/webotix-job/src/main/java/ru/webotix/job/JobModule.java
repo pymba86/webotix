@@ -7,6 +7,9 @@ import com.gruelbox.tools.dropwizard.guice.hibernate.EntityContribution;
 import com.gruelbox.tools.dropwizard.guice.resources.WebResource;
 import io.dropwizard.lifecycle.Managed;
 import org.alfasoftware.morf.upgrade.TableContribution;
+import ru.webotix.job.api.JobAccess;
+import ru.webotix.job.api.JobLocker;
+import ru.webotix.job.api.JobSubmitter;
 
 /**
  * Модуль управления заданиями

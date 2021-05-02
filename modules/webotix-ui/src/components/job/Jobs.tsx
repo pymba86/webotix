@@ -1,15 +1,15 @@
 import React from "react"
-import {AlertJob, Job, JobType, ScriptJob} from "../../modules/server";
+import {AlertJob, Job, JobType, ScriptJob, SoftTrailingStopJob} from "../../modules/server";
 import ReactTable from "react-table";
 import {TableLink} from "../../elements/table";
 import {Icon} from "../../elements/icon";
-import {Link} from "react-router-dom";
 
-export type JobRemoveCallback = (id: string) => void;
+export type JobCallback = (id: string) => void;
 
 export interface JobShortProps {
     data: Job[];
-    onRemove: JobRemoveCallback;
+    onRemove: JobCallback;
+    onSelect: JobCallback;
 }
 
 const describe = (job: Job) => {
@@ -25,6 +25,12 @@ const describe = (job: Job) => {
         const ticker = scriptJob.ticker;
 
         return scriptJob.name + " (" + ticker.base + "/" + ticker.counter + ")"
+    } else if (job.jobType === JobType.SOFT_TRAILING_STOP) {
+
+        const scriptJob = job as SoftTrailingStopJob;
+        const ticker = scriptJob.tickTrigger;
+
+        return "Trailing stop" + " (" + ticker.base + "/" + ticker.counter + ")"
     } else {
         return "Complex (" + job.jobType + ")"
     }
@@ -35,11 +41,7 @@ const textStyle = {
     textAlign: "left"
 };
 
-const numberStyle = {
-    textAlign: "right"
-};
-
-const closeColumn = (onRemove: JobRemoveCallback) => ({
+const closeColumn = (onRemove: JobCallback) => ({
     id: "close",
     Header: null,
     Cell: ({original}: { original: Job }) => (
@@ -54,20 +56,20 @@ const closeColumn = (onRemove: JobRemoveCallback) => ({
     resizable: false
 });
 
-const nameColumn = {
+const nameColumn = (onSelect: JobCallback) => ({
     id: "name",
     Header: "Description",
     accessor: "id",
     Cell: ({original}: { original: Job }) => (
-        <Link to={"/job/" + original.id}>
+        <TableLink onClick={() => onSelect(original.id)}>
             {describe(original)}
-        </Link>
+        </TableLink>
     ),
     headerStyle: textStyle,
     style: textStyle,
     resizable: true,
     minWidth: 80
-};
+});
 
 const typeColumn = {
     id: "type",
@@ -81,14 +83,15 @@ const typeColumn = {
 
 export const Jobs: React.FC<JobShortProps> = ({
                                                   data,
-                                                  onRemove
+                                                  onRemove,
+                                                  onSelect
                                               }) => (
     <ReactTable
         data={data}
         columns={[
             closeColumn(onRemove),
             typeColumn,
-            nameColumn
+            nameColumn(onSelect)
         ]}
         showPagination={false}
         resizable={false}

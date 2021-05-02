@@ -19,10 +19,6 @@ export interface FrameworkApi {
 
     enablePaperTrading(): void;
 
-    referencePriceCoin: Coin | undefined;
-
-    setReferencePriceCoin: CoinNullableCallback;
-
     alertsCoin: Coin | null;
 
     populateLastFocusedField: LastFocusedFieldPopulate;
@@ -35,7 +31,6 @@ export interface FrameworkApi {
 export const FrameworkContext =
     React.createContext<FrameworkApi>({
         alertsCoin: null,
-        referencePriceCoin: undefined,
         enablePaperTrading() {
         },
         paperTrading: false,
@@ -46,9 +41,6 @@ export const FrameworkContext =
 
         },
         setLastFocusedFieldPopulate(_: (value: number) => void): void {
-        },
-        setReferencePriceCoin() {
-
         }
     });
 
@@ -72,7 +64,7 @@ export const FrameworkContainer: React.FC = () => {
     const [paperTrading, setPaperTrading] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const [alertsCoin, setAlertsCoin] = useState<Coin | null>(null);
-    const [referencePriceCoin, setReferencePriceCoin] = useState<Coin | undefined>(undefined)
+
     const [lastFocusedFieldPopulate, setLastFocusedFieldPopulate] = useState<LastFocusedFieldPopulate[]>([]);
 
 
@@ -86,8 +78,6 @@ export const FrameworkContainer: React.FC = () => {
             enablePaperTrading: () => setPaperTrading(true),
             setAlertsCoin,
             alertsCoin,
-            setReferencePriceCoin,
-            referencePriceCoin,
             populateLastFocusedField: value => {
                 if (lastFocusedFieldPopulate.length === 1) {
                     const populate = lastFocusedFieldPopulate[0];
@@ -98,7 +88,7 @@ export const FrameworkContainer: React.FC = () => {
             },
             setLastFocusedFieldPopulate: (fn: LastFocusedFieldPopulate) => setLastFocusedFieldPopulate([fn])
         }),
-        [alertsCoin, paperTrading, setReferencePriceCoin, referencePriceCoin, lastFocusedFieldPopulate]
+        [alertsCoin, paperTrading, lastFocusedFieldPopulate]
     );
 
     const layoutsAsObject = uiConfig.layouts;

@@ -3,7 +3,7 @@ package ru.webotix.job.status;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import ru.webotix.datasource.database.Transactionally;
-import ru.webotix.job.JobSubmitter;
+import ru.webotix.job.api.JobSubmitter;
 import ru.webotix.job.status.api.JobStatus;
 import ru.webotix.job.status.api.JobStatusService;
 import ru.webotix.processors.UpdateStatusJob;

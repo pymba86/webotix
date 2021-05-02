@@ -49,7 +49,7 @@ let handleBalance: BalanceHandler = (exchange, currency, balance) => {
 
 let connected = false;
 let selectedCoin: ServerCoin;
-let subscribedCoins: ServerCoin[];
+let subscribedCoins: ServerCoin[] = [];
 
 let socket: ReconnectingWebSocket;
 let timer: NodeJS.Timeout;

@@ -1,8 +1,4 @@
 import React, {useState, useContext, useMemo} from "react"
-
-import {connect, ConnectedProps} from "react-redux"
-import {RootState} from "../store/reducers";
-import * as coinsActions from "../store/coins/actions";
 import {Coin} from "../modules/market";
 import {FrameworkContext} from "../FrameworkContainer";
 import {ServerContext} from "../modules/server/ServerContext";
@@ -14,23 +10,21 @@ import {Button} from "../elements/button";
 import {AuthContext} from "../modules/auth/AuthContext";
 import exchangeService from "../modules/market/exchangeService";
 import {LogContext} from "../modules/log/LogContext";
+import {CoinPriceList, CoinsActionTypes} from "../store/coins/types";
+import {CoinNullableCallback} from "../components/coins";
 
-const mapState = (state: RootState) => ({
-    referencePrices: state.coins.referencePrices
-});
+interface ReferencePriceContainerProps {
+    coin?: Coin;
+    setReferencePriceCoin: CoinNullableCallback;
+    referencePrices: CoinPriceList;
+    setReferencePrice: (coin: Coin, price?: number) => CoinsActionTypes;
+}
 
-const mapDispatch = {
-    setReferencePrice: (coin: Coin, price?: number) =>
-        coinsActions.setReferencePrice(coin, price)
-};
-
-const connector = connect(mapState, mapDispatch);
-
-type StateProps = ConnectedProps<typeof connector>;
-
-const ReferencePrice: React.FC<StateProps> = (
+export const ReferencePriceContainer: React.FC<ReferencePriceContainerProps> = (
     {
+        coin,
         referencePrices,
+        setReferencePriceCoin,
         setReferencePrice
     }
 ) => {
@@ -39,8 +33,6 @@ const ReferencePrice: React.FC<StateProps> = (
     const authApi = useContext(AuthContext);
     const logApi = useContext(LogContext);
     const serverApi = useContext(ServerContext);
-
-    const coin = frameworkApi.referencePriceCoin;
 
     const errorPopup = logApi.errorPopup;
 
@@ -60,7 +52,7 @@ const ReferencePrice: React.FC<StateProps> = (
                 () => exchangeService.setReferencePrice(coin, price))
                 .then(() => {
                     setReferencePrice(coin, price ? Number(price) : undefined)
-                    frameworkApi.setReferencePriceCoin(undefined)
+                    setReferencePriceCoin(undefined)
                     setPrice("")
                 })
                 .catch((error: Error) => errorPopup("Could not fetch coin metadata: " + error.message));
@@ -91,7 +83,7 @@ const ReferencePrice: React.FC<StateProps> = (
             <Modal visible={true} closable={true}
                    footer={footerMarkup}
                    header={"Set reference price for " + coin.name}
-                   onClose={() => frameworkApi.setReferencePriceCoin(undefined)}>
+                   onClose={() => setReferencePriceCoin(undefined)}>
                 <Form>
                     <Form.Item
                         invalid={ready}
@@ -109,5 +101,3 @@ const ReferencePrice: React.FC<StateProps> = (
     }
     return null;
 }
-
-export const ReferencePriceContainer = connector(ReferencePrice);

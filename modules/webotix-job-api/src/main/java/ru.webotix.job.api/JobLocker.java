@@ -1,4 +1,4 @@
-package ru.webotix.job;
+package ru.webotix.job.api;
 
 import java.util.UUID;
 

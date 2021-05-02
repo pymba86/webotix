@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useMemo} from "react";
+import React, {useContext, useMemo, useState} from "react";
 import {useVisibility} from "../components/visibility/Visibility";
 import {RenderIf} from "../components/render/RenderIf";
 import {Section} from "../elements/section";
@@ -9,24 +9,34 @@ import {ServerContext} from "../modules/server/ServerContext";
 import {SocketContext} from "../modules/socket/SocketContext";
 import {MarketContext} from "../modules/market/MarketContext";
 import {Coins, FullCoinData} from "../components/coins";
-import {FrameworkContext} from "../FrameworkContainer";
 import {RootState} from "../store/reducers";
 import {connect, ConnectedProps} from "react-redux";
+import {ReferencePriceContainer} from "./ReferencePriceContainer";
+import {Coin} from "../modules/market";
+import * as coinsActions from "../store/coins/actions";
+import {AddCoinContainer} from "./AddCoinContainer";
 
 const mapState = (state: RootState) => ({
     referencePrices: state.coins.referencePrices
 });
 
-const connector = connect(mapState);
+const mapDispatch = {
+    setReferencePrice: (coin: Coin, price?: number) =>
+        coinsActions.setReferencePrice(coin, price)
+};
+
+const connector = connect(mapState, mapDispatch);
 
 type StateProps = ConnectedProps<typeof connector>;
 
-const CoinsWrapper: React.FC<StateProps> = ({referencePrices}) => {
+const CoinsWrapper: React.FC<StateProps> = ({referencePrices, setReferencePrice}) => {
 
     const serverApi = useContext(ServerContext);
     const socketApi = useContext(SocketContext);
     const marketApi = useContext(MarketContext);
-    const frameworkApi = useContext(FrameworkContext);
+
+    const [referencePriceCoin, setReferencePriceCoin] = useState<Coin | undefined>(undefined);
+    const [visibleAddCoin, setVisibleAddCoin] = useState<boolean>(false);
 
     const visible = useVisibility();
     const history = useHistory();
@@ -34,9 +44,6 @@ const CoinsWrapper: React.FC<StateProps> = ({referencePrices}) => {
     const coins = serverApi.subscriptions;
     const tickers = socketApi.tickers;
     const exchanges = marketApi.data.exchanges;
-
-    const handleAddCoin = useCallback(
-        () => history.push('/addCoin'), [history]);
 
     const data: FullCoinData[] = useMemo(
         () => coins.map(coin => {
@@ -63,16 +70,31 @@ const CoinsWrapper: React.FC<StateProps> = ({referencePrices}) => {
                      heading={"Coins"}
                      nopadding={true}
                      buttons={() => (
-                         <SectionLink onClick={handleAddCoin}>
+                         <SectionLink onClick={() => setVisibleAddCoin(true)}>
                              <Icon type="plus"/>
                          </SectionLink>
                      )}>
+
                 <Coins data={data}
                        onRemove={coin => {
                            serverApi.removeSubscription(coin)
                                .then(() => history.push("/"));
                        }}
-                       onClickReferencePrice={frameworkApi.setReferencePriceCoin}/>
+                       onClickReferencePrice={setReferencePriceCoin}/>
+
+                {referencePriceCoin && (
+                    <ReferencePriceContainer
+                        coin={referencePriceCoin}
+                        setReferencePriceCoin={setReferencePriceCoin}
+                        referencePrices={referencePrices}
+                        setReferencePrice={setReferencePrice}/>
+                )}
+
+                {visibleAddCoin && (
+                    <AddCoinContainer visible={visibleAddCoin}
+                                      onClose={() => setVisibleAddCoin(false)}/>
+                )}
+
             </Section>
         </RenderIf>
     )

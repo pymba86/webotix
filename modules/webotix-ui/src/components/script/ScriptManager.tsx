@@ -3,7 +3,7 @@ import classNames from "classnames";
 import {ScriptEditor} from "./ScriptEditor";
 import {ScriptToolbar} from "./ScriptToolbar";
 import {RootState} from "../../store/reducers";
-import {Script} from "../../modules/script/types";
+import {Script} from "../../modules/script";
 import * as scriptActions from "../../store/scripts/actions";
 import {connect, ConnectedProps} from "react-redux";
 import scriptService from "../../modules/script/scriptService";

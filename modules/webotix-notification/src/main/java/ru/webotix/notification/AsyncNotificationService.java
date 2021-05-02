@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.webotix.datasource.database.Transactionally;
-import ru.webotix.job.JobSubmitter;
+import ru.webotix.job.api.JobSubmitter;
 import ru.webotix.notification.api.Notification;
 import ru.webotix.notification.api.NotificationService;
 import ru.webotix.processors.AlertJob;

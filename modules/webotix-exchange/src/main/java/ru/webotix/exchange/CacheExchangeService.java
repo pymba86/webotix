@@ -16,12 +16,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.ExchangeSpecification;
+import org.knowm.xchange.dto.meta.CurrencyPairMetaData;
 import org.knowm.xchange.dto.meta.ExchangeMetaData;
 import org.knowm.xchange.dto.meta.RateLimit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.webotix.exchange.api.ExchangeService;
 import ru.webotix.exchange.api.RateController;
+import ru.webotix.market.data.api.TickerSpec;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -185,6 +187,14 @@ public class CacheExchangeService implements ExchangeService {
         ExchangeConfiguration exchangeConfiguration = configuration.get(name);
         return exchangeConfiguration != null &&
                 StringUtils.isNotEmpty(exchangeConfiguration.getApiKey());
+    }
+
+    @Override
+    public CurrencyPairMetaData fetchCurrencyPairMetaData(TickerSpec ex) {
+        return get(ex.exchange())
+                .getExchangeMetaData()
+                .getCurrencyPairs()
+                .get(ex.currencyPair());
     }
 
     @Override

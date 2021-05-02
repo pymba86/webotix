@@ -1,29 +1,24 @@
 import React, {useContext, useEffect} from "react";
-import {RouteComponentProps} from "react-router";
 import {Modal} from "../elements/modal";
 import {Select} from "../elements/select";
 import {LogContext} from "../modules/log/LogContext";
-import {Script} from "../modules/script/types";
+import {Script} from "../modules/script";
 import scriptService from "../modules/script/scriptService";
-import {RootState} from "../store/reducers";
-import * as scriptActions from "store/scripts/actions"
-import {connect, ConnectedProps} from "react-redux";
+import {ScriptsActionTypes} from "../store/scripts/types";
 
-const mapState = (state: RootState) => ({
-    selectedScript: state.scripts.selectedScript
-});
+interface ScriptControlProps {
+    selectScript: (script: Script) => ScriptsActionTypes;
+    visible: boolean;
+    onClose: () => void;
+}
 
-const mapDispatch = {
-    selectScript: (script: Script) => scriptActions.selectScript(script)
-};
-
-const connector = connect(mapState, mapDispatch);
-
-type StateProps = ConnectedProps<typeof connector>;
-
-type ScriptControlProps = StateProps & RouteComponentProps;
-
-const ScriptControl: React.FC<ScriptControlProps> = ({history, selectScript}) => {
+export const ScriptControlContainer: React.FC<ScriptControlProps> = (
+    {
+        selectScript,
+        visible,
+        onClose
+    }
+) => {
 
     const logApi = useContext(LogContext);
 
@@ -45,14 +40,14 @@ const ScriptControl: React.FC<ScriptControlProps> = ({history, selectScript}) =>
 
     const onChangeScript = (script: Script) => {
         selectScript(script);
-        history.push("/");
+        onClose();
     };
 
     return (
-        <Modal visible={true}
+        <Modal visible={visible}
                closable={true}
                header={"Scripts"}
-               onClose={() => history.push("/")}>
+               onClose={onClose}>
 
             <Select placeholder={"Select script"}
                     loading={loading}
@@ -64,5 +59,3 @@ const ScriptControl: React.FC<ScriptControlProps> = ({history, selectScript}) =>
         </Modal>
     )
 };
-
-export const ScriptControlContainer = connector(ScriptControl);

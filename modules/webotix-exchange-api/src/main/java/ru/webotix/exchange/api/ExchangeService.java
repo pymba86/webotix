@@ -1,6 +1,8 @@
 package ru.webotix.exchange.api;
 
 import org.knowm.xchange.Exchange;
+import org.knowm.xchange.dto.meta.CurrencyPairMetaData;
+import ru.webotix.market.data.api.TickerSpec;
 
 import java.util.Collection;
 
@@ -28,6 +30,9 @@ public interface ExchangeService {
      * @return проверка на аутенфикацию на бирже
      */
     boolean isAuthenticated(String name);
+
+
+    CurrencyPairMetaData fetchCurrencyPairMetaData(TickerSpec ex);
 
     /**
      * Получить ограничитель скорости операций по бирже

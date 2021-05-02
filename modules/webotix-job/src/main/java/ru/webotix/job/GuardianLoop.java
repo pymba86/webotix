@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import ru.webotix.base.exception.WebotixAbortException;
 import ru.webotix.datasource.database.Transactionally;
 import ru.webotix.job.api.Job;
+import ru.webotix.job.api.JobAccess;
 
 import java.util.concurrent.CountDownLatch;
 

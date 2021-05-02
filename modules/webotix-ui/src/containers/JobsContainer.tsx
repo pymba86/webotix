@@ -2,6 +2,7 @@ import React, {useContext, useState} from "react";
 import {Section, SectionTab} from "../elements/section";
 import {ServerContext} from "../modules/server/ServerContext";
 import {Jobs} from "../components/job";
+import {JobContainer} from "./JobContainer";
 
 enum Mode {
     ONLY_COMPLEX = "complexonly",
@@ -17,6 +18,8 @@ export const JobsContainer: React.FC = () => {
     const loading = serverApi.jobsLoading;
 
     const rawJobs = loading ? [] : serverApi.jobs;
+
+    const [selectId, setSelectId] = useState<string>("");
 
     return (
         <Section
@@ -37,7 +40,14 @@ export const JobsContainer: React.FC = () => {
                     </SectionTab>
                 </React.Fragment>
             )}>
-                <Jobs data={rawJobs} onRemove={(id: string) => serverApi.deleteJob(id)}/>
+            
+            <Jobs data={rawJobs}
+                  onRemove={(id: string) => serverApi.deleteJob(id)}
+                  onSelect={setSelectId}/>
+            
+            {selectId && (
+                <JobContainer id={selectId} onClose={() => setSelectId("")}/>
+            )}
         </Section>
     )
-};
+}

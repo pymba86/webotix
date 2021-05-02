@@ -71,8 +71,9 @@ export interface SoftTrailingStopJob extends Job {
     direction: TradeDirection;
     amount: number;
     stopPrice: number;
-    limitPrice: number;
     lastSyncPrice: number;
+    stopPercentage: number;
+    limitPercentage: number;
 }
 
 export enum Status {

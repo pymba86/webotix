@@ -1,5 +1,4 @@
 import React, {useContext, useEffect} from "react";
-import {RouteComponentProps} from "react-router";
 import {Button} from "../elements/button";
 import {Modal} from "../elements/modal";
 import {Form} from "../elements/form";
@@ -10,8 +9,21 @@ import {LogContext} from "../modules/log/LogContext";
 import exchangeService from "../modules/market/exchangeService";
 import {augmentCoin} from "../modules/market/utils";
 import {ServerContext} from "../modules/server/ServerContext";
+import {useHistory} from "react-router-dom";
 
-export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
+interface AddCoinContainerProps {
+    visible: boolean;
+    onClose: () => void;
+}
+
+export const AddCoinContainer: React.FC<AddCoinContainerProps> = (
+    {
+        visible,
+        onClose
+    }
+) => {
+
+    const history = useHistory();
 
     const marketApi = useContext(MarketContext);
     const logApi = useContext(LogContext);
@@ -53,6 +65,7 @@ export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
     const onSubmit = () => {
         if (pair) {
             serverApi.addSubscription(pair)
+                .then(onClose)
                 .then(() => history.push("/coin/" + pair.key));
         }
     };
@@ -66,10 +79,10 @@ export const AddCoinContainer: React.FC<RouteComponentProps> = ({history}) => {
     );
 
     return (
-        <Modal visible={true} closable={true}
+        <Modal visible={visible} closable={true}
                footer={footerMarkup}
                header={"Add coin"}
-               onClose={() => history.push("/")}>
+               onClose={onClose}>
 
             <Form>
                 <Form.Item label={"Exchange"} required={true}>

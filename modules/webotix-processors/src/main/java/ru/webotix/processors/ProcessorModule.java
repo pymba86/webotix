@@ -9,5 +9,6 @@ public class ProcessorModule extends AbstractModule {
         install(new AlertJobProcessor.Module());
         install(new UpdateStatusJobProcessor.Module());
         install(new LimitOrderJobProcessor.Module());
+        install(new SoftTrailingStopProcessor.Module());
     }
 }

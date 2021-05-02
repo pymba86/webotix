@@ -3,11 +3,18 @@ import React from "react";
 import {createPortal} from "react-dom";
 import {ModalPanel} from "./Panel";
 
+export const Modal: React.FC<ModalProps> = (
+    {
+       visible,
+       children,
+       ...props
+    }) => {
 
-export class Modal extends React.Component<ModalProps> {
+    const modal = (
+        <ModalPanel visible={visible} {...props}>
+            {children}
+        </ModalPanel>
+    );
 
-    public render() {
-        const node = <ModalPanel {...this.props}/>;
-        return createPortal(node, document.body);
-    }
+    return visible ? createPortal(modal, document.body) : null;
 }
