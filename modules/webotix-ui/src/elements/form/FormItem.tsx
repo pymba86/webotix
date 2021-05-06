@@ -6,6 +6,7 @@ import {FormItemProps} from "./types";
 export const FormItem: React.FC<FormItemProps> = ({
                                                       prefixCls = 'ui-form-item',
                                                       labelAlign = 'top', status,
+                                                      validate = true,
                                                       message, invalid, label, children,
                                                       className, labelClassName, required
                                                   }: FormItemProps) => {
@@ -13,8 +14,9 @@ export const FormItem: React.FC<FormItemProps> = ({
     const itemClassName = classNames(
         prefixCls,
         {
-            [`${prefixCls}-top`]: labelAlign === 'top',
+            [`${prefixCls}-${labelAlign}`]: labelAlign,
             [`${prefixCls}-required`]: required,
+            [`${prefixCls}-validate`]: validate,
         },
         className,
     );
@@ -48,9 +50,9 @@ export const FormItem: React.FC<FormItemProps> = ({
 
     return (
         <div className={itemClassName}>
-            <div className={labelClsName}>
+            {label && (<div className={labelClsName}>
                 {label}
-            </div>
+            </div>)}
             <div className={`${prefixCls}-control`}>
                 {children}
                 {messageNode}

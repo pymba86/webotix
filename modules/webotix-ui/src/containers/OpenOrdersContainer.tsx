@@ -1,22 +1,12 @@
 import React, {useContext, useMemo} from "react";
 import {SocketContext} from "../modules/socket/SocketContext";
-import {JobOrder, Order, OrdersType, OrderType, RunningAtType} from "../modules/socket";
+import { Order, OrdersType, RunningAtType} from "../modules/socket";
 import {OpenOrders} from "../components/orders";
 import {AuthContext} from "../modules/auth/AuthContext";
 import {LogContext} from "../modules/log/LogContext";
 import {ServerContext} from "../modules/server/ServerContext";
-import {Coin, ServerCoin} from "../modules/market";
+import {Coin} from "../modules/market";
 import exchangeService from "../modules/market/exchangeService";
-import {LimitOrderJob, OcoJob, TradeDirection} from "../modules/server";
-import {isStop} from "../utils/jobUtils";
-
-function jobTriggerMatchesCoin(job: OcoJob, coin: ServerCoin) {
-    return (
-        job.tickTrigger.exchange === coin.exchange &&
-        job.tickTrigger.base === coin.base &&
-        job.tickTrigger.counter === coin.counter
-    )
-}
 
 export const OpenOrdersContainer: React.FC = () => {
 
@@ -35,39 +25,7 @@ export const OpenOrdersContainer: React.FC = () => {
         [openOrders]
     );
 
-    const allJobs = serverApi.jobs;
-
-    const jobsAsOrders = useMemo<JobOrder[]>(() => {
-        if (!selectedCoin) return []
-        return allJobs
-            .filter(job => isStop(job))
-            .map(job => job as OcoJob)
-            .filter(job => jobTriggerMatchesCoin(job, selectedCoin))
-            .map(job => ({
-                kind: 'job',
-                runningAt: RunningAtType.SERVER,
-                jobId: job.id,
-                type: job.high
-                    ? (job.high.job as LimitOrderJob).direction === TradeDirection.BUY
-                        ? OrderType.BID
-                        : OrderType.ASK
-                    : (job.low.job as LimitOrderJob).direction === TradeDirection.BUY
-                        ? OrderType.BID
-                        : OrderType.ASK,
-                stopPrice: job.high ? Number(job.high.thresholdAsString) : Number(job.low.thresholdAsString),
-                limitPrice: job.high
-                    ? Number((job.high.job as LimitOrderJob).limitPrice)
-                    : Number((job.low.job as LimitOrderJob).limitPrice),
-                originalAmount: job.high
-                    ? Number((job.high.job as LimitOrderJob).amount)
-                    : Number((job.low.job as LimitOrderJob).amount),
-                remainingAmount: job.high
-                    ? Number((job.high.job as LimitOrderJob).amount)
-                    : Number((job.low.job as LimitOrderJob).amount)
-            }))
-    }, [allJobs, selectedCoin])
-
-    const orders: OrdersType[] = selectedCoin && allOrders ? [...allOrders, ...jobsAsOrders] : [];
+    const orders: OrdersType[] = selectedCoin && allOrders ? allOrders : [];
 
     const authenticatedRequest = authApi.authenticatedRequest;
     const logPopup = logApi.errorPopup;

@@ -1,8 +1,5 @@
 package ru.webotix.job.api;
 
-import ru.webotix.job.api.Job;
-import ru.webotix.job.api.JobControl;
-
 public interface JobSubmitter {
 
     /**

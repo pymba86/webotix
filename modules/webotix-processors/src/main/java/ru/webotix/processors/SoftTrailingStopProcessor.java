@@ -204,16 +204,6 @@ public class SoftTrailingStopProcessor implements SoftTrailingStop.Processor {
 
             if (tickerPrice.compareTo(job.lastSyncPrice()) > 0) {
 
-                notificationService.alert(
-                        String.format(
-                                "Trailing stop on %s %s/%s market update stop price (%s to %s)",
-                                job.tickTrigger().exchange(),
-                                job.tickTrigger().base(),
-                                job.tickTrigger().counter(),
-                                job.lastSyncPrice(),
-                                tickerPrice)
-                );
-
                 jobControl.replace(
                         job.toBuilder()
                                 .lastSyncPrice(tickerPrice)
@@ -256,16 +246,6 @@ public class SoftTrailingStopProcessor implements SoftTrailingStop.Processor {
             }
 
             if (tickerPrice.compareTo(job.lastSyncPrice()) < 0) {
-
-                notificationService.alert(
-                        String.format(
-                                "Trailing stop on %s %s/%s market update stop price (%s to %s)",
-                                job.tickTrigger().exchange(),
-                                job.tickTrigger().base(),
-                                job.tickTrigger().counter(),
-                                job.lastSyncPrice(),
-                                tickerPrice)
-                );
 
                 jobControl.replace(
                         job.toBuilder()

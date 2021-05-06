@@ -1,6 +1,7 @@
 package ru.webotix.exchange.api;
 
 import org.knowm.xchange.Exchange;
+import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.meta.CurrencyPairMetaData;
 import ru.webotix.market.data.api.TickerSpec;
 
@@ -41,4 +42,6 @@ public interface ExchangeService {
      * @return ограничитель скорости
      */
     RateController rateController(String name);
+
+    boolean exchangeSupportsPair(String exchange, CurrencyPair currencyPair);
 }

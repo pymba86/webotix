@@ -54,9 +54,8 @@ export interface OcoThresholdTask {
 
 export interface OcoJob extends Job {
     tickTrigger: ServerCoin;
-    high: OcoThresholdTask;
-    low: OcoThresholdTask;
-    verbose: boolean;
+    high?: OcoThresholdTask;
+    low?: OcoThresholdTask;
 }
 
 export interface LimitOrderJob extends Job {

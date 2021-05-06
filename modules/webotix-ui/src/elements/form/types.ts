@@ -12,6 +12,7 @@ export type FormItemProps = React.HTMLAttributes<HTMLElement> & {
     label?: string;
     message?: string;
     invalid?: boolean;
+    validate?: boolean;
     status?: FormItemStatus;
 };
 

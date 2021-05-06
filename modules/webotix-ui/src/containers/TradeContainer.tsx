@@ -6,6 +6,8 @@ import {SocketContext} from "../modules/socket/SocketContext";
 import {Coin} from "../modules/market";
 import {LimitOrderContainer} from "./LimitOrderContainer";
 import {TrailingStopOrderContainer} from "./TrailingStopOrderContainer";
+import {StopOrderContainer} from "./StopOrderContaier";
+import {StopTakeProfitContainer} from "./StopTakeProfitContainer";
 
 const TRADE_SELECTED_KEY = "Trade.selected";
 
@@ -27,11 +29,11 @@ export const TradeContainer: React.FC = () => {
         if (selected === "limit") {
             return <LimitOrderContainer key={coin.key} coin={coin}/>
         } else if (selected === "stop") {
-            return <div>limit</div>
+            return <StopOrderContainer key={coin.key} coin={coin}/>
         } else if (selected === "trailing") {
             return <TrailingStopOrderContainer key={coin.key} coin={coin}/>
         } else if (selected === "oco") {
-            return <div>limit</div>
+            return <StopTakeProfitContainer key={coin.key} coin={coin}/>
         }
         return null
     };

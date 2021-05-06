@@ -12,6 +12,7 @@ $checkbox-prefix: 'ui-checkbox';
   padding: 0;
   vertical-align: middle;
   cursor: pointer;
+  user-select: none;
 
   &-input {
     outline: none;

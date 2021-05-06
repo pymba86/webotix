@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.ExchangeSpecification;
+import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.meta.CurrencyPairMetaData;
 import org.knowm.xchange.dto.meta.ExchangeMetaData;
 import org.knowm.xchange.dto.meta.RateLimit;
@@ -200,5 +201,12 @@ public class CacheExchangeService implements ExchangeService {
     @Override
     public RateController rateController(String name) {
         return rateLimiters.getUnchecked(name);
+    }
+
+    @Override
+    public boolean exchangeSupportsPair(String exchange, CurrencyPair currencyPair)
+    {
+        return get(exchange).getExchangeMetaData().getCurrencyPairs().keySet().stream()
+                .anyMatch(pair -> pair.equals(currencyPair));
     }
 }

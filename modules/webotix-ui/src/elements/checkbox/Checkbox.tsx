@@ -38,9 +38,10 @@ export const Checkbox: React.FC<CheckboxProps> = ({
                    checked={active}
                    type={type}
                    onChange={() => {
-                       setActive(!active);
+                       const toggle = !active;
+                       setActive(toggle);
                        if (onChange) {
-                           onChange(active);
+                           onChange(toggle);
                        }
                    }}
                    value={value}
